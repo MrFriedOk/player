@@ -20,4 +20,7 @@ fn load_dir() -> Result<PathBuf, String> {
     }
 }
 
-fn main() {}
+fn main() {
+    let dir: PathBuf = load_dir().unwrap();
+    println!("{:?}", dir);
+}

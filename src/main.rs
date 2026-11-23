@@ -3,6 +3,7 @@ use nucleo_matcher::{
     Config, Matcher,
     pattern::{CaseMatching, Normalization, Pattern},
 };
+use walkdir::WalkDir;
 //use ratatui::*;
 //use rodio::*;
 use std::{
@@ -18,10 +19,19 @@ fn load_dir() -> Result<PathBuf, String> {
     Ok(audio_dir.to_path_buf())
 }
 
-fn scan(dir: &PathBuf) {}
+fn scan(dirs: String) {
+    todo!()
+}
+
+fn walk(dir: &PathBuf) {
+    for entry in WalkDir::new(dir).into_iter().filter_map(|e| e.ok()) {
+        println!("{:?}", entry.path())
+    }
+}
 
 fn main() {
     let dir: PathBuf = load_dir().unwrap();
     println!("default audio directory, {:?}", dir);
-    scan(&dir);
+    walk(&dir);
+    //scan(&dir);
 }

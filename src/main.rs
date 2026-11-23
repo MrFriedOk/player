@@ -13,6 +13,7 @@ use std::{
 
 use lofty::file::FileType;
 
+#[derive(Debug)]
 struct Track {
     file_name: String,
     file_type: FileType,
@@ -20,13 +21,11 @@ struct Track {
 }
 
 impl Track {
-    fn from_path(path: &PathBuf) -> Option<Self> {
+    fn from_path(path: PathBuf) -> Option<Self> {
         Some(Self {
             file_name: path.file_name()?.to_string_lossy().into_owned(),
-            file_type: FileType::from_path(path)
-                .ok_or("couldn't guess file type")
-                .unwrap(),
-            path_buf: *path,
+            file_type: FileType::from_path(&path)?,
+            path_buf: path,
         })
     }
 }
@@ -61,7 +60,7 @@ fn main() {
     println!("default audio directory, {:?}", dir);
     let files: Vec<PathBuf> = walk(&dir);
     for file in files {
-        let track: Track = Track::from_path(&file);
+        let track: Track = Track::from_path(file);
         println!("{:?}", track)
     }
     println!("{:?}", files);

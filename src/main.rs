@@ -30,6 +30,10 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
 
 fn search(input: String, files: Vec<PathBuf>) {
     let input: String = input.to_lowercase();
+    let files: AsRef<str> = files.as_ref();
+    let mut matcher: Matcher = Matcher::new(Config::DEFAULT.match_paths());
+    let matches = Pattern::parse(&input, CaseMatching::Ignore, Normalization::Smart)
+        .match_list(files, &mut matcher);
 }
 
 fn main() {

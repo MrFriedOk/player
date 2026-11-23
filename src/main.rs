@@ -16,15 +16,8 @@ fn load_dir() -> Result<PathBuf, String> {
     Ok(audio_dir.to_path_buf())
 }
 
-fn scan(dir: PathBuf) -> Result<()> {
-    for entry in WalkDir::new(dir) {
-        println!("{:?}", entry?.path())
-    }
-    Ok(())
-}
-
 fn main() {
     let dir: PathBuf = load_dir().unwrap();
     println!("default audio directory, {:?}", dir);
-    scan(dir);
+    //    scan(&dir);
 }

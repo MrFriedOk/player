@@ -18,6 +18,7 @@ struct Track {
     file_name: String,
     file_type: FileType,
     path_buf: PathBuf,
+    haystack: String,
 }
 
 impl Track {
@@ -26,7 +27,12 @@ impl Track {
             file_name: path.file_name()?.to_string_lossy().into_owned(),
             file_type: FileType::from_path(path)?,
             path_buf: path.to_owned(),
+            haystack: "".to_owned(),
         })
+    }
+
+    fn gen_haystack(&mut self) {
+        let haystack: String = "".to_owned();
     }
 }
 
@@ -49,7 +55,6 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
 
 fn search(input: String, tracks: Vec<Track>) {
     let input: String = input.to_lowercase();
-    //let files: AsRef<str> = files.as_ref();
     //let mut matcher: Matcher = Matcher::new(Config::DEFAULT.match_paths());
     //let matches = Pattern::parse(&input, CaseMatching::Ignore, Normalization::Smart)
     //    .match_list(files, &mut matcher);

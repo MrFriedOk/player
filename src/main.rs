@@ -24,7 +24,7 @@ impl Track {
     fn from_path(path: &PathBuf) -> Option<Self> {
         Some(Self {
             file_name: path.file_name()?.to_string_lossy().into_owned(),
-            file_type: FileType::from_path(&path)?,
+            file_type: FileType::from_path(path)?,
             path_buf: path.to_owned(),
         })
     }

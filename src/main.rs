@@ -24,7 +24,7 @@ struct Track {
     file_type: FileType,
     path_buf: PathBuf,
     haystack: String,
-    tag: TaggedFile,
+    tag: Tag,
 }
 
 impl Track {
@@ -32,13 +32,15 @@ impl Track {
         let path_buf: PathBuf = path.to_owned();
         let file_type: FileType = FileType::from_path(path)?;
         let file_name: String = path.file_name()?.to_string_lossy().into_owned();
-        let id3v2 = read_from_path(path).ok()?;
+        let tagged: TaggedFile = read_from_path(path).ok()?;
+        let tag: Tag = tagged.primary_tag()?.to_owned();
+        let thing = tag.tag_type();
         Some(Self {
             file_name: file_name.clone(),
             file_type,
             path_buf,
-            haystack: format!("{} {:?}", file_name, file_type),
-            tag: id3v2,
+            haystack: format!("{} {:?} {:?}", file_name, file_type, thing),
+            tag: tag,
         })
     }
 }
@@ -63,7 +65,7 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
 fn search(input: String, tracks: Vec<Track>) {
     let input: String = input.to_lowercase();
     for track in tracks {
-        println!("{}", track.haystack);
+        println!("{:?}", track.haystack);
     }
     //let mut matcher: Matcher = Matcher::new(Config::DEFAULT.match_paths());
     //let matches = Pattern::parse(&input, CaseMatching::Ignore, Normalization::Smart)

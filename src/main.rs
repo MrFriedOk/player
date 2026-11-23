@@ -26,6 +26,8 @@ struct Track {
     haystack: String,
     tag: Tag,
     pub artist: String,
+    pub title: String,
+    pub album: String,
 }
 
 impl Track {
@@ -35,14 +37,22 @@ impl Track {
         let file_name: String = path.file_name()?.to_string_lossy().into_owned();
         let tagged: TaggedFile = read_from_path(path).ok()?;
         let tag: Tag = tagged.primary_tag()?.to_owned();
-        let thing = tag.tag_type();
+        let artist: String = tag.artist()?.into_owned();
+        let title: String = tag.title()?.into_owned();
+        let album: String = tag.album()?.into_owned();
+        //let thing = tag.tag_type();
         Some(Self {
             file_name: file_name.clone(),
             file_type,
             path_buf,
-            haystack: format!("{} {:?} {:?}", file_name, file_type, tag.artist()),
-            tag,
-            artist: tag.artist()?,
+            haystack: format!(
+                "{} {:?} {:?} {:?} {:?}",
+                file_name, file_type, artist, title, album,
+            ),
+            tag: tag.clone(),
+            artist,
+            title,
+            album,
         })
     }
 }

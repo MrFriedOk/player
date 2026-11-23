@@ -21,11 +21,11 @@ struct Track {
 }
 
 impl Track {
-    fn from_path(path: PathBuf) -> Option<Self> {
+    fn from_path(path: &PathBuf) -> Option<Self> {
         Some(Self {
             file_name: path.file_name()?.to_string_lossy().into_owned(),
             file_type: FileType::from_path(&path)?,
-            path_buf: path,
+            path_buf: path.to_owned(),
         })
     }
 }
@@ -60,7 +60,7 @@ fn main() {
     println!("default audio directory, {:?}", dir);
     let files: Vec<PathBuf> = walk(&dir);
     for file in &files {
-        if let Some(track) = Track::from_path(*file) {
+        if let Some(track) = Track::from_path(file) {
             println!("{:?}", track)
         }
     }

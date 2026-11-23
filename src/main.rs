@@ -47,7 +47,7 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
     files
 }
 
-fn search(input: String, files: Vec<PathBuf>) {
+fn search(input: String, tracks: Vec<Track>) {
     let input: String = input.to_lowercase();
     //let files: AsRef<str> = files.as_ref();
     //let mut matcher: Matcher = Matcher::new(Config::DEFAULT.match_paths());
@@ -57,14 +57,15 @@ fn search(input: String, files: Vec<PathBuf>) {
 
 fn main() {
     let dir: PathBuf = load_dir().unwrap();
+    let mut tracks: Vec<Track> = Vec::new();
     println!("default audio directory, {:?}", dir);
     let files: Vec<PathBuf> = walk(&dir);
     for file in &files {
         if let Some(track) = Track::from_path(file) {
-            println!("{:?}", track)
+            tracks.push(track);
         }
     }
     //println!("{:?}", &files);
-    search("the".to_owned(), files)
+    search("the".to_owned(), tracks)
     //scan(&dir);
 }

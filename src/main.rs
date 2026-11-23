@@ -16,7 +16,7 @@ use lofty::file::TaggedFileExt;
 use lofty::{
     file::{FileType, TaggedFile},
     read_from_path,
-    tag::{Tag, TagType},
+    tag::{Accessor, Tag, TagType},
 };
 
 struct Track {
@@ -39,8 +39,8 @@ impl Track {
             file_name: file_name.clone(),
             file_type,
             path_buf,
-            haystack: format!("{} {:?} {:?}", file_name, file_type, thing),
-            tag: tag,
+            haystack: format!("{} {:?} {:?}", file_name, file_type, tag.artist()),
+            tag,
         })
     }
 }

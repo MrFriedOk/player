@@ -11,9 +11,14 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use lofty::{file::FileType, read_from_path};
+use lofty::file::TaggedFileExt;
 
-#[derive(Debug)]
+use lofty::{
+    file::{FileType, TaggedFile},
+    read_from_path,
+    tag::{Tag, TagType},
+};
+
 struct Track {
     file_name: String,
     file_type: FileType,
@@ -27,7 +32,7 @@ impl Track {
         let path_buf: PathBuf = path.to_owned();
         let file_type: FileType = FileType::from_path(path)?;
         let file_name: String = path.file_name()?.to_string_lossy().into_owned();
-        let id3v2 = read_from_path(path).ok().primary_tag()?.to_owned();
+        let id3v2 = read_from_path(path).unwrap().primary_tag()?.to_owned();
         Some(Self {
             file_name: file_name.clone(),
             file_type,

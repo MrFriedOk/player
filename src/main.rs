@@ -14,13 +14,18 @@ use std::{
 use lofty::file::FileType;
 
 struct Track {
-    path_buf: PathBuf,
+    file_name: String,
     file_type: FileType,
+    path_buf: PathBuf,
 }
 
 impl Track {
     fn from_path(path: &PathBuf) -> Result<Self, _> {
-        todo!()
+        Ok(Self {
+            file_name: path.file_name().ok_or(),
+            file_type: FileType::from_path(path).ok("can't read file type"),
+            path_buf: *path,
+        })
     }
 }
 
@@ -43,16 +48,20 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
 
 fn search(input: String, files: Vec<PathBuf>) {
     let input: String = input.to_lowercase();
-    let files: AsRef<str> = files.as_ref();
-    let mut matcher: Matcher = Matcher::new(Config::DEFAULT.match_paths());
-    let matches = Pattern::parse(&input, CaseMatching::Ignore, Normalization::Smart)
-        .match_list(files, &mut matcher);
+    //let files: AsRef<str> = files.as_ref();
+    //let mut matcher: Matcher = Matcher::new(Config::DEFAULT.match_paths());
+    //let matches = Pattern::parse(&input, CaseMatching::Ignore, Normalization::Smart)
+    //    .match_list(files, &mut matcher);
 }
 
 fn main() {
     let dir: PathBuf = load_dir().unwrap();
     println!("default audio directory, {:?}", dir);
     let files: Vec<PathBuf> = walk(&dir);
+    for file in files {
+        let track: Track = Track::from_path(&file);
+        println!("{:?}", track)
+    }
     println!("{:?}", files);
     search("the".to_owned(), files)
     //scan(&dir);

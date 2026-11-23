@@ -24,7 +24,7 @@ struct Track {
     file_type: FileType,
     path_buf: PathBuf,
     haystack: String,
-    tag: Tag,
+    tag: TaggedFile,
 }
 
 impl Track {
@@ -32,16 +32,13 @@ impl Track {
         let path_buf: PathBuf = path.to_owned();
         let file_type: FileType = FileType::from_path(path)?;
         let file_name: String = path.file_name()?.to_string_lossy().into_owned();
-        let id3v2 = match read_from_path(path) {
-            Ok(tag) => Some(tag.primary_tag().to_owned()),
-            Err(err) => None(eprint!("coudln't parse this tag: {err}")),
-        };
+        let id3v2 = read_from_path(path).ok()?;
         Some(Self {
             file_name: file_name.clone(),
             file_type,
             path_buf,
             haystack: format!("{} {:?}", file_name, file_type),
-            tag: if let Some(tag) = id3v2,
+            tag: id3v2,
         })
     }
 }

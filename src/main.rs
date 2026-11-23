@@ -32,10 +32,10 @@ impl Track {
         let path_buf: PathBuf = path.to_owned();
         let file_type: FileType = FileType::from_path(path)?;
         let file_name: String = path.file_name()?.to_string_lossy().into_owned();
-        let id3v2 = read_from_path(path)
-            .unwrap_or_default()
-            .primary_tag()?
-            .to_owned();
+        let id3v2 = match read_from_path(path) {
+            Ok(tag) => tag.primary_tag().to_owned(),
+            Err(err) => eprint!("coudln't parse this tag: {err}"); continue;
+        }
         Some(Self {
             file_name: file_name.clone(),
             file_type,

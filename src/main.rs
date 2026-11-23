@@ -23,15 +23,19 @@ fn scan(dirs: String) {
     todo!()
 }
 
-fn walk(dir: &PathBuf) {
+fn walk(dir: &PathBuf) -> Vec<PathBuf> {
+    let mut files: Vec<PathBuf> = Vec::new();
     for entry in WalkDir::new(dir).into_iter().filter_map(|e| e.ok()) {
-        println!("{:?}", entry.path())
+        //println!("{:?}", entry.path())
+        files.push(entry.into_path());
     }
+    files
 }
 
 fn main() {
     let dir: PathBuf = load_dir().unwrap();
     println!("default audio directory, {:?}", dir);
-    walk(&dir);
+    let files: Vec<PathBuf> = walk(&dir);
+    println!("{:?}", files)
     //scan(&dir);
 }

@@ -11,7 +11,7 @@ use std::{
     path::{Path, PathBuf},
 };
 
-use lofty::file::FileType;
+use lofty::{file::FileType, read_from_path};
 
 #[derive(Debug)]
 struct Track {
@@ -19,6 +19,7 @@ struct Track {
     file_type: FileType,
     path_buf: PathBuf,
     haystack: String,
+    tag: Tag,
 }
 
 impl Track {
@@ -26,11 +27,13 @@ impl Track {
         let path_buf: PathBuf = path.to_owned();
         let file_type: FileType = FileType::from_path(path)?;
         let file_name: String = path.file_name()?.to_string_lossy().into_owned();
+        let id3v2 = read_from_path(path).ok().primary_tag()?.to_owned();
         Some(Self {
             file_name: file_name.clone(),
             file_type,
             path_buf,
-            haystack: format!("{} {:?} {}", file_name, file_type, "2"),
+            haystack: format!("{} {:?}", file_name, file_type),
+            tag: id3v2,
         })
     }
 }

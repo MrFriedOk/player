@@ -59,11 +59,12 @@ fn main() {
     let dir: PathBuf = load_dir().unwrap();
     println!("default audio directory, {:?}", dir);
     let files: Vec<PathBuf> = walk(&dir);
-    for file in files {
-        let track: Track = Track::from_path(file);
-        println!("{:?}", track)
+    for file in &files {
+        if let Some(track) = Track::from_path(*file) {
+            println!("{:?}", track)
+        }
     }
-    println!("{:?}", files);
+    //println!("{:?}", &files);
     search("the".to_owned(), files)
     //scan(&dir);
 }

@@ -16,10 +16,11 @@ fn load_dir() -> Result<PathBuf, String> {
     Ok(audio_dir.to_path_buf())
 }
 
-fn scan(dir: PathBuf) {
+fn scan(dir: PathBuf) -> Result<()> {
     for entry in WalkDir::new(dir) {
         println!("{:?}", entry?.path())
     }
+    Ok(())
 }
 
 fn main() {

@@ -1,12 +1,14 @@
 use directories::{BaseDirs, UserDirs};
-use nucleo::*;
-use ratatui::*;
-use rodio::*;
+use nucleo_matcher::{
+    Config, Matcher,
+    pattern::{CaseMatching, Normalization, Pattern},
+};
+//use ratatui::*;
+//use rodio::*;
 use std::{
     fs,
     path::{Path, PathBuf},
 };
-use walkdir::{DirEntry, WalkDir};
 
 fn load_dir() -> Result<PathBuf, String> {
     let user_dir: UserDirs = UserDirs::new().ok_or("couldn't find home dir?")?;
@@ -16,13 +18,7 @@ fn load_dir() -> Result<PathBuf, String> {
     Ok(audio_dir.to_path_buf())
 }
 
-fn scan(dir: &PathBuf) -> Result<()> {
-    for entry in WalkDir::new(dir) {
-        println!("{:?}", entry?.path());
-        Ok(())
-    }
-    //Ok(())
-}
+fn scan(dir: &PathBuf) {}
 
 fn main() {
     let dir: PathBuf = load_dir().unwrap();

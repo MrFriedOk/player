@@ -27,10 +27,10 @@ impl Track {
         let file_type: FileType = FileType::from_path(path)?;
         let file_name: String = path.file_name()?.to_string_lossy().into_owned();
         Some(Self {
-            &file_name,
+            file_name: file_name.clone(),
             file_type,
             path_buf,
-            haystack: format!("{} {:?} {}", &file_name, file_type, "2"),
+            haystack: format!("{} {:?} {}", file_name, file_type, "2"),
         })
     }
 }
@@ -54,6 +54,9 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
 
 fn search(input: String, tracks: Vec<Track>) {
     let input: String = input.to_lowercase();
+    for track in tracks {
+        println!("{}", track.haystack);
+    }
     //let mut matcher: Matcher = Matcher::new(Config::DEFAULT.match_paths());
     //let matches = Pattern::parse(&input, CaseMatching::Ignore, Normalization::Smart)
     //    .match_list(files, &mut matcher);

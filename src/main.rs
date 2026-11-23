@@ -23,16 +23,15 @@ struct Track {
 
 impl Track {
     fn from_path(path: &PathBuf) -> Option<Self> {
+        let path_buf: PathBuf = path.to_owned();
+        let file_type: FileType = FileType::from_path(path)?;
+        let file_name: String = path.file_name()?.to_string_lossy().into_owned();
         Some(Self {
-            file_name: path.file_name()?.to_string_lossy().into_owned(),
-            file_type: FileType::from_path(path)?,
-            path_buf: path.to_owned(),
-            haystack: "".to_owned(),
+            &file_name,
+            file_type,
+            path_buf,
+            haystack: format!("{} {:?} {}", &file_name, file_type, "2"),
         })
-    }
-
-    fn gen_haystack(&mut self) {
-        let haystack: String = "".to_owned();
     }
 }
 

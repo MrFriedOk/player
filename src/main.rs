@@ -14,21 +14,18 @@ use std::{
 use lofty::file::FileType;
 
 struct Track {
-    file_name: &str,
+    file_name: String,
     file_type: FileType,
     path_buf: PathBuf,
 }
 
 impl Track {
-    fn from_path(path: &PathBuf) -> Result<Self, _> {
-        Ok(Self {
-            file_name: path
-                .file_name()
-                .ok_or("couldn't read file name")
-                .unwrap()
-                .to_str()
-                .ok_or("couldn't convert to string"),
-            file_type: FileType::from_path(path).ok("can't read file type"),
+    fn from_path(path: &PathBuf) -> Option<Self> {
+        Some(Self {
+            file_name: path.file_name()?.to_string_lossy().into_owned(),
+            file_type: FileType::from_path(path)
+                .ok_or("couldn't guess file type")
+                .unwrap(),
             path_buf: *path,
         })
     }

@@ -8,16 +8,11 @@ use std::{
 };
 
 fn load_dir() -> Result<PathBuf, String> {
-    //let mut path: Path = Path::new();
-
-    if let Some(user_dir) = UserDirs::new() {
-        let path: &Path = user_dir
-            .audio_dir()
-            .expect("should have found the audio directory");
-        Ok(path.to_path_buf())
-    } else {
-        Err("couldn't find default audio directory".to_owned())
-    }
+    let user_dir: UserDirs = UserDirs::new().ok_or("couldn't find home dir?")?;
+    let audio_dir = user_dir
+        .audio_dir()
+        .ok_or("couldn't find default audio dir?")?;
+    Ok(audio_dir.to_path_buf())
 }
 
 fn main() {

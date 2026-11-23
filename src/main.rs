@@ -30,6 +30,12 @@ struct Track {
     pub album: String,
 }
 
+impl AsRef<str> for Track {
+    fn as_ref(&self) -> &str {
+        &self.haystack
+    }
+}
+
 impl Track {
     fn from_path(path: &PathBuf) -> Option<Self> {
         let path_buf: PathBuf = path.to_owned();
@@ -75,13 +81,17 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
 }
 
 fn search(input: String, tracks: Vec<Track>) {
-    let input: String = input.to_lowercase();
-    for track in tracks {
+    //let input: String = input.to_lowercase();
+    for track in &tracks {
         println!("{:?}", track.haystack);
     }
-    //let mut matcher: Matcher = Matcher::new(Config::DEFAULT.match_paths());
-    //let matches = Pattern::parse(&input, CaseMatching::Ignore, Normalization::Smart)
-    //    .match_list(files, &mut matcher);
+    let mut matcher: Matcher = Matcher::new(Config::DEFAULT.match_paths());
+    let matches = Pattern::parse(&input, CaseMatching::Ignore, Normalization::Smart)
+        .match_list(tracks, &mut matcher);
+
+    for match2 in matches {
+        println!("{:?}", match2.0.artist);
+    }
 }
 
 fn main() {
@@ -95,6 +105,6 @@ fn main() {
         }
     }
     //println!("{:?}", &files);
-    search("the".to_owned(), tracks)
+    search("jojo's bizarre".to_owned(), tracks)
     //scan(&dir);
 }

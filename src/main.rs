@@ -25,6 +25,7 @@ struct Track {
     path_buf: PathBuf,
     haystack: String,
     tag: Tag,
+    pub artist: String,
 }
 
 impl Track {
@@ -41,6 +42,7 @@ impl Track {
             path_buf,
             haystack: format!("{} {:?} {:?}", file_name, file_type, tag.artist()),
             tag,
+            artist: tag.artist()?,
         })
     }
 }

@@ -1,3 +1,6 @@
-fn main() {
-    println!("Hello, world!");
-}
+use directories::{BaseDirs, UserDirs};
+use nucleo::*;
+use ratatui::*;
+use rodio::*;
+
+fn main() {}

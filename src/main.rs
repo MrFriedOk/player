@@ -29,7 +29,7 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
         //println!("{:?}", entry.path())
         files.push(entry.into_path());
     }
-    files
+    files.into_iter().filter(|f| f.ends_with(".jpg"))
 }
 
 fn main() {

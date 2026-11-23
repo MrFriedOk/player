@@ -6,7 +6,7 @@ use std::{
     fs,
     path::{Path, PathBuf},
 };
-use walkdir::*;
+use walkdir::{DirEntry, WalkDir};
 
 fn load_dir() -> Result<PathBuf, String> {
     let user_dir: UserDirs = UserDirs::new().ok_or("couldn't find home dir?")?;
@@ -16,8 +16,16 @@ fn load_dir() -> Result<PathBuf, String> {
     Ok(audio_dir.to_path_buf())
 }
 
+fn scan(dir: &PathBuf) -> Result<()> {
+    for entry in WalkDir::new(dir) {
+        println!("{:?}", entry?.path());
+        Ok(())
+    }
+    //Ok(())
+}
+
 fn main() {
     let dir: PathBuf = load_dir().unwrap();
     println!("default audio directory, {:?}", dir);
-    //    scan(&dir);
+    scan(&dir);
 }

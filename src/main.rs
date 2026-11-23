@@ -19,23 +19,24 @@ fn load_dir() -> Result<PathBuf, String> {
     Ok(audio_dir.to_path_buf())
 }
 
-fn scan(dirs: String) {
-    todo!()
-}
-
 fn walk(dir: &PathBuf) -> Vec<PathBuf> {
     let mut files: Vec<PathBuf> = Vec::new();
     for entry in WalkDir::new(dir).into_iter().filter_map(|e| e.ok()) {
         //println!("{:?}", entry.path())
         files.push(entry.into_path());
     }
-    files.into_iter().filter(|f| f.ends_with(".jpg"))
+    files
+}
+
+fn search(input: String, files: Vec<PathBuf>) {
+    let input: String = input.to_lowercase();
 }
 
 fn main() {
     let dir: PathBuf = load_dir().unwrap();
     println!("default audio directory, {:?}", dir);
     let files: Vec<PathBuf> = walk(&dir);
-    println!("{:?}", files)
+    println!("{:?}", files);
+    search("the".to_owned(), files)
     //scan(&dir);
 }

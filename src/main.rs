@@ -11,6 +11,19 @@ use std::{
     path::{Path, PathBuf},
 };
 
+use lofty::file::FileType;
+
+struct Track {
+    path_buf: PathBuf,
+    file_type: FileType,
+}
+
+impl Track {
+    fn from_path(path: &PathBuf) -> Result<Self, _> {
+        todo!()
+    }
+}
+
 fn load_dir() -> Result<PathBuf, String> {
     let user_dir: UserDirs = UserDirs::new().ok_or("couldn't find home dir?")?;
     let audio_dir = user_dir

@@ -54,5 +54,6 @@ impl App {
 impl Widget for &App {
     fn render(self, area: Rect, buf: &mut Buffer) {
         let layout = Layout::vertical([Constraint::Length(1), Constraint::Fill(1)]).spacing(1);
+        let [top, main] = area.layout(&layout);
     }
 }

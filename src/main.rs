@@ -71,6 +71,10 @@ fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
     let dir: PathBuf = load_dir().unwrap();
     let bufs: Vec<PathBuf> = walk(&dir);
+    let mut tracks: Vec<Track> = Vec::new();
+    for buf in bufs {
+        tracks.push(Track::from_path(&buf))
+    }
     ratatui::run(|terminal| App::new(tracks).run(terminal));
 
     Ok(())

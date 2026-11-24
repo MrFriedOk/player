@@ -3,8 +3,8 @@ use std::path::PathBuf;
 use color_eyre::config::Frame;
 use ratatui::DefaultTerminal;
 
-use crate::{load_dir, walk}();
 use crate::track::Track;
+use crate::{load_dir, walk};
 //use std::io;
 use std::error::Error;
 
@@ -20,13 +20,15 @@ pub struct Setup {
 
 impl Setup {
     pub fn new() -> Self {
-        Self { 
+        let dir: PathBuf = load_dir().unwrap();
+        let bufs: Vec<PathBuf> = walk(&dir);
+        let tracks: Vec<Track> = vec![];
+        Self {
             first: true,
             exit: false,
-            dir: load_dir().unwrap(),
-            bufs: walk(load_dir().unwrap()),
-            tracks: vec![for buf in ]
-
+            dir,
+            bufs,
+            tracks,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>, String> {

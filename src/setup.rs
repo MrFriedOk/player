@@ -59,6 +59,7 @@ impl Setup {
                 KeyCode::Esc => self.exit(),
                 KeyCode::Char(char) => self.input.push(char),
                 KeyCode::Enter => self.send()?,
+                KeyCode::Backspace => self.input.pop()?,
                 _ => (),
             },
             _ => (),
@@ -77,6 +78,10 @@ impl Setup {
         };
         let text: Paragraph = Paragraph::new(&*self.input).block(block);
         frame.render_widget(text, msg_area);
+        if let Some(text) = &self.dir {
+            let text: Paragraph = Paragraph::new(text.to_string_lossy().into_owned());
+            frame.render_widget(text, msg_area);
+        }
     }
 
     fn exit(&mut self) {

@@ -18,7 +18,7 @@ enum Screen {
 #[derive(Default)]
 pub struct App {
     exit: bool,
-    active_screen: Screen,
+    active_screen: usize,
 }
 
 impl App {
@@ -49,15 +49,12 @@ impl App {
     pub fn exit(&mut self) {
         self.exit = true;
     }
+    fn tabs(&self, frame: &mut Frame, area: Rect) {}
 }
 
 impl Widget for &App {
     fn render(self, area: Rect, buf: &mut Buffer) {
         let layout = Layout::vertical([Constraint::Length(1), Constraint::Fill(1)]).spacing(1);
         let [top, main] = area.layout(&layout);
-
-        tabs()
     }
 }
-
-fn tabs(frame: &mut Frame, area: Rect) {}

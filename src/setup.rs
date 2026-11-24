@@ -7,6 +7,8 @@ use crossterm::event::KeyEventKind;
 use ratatui::DefaultTerminal;
 use ratatui::Frame;
 use ratatui::layout::Rect;
+use ratatui::widgets::Block;
+use ratatui::widgets::BorderType;
 
 use crate::track::Track;
 use crate::{load_dir, walk};
@@ -62,9 +64,15 @@ impl Setup {
     }
 
     fn render(&self, frame: &mut Frame) {
-        let area = frame.area();
-        //let content:
-        //frame.render_widget(content, area);
+        let area: Rect = frame.area();
+        let content: Block = Block::bordered().title("input");
+        let msg_area: Rect = Rect {
+            x: area.width / 2,
+            y: area.height / 2,
+            width: area.width / 2,
+            height: area.height / 2,
+        };
+        frame.render_widget(content, msg_area);
     }
 
     fn exit(&mut self) {

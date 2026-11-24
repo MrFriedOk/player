@@ -22,7 +22,7 @@ pub struct Track {
     pub artist: String,
     pub title: String,
     pub album: String,
-    pub picture: Option<Picture>,
+    pub picture: Option<Vec<u8>>,
 }
 
 impl AsRef<str> for Track {
@@ -68,9 +68,7 @@ impl Track {
         })
     }
 
-    pub fn get_pic(&mut self) -> Result<Picture, PictureParseError> {
-        if let Some(pic) = Picture::from_ape_bytes(self.tag).ok();
-
-        Ok(picture)
+    pub fn get_pic(&mut self) {
+        self.picture = Some(self.tag.pictures())
     }
 }

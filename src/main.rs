@@ -63,7 +63,7 @@ fn player(buf: PathBuf) -> Result<()> {
 
     player.append(source);
 
-    player.sleep_until_end();
+    //player.sleep_until_end(); this breaks everything
     Ok(())
 }
 

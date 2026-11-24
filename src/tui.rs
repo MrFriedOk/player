@@ -31,18 +31,19 @@ impl App {
         Ok(())
     }
 
-    pub fn render(&self, frame: &mut Frame) {
+    fn render(&self, frame: &mut Frame) {
         let layout = Layout::vertical([Constraint::Length(1), Constraint::Length(1)]);
         let [tabs, main] = frame.area().layout(&layout);
 
         self.render_tabs(frame, tabs);
     }
 
-    pub fn handle_events(&mut self) -> io::Result<()> {
+    fn handle_events(&mut self) -> io::Result<()> {
         match event::read()? {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
                 //KeyCode::Char(char) => self.exit(),
                 KeyCode::Esc => self.exit(),
+                KeyCode::Tab => self.active_screen += 1 % 2,
                 _ => (),
             },
             _ => (),
@@ -53,6 +54,6 @@ impl App {
         self.exit = true;
     }
     fn render_tabs(&self, frame: &mut Frame, area: Rect) {
-        frame.render_widget(Tabs::new(["Home", "List"]), area);
+        frame.render_widget(Tabs::new(["Home", "List"]).select(self.active_screen), area);
     }
 }

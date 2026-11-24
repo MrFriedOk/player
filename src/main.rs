@@ -7,7 +7,7 @@ use walkdir::WalkDir;
 //use ratatui::*;
 //use rodio::*;
 use std::{
-    fmt::Debug,
+    fmt::{Debug, Formatter},
     fs,
     io::{Read, stdin},
     path::{Path, PathBuf},
@@ -39,7 +39,12 @@ impl AsRef<str> for Track {
 }
 
 impl Debug for Track {
-    fn fmt(&self) {}
+    fn fmt(&self, formatter: &mut Formatter<'_>) -> std::fmt::Result {
+        formatter
+            .debug_struct("Track")
+            .field("artist", &self.artist)
+            .finish()
+    }
 }
 
 impl Track {

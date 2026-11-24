@@ -9,6 +9,7 @@ use walkdir::WalkDir;
 use std::{
     fmt::{Debug, Formatter},
     fs,
+    io,
     io::{Read, stdin},
     path::{Path, PathBuf},
 };
@@ -104,14 +105,10 @@ fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
     let matches = Pattern::parse(&input, CaseMatching::Ignore, Normalization::Smart)
         .match_list(tracks, &mut matcher);
 
-    for match2 in &matches {
-        println!("{:?}, score: {}", match2.0.artist, match2.1);
-    }
-
     matches
 }
 
-fn main() {
+fn main() -> io::Result<()>{
     let dir: PathBuf = load_dir().unwrap();
     let mut tracks: Vec<Track> = Vec::new();
     println!("default audio directory, {:?}", dir);
@@ -121,13 +118,16 @@ fn main() {
             tracks.push(track);
         }
     }
-    let mut input: String = "".to_owned();
-    stdin().read_line(&mut input).unwrap();
+    let mut input: String = String::new();
+    let stdin = stdin();
+    stdin.read_to_string(&mut input).expect("bad input?")?;
+    Ok(())
+    println!("{}", input);
 
     //println!("{:?}", &files);
-    let matches: Vec<(Track, u32)> = search("jojo".to_owned(), tracks);
+    let matches: Vec<(Track, u32)> = search(input.to_string().to_owned(), tracks);
     for track in matches {
-        println!("something");
+        println!("{:?}{}", track.0, track.1);
     }
     //scan(&dir);
 }

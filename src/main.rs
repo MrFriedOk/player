@@ -1,5 +1,5 @@
 use color_eyre::Result;
-use crossterm::event::{self, Event, KeyCode};
+use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use directories::UserDirs;
 use nucleo_matcher::{
     Config, Matcher,
@@ -66,9 +66,13 @@ impl App {
         frame.render_widget(self, frame.area());
     }
     pub fn handle_events(&mut self) -> io::Result<()> {
-        if let Event::Key(key) = event::read()? {
-            Ok(())
+        match event::read() {
+            Event::Key(event) if event.kind == KeyEventKind::Press => {
+                match 
+            }
+            _ => ()
         }
+        Ok(())
     }
 }
 

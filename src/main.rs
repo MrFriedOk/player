@@ -66,13 +66,17 @@ impl App {
         frame.render_widget(self, frame.area());
     }
     pub fn handle_events(&mut self) -> io::Result<()> {
-        match event::read() {
-            Event::Key(event) if event.kind == KeyEventKind::Press => {
-                match 
-            }
-            _ => ()
+        match event::read()? {
+            Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
+                KeyCode::Char('q') => self.exit(),
+                _ => (),
+            },
+            _ => (),
         }
         Ok(())
+    }
+    pub fn exit(&mut self) {
+        self.exit = true;
     }
 }
 

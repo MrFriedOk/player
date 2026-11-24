@@ -34,16 +34,16 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
 
-    ratatui::run(|terminal| Setup::new().run(terminal))?;
+    let tracks: Vec<Track> = ratatui::run(|terminal| Setup::new().run(terminal))?;
 
-    let dir: PathBuf = load_dir().unwrap();
-    let bufs: Vec<PathBuf> = walk(&dir);
-    let mut tracks: Vec<Track> = Vec::new();
-    for buf in bufs {
-        if let Some(track) = Track::from_path(&buf) {
-            tracks.push(track);
-        }
-    }
+    //let dir: PathBuf = load_dir().unwrap();
+    //let bufs: Vec<PathBuf> = walk(&dir);
+    //let mut tracks: Vec<Track> = Vec::new();
+    //for buf in bufs {
+    //    if let Some(track) = Track::from_path(&buf) {
+    //        tracks.push(track);
+    //    }
+    //}
     ratatui::run(|terminal| App::new(tracks).run(terminal))?;
 
     Ok(())

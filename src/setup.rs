@@ -1,11 +1,12 @@
 use std::path::PathBuf;
 
-use color_eyre::config::Frame;
 use ratatui::DefaultTerminal;
+use ratatui::Frame;
 
 use crate::track::Track;
 use crate::{load_dir, walk};
 //use std::io;
+use color_eyre::Result;
 use std::error::Error;
 
 //type Result<T> = Result<T, Box<dyn Error>>;
@@ -31,16 +32,16 @@ impl Setup {
             tracks,
         }
     }
-    pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>, String> {
+    pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
         while !self.exit {
-            terminal.draw(|frame| self.render(frame));
+            terminal.draw(|frame| self.render(frame))?;
 
             self.handle_events()?;
         }
         Ok(Vec::new()) //return the Vec once done, make sure to change this lol
     }
 
-    fn handle_events(&mut self) -> Result<(), String> {
+    fn handle_events(&mut self) -> Result<()> {
         Ok(())
     }
 

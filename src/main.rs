@@ -57,9 +57,7 @@ fn player(buf: PathBuf) -> Result<()> {
     let player = rodio::Player::connect_new(&handle.mixer());
     handle.log_on_drop(false);
 
-    let buf = BufReader::new(
-        File::open("/home/fried/Music/Kroi/SPIN/01. SPIN (Instrumental).flac").unwrap(),
-    );
+    let buf = BufReader::new(File::open(buf).unwrap());
 
     let source = Decoder::try_from(buf).unwrap();
 

@@ -18,8 +18,6 @@ impl App {
             terminal.draw(|frame| self.draw(frame))?;
 
             self.handle_events()?;
-
-            player(PathBuf::new());
         }
         Ok(())
     }

@@ -51,6 +51,7 @@ fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
 fn player(buf: PathBuf) -> Result<()> {
     let handle = rodio::DeviceSinkBuilder::open_default_sink().expect("open default audio stream");
     let player = rodio::Player::connect_new(&handle.mixer());
+    let buf: PathBuf = PathBuf::from("/home/fried/Music/Kroi/SPIN/01. SPIN (Instrumental).flac");
     let file = File::open(buf).unwrap();
     let source = Decoder::try_from(file).unwrap();
     handle.mixer().add(source);
@@ -59,9 +60,11 @@ fn player(buf: PathBuf) -> Result<()> {
 
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
-    ratatui::run(|terminal| App::default().run(terminal))
+    ratatui::run(|terminal| App::default().run(terminal));
 
-    player(load_dir().unwrap().push("Kroi/SPIN/'01. SPIN (Instrumental).flac'"))
+    player(load_dir().unwrap())?;
+
+    Ok(())
 
     //let dir: PathBuf = load_dir().unwrap();
     //let mut tracks: Vec<Track> = Vec::new();

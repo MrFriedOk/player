@@ -19,21 +19,21 @@ use std::error::Error;
 pub struct Setup {
     first: bool,
     exit: bool,
-    dir: PathBuf,
+    dir: Option<PathBuf>,
     bufs: Vec<PathBuf>,
     // tracks: Vec<Track>,
 }
 
 impl Setup {
     pub fn new() -> Self {
-        let dir: PathBuf = load_dir().unwrap();
-        let bufs: Vec<PathBuf> = walk(&dir);
+        //let dir: PathBuf = load_dir().unwrap();
+        //let bufs: Vec<PathBuf> = walk(&dir);
         //let tracks: Vec<Track> = vec![];
         Self {
             first: true,
             exit: false,
-            dir,
-            bufs,
+            dir: None,
+            bufs: Vec::new(),
             //tracks,
         }
     }

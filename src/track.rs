@@ -1,7 +1,7 @@
 use lofty::file::TaggedFileExt;
 
-use lofty::picture::Picture;
 use lofty::picture::error::PictureParseError;
+use lofty::picture::{Picture, PictureType};
 use lofty::{
     file::{FileType, TaggedFile},
     read_from_path,
@@ -69,6 +69,14 @@ impl Track {
     }
 
     pub fn get_pic(&mut self) {
-        self.picture = Some(self.tag.pictures())
+        let pic = self
+            .tag
+            .pictures()
+            .iter()
+            .find(|pic| pic.pic_type() == PictureType::CoverFront)?
+            .data()
+            .to_vec();
+
+        self.picture = Some(pic)
     }
 }

@@ -69,7 +69,9 @@ fn player(buf: PathBuf) -> Result<()> {
 
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
-    let tracks: Vec<Track> = ratatui::run(|terminal| App::new(tracks).run(terminal));
+    let dir: PathBuf = load_dir().unwrap();
+    let bufs: Vec<PathBuf> = walk(&dir);
+    ratatui::run(|terminal| App::new(tracks).run(terminal));
 
     Ok(())
 

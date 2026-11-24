@@ -71,13 +71,15 @@ impl Track {
     }
 
     pub fn get_pic(&mut self) {
-        let Some(pic) = self
+        let pic = self
             .tag
             .pictures()
             .iter()
             .find(|pic| pic.pic_type() == PictureType::CoverFront);
-        else {
-            return;
-        };
+
+        match pic {
+            Some(pic) => self.picture = Some(pic.data().to_vec()),
+            None => (),
+        }
     }
 }

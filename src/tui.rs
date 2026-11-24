@@ -32,8 +32,10 @@ impl App {
     }
 
     fn render(&self, frame: &mut Frame) {
-        let layout = Layout::vertical([Constraint::Length(1), Constraint::Length(1)]);
-        let [tabs, main] = frame.area().layout(&layout);
+        let v_layout = Layout::vertical([Constraint::Length(1), Constraint::Min(0)]);
+        let h_layout: Layout = Layout::horizontal([Constraint::Length(1), Constraint::Length(1)]);
+        let [tabs, main] = frame.area().layout(&v_layout);
+        let [left, right] = main.layout(&h_layout);
 
         self.render_tabs(frame, tabs);
 

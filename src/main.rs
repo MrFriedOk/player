@@ -4,9 +4,10 @@ use nucleo_matcher::{
     Config, Matcher,
     pattern::{CaseMatching, Normalization, Pattern},
 };
-use ratatui::DefaultTerminal;
 use ratatui::backend::CrosstermBackend;
 use ratatui::widgets::Widget;
+use ratatui::{DefaultTerminal, Frame};
+use std::io;
 use walkdir::WalkDir;
 //use rodio::*;
 use std::path::PathBuf;
@@ -49,20 +50,22 @@ fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
 
 #[derive(Default)]
 struct App {
-    should_quit: bool,
+    exit: bool,
 }
 
 impl App {
-    fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
-        while !self.should_quit {
-            self.render(terminal)?;
+    pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
+        while !self.exit {
+            terminal.draw(|frame| self.draw(frame))?;
+            self.handle_events()?;
         }
         Ok(())
     }
-
-    fn render(&mut self, tui: &mut DefaultTerminal) -> Result<()> {
-        tui.draw(|frame| frame.render_widget(self, frame.area()))?;
-        Ok(())
+    pub fn draw(&self, frame: &mut Frame) {
+        todo!()
+    }
+    pub fn handle_events(&mut self) -> io::Result<()> {
+        todo!()
     }
 }
 

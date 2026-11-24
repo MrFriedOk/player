@@ -9,14 +9,6 @@ use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
 use std::io;
 use std::path::PathBuf;
 
-#[derive(Default)]
-enum Screen {
-    #[default]
-    List,
-    Visualizer,
-}
-
-#[derive(Default)]
 pub struct App {
     exit: bool,
     active_screen: usize,
@@ -63,14 +55,18 @@ impl App {
         }
         Ok(())
     }
-    pub fn exit(&mut self) {
+
+    fn exit(&mut self) {
         self.exit = true;
     }
+
     fn render_tabs(&self, frame: &mut Frame, area: Rect) {
+        let block: Block = Block::bordered();
         frame.render_widget(
             Tabs::new(["Home", "List"])
                 .select(self.active_screen)
-                .padding(" ", " "),
+                .padding(" ", " ")
+                .block(block),
             area,
         );
     }

@@ -1,9 +1,11 @@
+use crate::player;
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::widgets::Widget;
 use ratatui::{DefaultTerminal, Frame};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
 use std::io;
+use std::path::PathBuf;
 
 #[derive(Default)]
 pub struct App {
@@ -13,7 +15,9 @@ pub struct App {
 impl App {
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
         while !self.exit {
+            player(PathBuf::new());
             terminal.draw(|frame| self.draw(frame))?;
+
             self.handle_events()?;
         }
         Ok(())

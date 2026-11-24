@@ -52,18 +52,11 @@ fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
 }
 
 fn player(buf: PathBuf) -> Result<()> {
-    // _stream must live as long as the sink
-    let handle = rodio::DeviceSinkBuilder::open_default_sink().expect("open default audio stream");
+    let mut handle =
+        rodio::DeviceSinkBuilder::open_default_sink().expect("open default audio stream");
     let player = rodio::Player::connect_new(&handle.mixer());
+    handle.log_on_drop(false);
 
-    // Add a dummy source of the sake of the example.
-    let source = SineWave::new(440.0)
-        .take_duration(Duration::from_secs_f32(0.25))
-        .amplify(0.20);
-    player.append(source);
-
-    // The sound plays in a separate thread. This call will block the current thread until the
-    // player has finished playing all its queued sounds.
     player.sleep_until_end();
     Ok(())
 }

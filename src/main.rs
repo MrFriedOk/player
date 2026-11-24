@@ -6,8 +6,11 @@ use nucleo_matcher::{
     pattern::{CaseMatching, Normalization, Pattern},
 };
 
-use rodio::{Decoder, MixerDeviceSink, source::Source};
-use std::{fs::File, path::PathBuf};
+use rodio::{
+    Decoder, MixerDeviceSink,
+    source::{SineWave, Source},
+};
+use std::{fs::File, path::PathBuf, time::Duration};
 use walkdir::WalkDir;
 
 pub mod track;
@@ -49,20 +52,25 @@ fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
 }
 
 fn player(buf: PathBuf) -> Result<()> {
+    // _stream must live as long as the sink
     let handle = rodio::DeviceSinkBuilder::open_default_sink().expect("open default audio stream");
     let player = rodio::Player::connect_new(&handle.mixer());
-    let buf: PathBuf = PathBuf::from("/home/fried/Music/Kroi/SPIN/01. SPIN (Instrumental).flac");
-    let file = File::open(buf).unwrap();
-    let source = Decoder::try_from(file).unwrap();
-    handle.mixer().add(source);
+
+    // Add a dummy source of the sake of the example.
+    let source = SineWave::new(440.0)
+        .take_duration(Duration::from_secs_f32(0.25))
+        .amplify(0.20);
+    player.append(source);
+
+    // The sound plays in a separate thread. This call will block the current thread until the
+    // player has finished playing all its queued sounds.
+    player.sleep_until_end();
     Ok(())
 }
 
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
     ratatui::run(|terminal| App::default().run(terminal));
-
-    player(load_dir().unwrap())?;
 
     Ok(())
 

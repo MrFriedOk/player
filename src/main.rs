@@ -69,7 +69,7 @@ fn player(buf: PathBuf) -> Result<()> {
 
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
-    ratatui::run(|terminal| App::default().run(terminal));
+    let tracks: Vec<Track> = ratatui::run(|terminal| App::new(tracks).run(terminal));
 
     Ok(())
 

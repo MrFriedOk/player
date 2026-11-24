@@ -1,4 +1,5 @@
 use crate::player;
+use crate::track::Track;
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::layout::{Constraint, Layout};
@@ -19,9 +20,17 @@ enum Screen {
 pub struct App {
     exit: bool,
     active_screen: usize,
+    tracks: Vec<Track>,
 }
 
 impl App {
+    pub fn new(tracks: Vec<Track>) -> Self {
+        Self {
+            exit: false,
+            active_screen: 0,
+            tracks,
+        }
+    }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;

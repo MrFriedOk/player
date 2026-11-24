@@ -60,7 +60,7 @@ impl Track {
                 "{} {:?} {:?} {:?} {:?}",
                 file_name, file_type, artist, title, album,
             ),
-            tag: tag.clone(),
+            tag,
             artist,
             title,
             album,
@@ -69,6 +69,8 @@ impl Track {
     }
 
     pub fn get_pic(&mut self) -> Result<Picture, PictureParseError> {
-        let picture: Picture = self.tag.pictures();
+        if let Some(pic) = Picture::from_ape_bytes(self.tag).ok();
+
+        Ok(picture)
     }
 }

@@ -1,19 +1,12 @@
-use crossterm::event::{self, Event, KeyCode, KeyEvent, KeyEventKind};
-use directories::{BaseDirs, UserDirs};
+use color_eyre::Result;
+use directories::UserDirs;
 use nucleo_matcher::{
     Config, Matcher,
     pattern::{CaseMatching, Normalization, Pattern},
 };
-use ratatui::{
-    DefaultTerminal, Frame,
-    backend::CrosstermBackend,
-    buffer::Buffer,
-    layout::Rect,
-    style::Stylize,
-    symbols::border,
-    text::{Line, Text},
-    widgets::{Block, Paragraph, Widget},
-};
+use ratatui::DefaultTerminal;
+use ratatui::backend::CrosstermBackend;
+use ratatui::widgets::Widget;
 use walkdir::WalkDir;
 //use rodio::*;
 use std::path::PathBuf;
@@ -54,16 +47,36 @@ fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
     matches
 }
 
-fn main() -> Result<()> {
-    let dir: PathBuf = load_dir().unwrap();
-    let mut tracks: Vec<Track> = Vec::new();
-    println!("default audio directory, {:?}", dir);
-    let files: Vec<PathBuf> = walk(&dir);
-    for file in &files {
-        if let Some(track) = Track::from_path(file) {
-            tracks.push(track);
+#[derive(Default)]
+struct App {
+    should_quit: bool,
+}
+
+impl App {
+    fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
+        while !self.should_quit {
+            self.render(terminal)?;
         }
+        Ok(())
     }
-    color_eye::install()?;
-    let terminal: Terminal<CrosstermBackend> = ratatui::init();
+
+    fn render(&mut self, tui: &mut DefaultTerminal) -> Result<()> {
+        tui.draw(|frame| frame.render_widget(self, frame.area()))?;
+        Ok(())
+    }
+}
+
+fn main() -> color_eyre::Result<()> {
+    color_eyre::install()?;
+    ratatui::run(|terminal| App::default().run(terminal))
+
+    //let dir: PathBuf = load_dir().unwrap();
+    //let mut tracks: Vec<Track> = Vec::new();
+    //println!("default audio directory, {:?}", dir);
+    //let files: Vec<PathBuf> = walk(&dir);
+    //for file in &files {
+    //    if let Some(track) = Track::from_path(file) {
+    //        tracks.push(track);
+    //    }
+    //}
 }

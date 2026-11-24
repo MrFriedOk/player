@@ -3,14 +3,12 @@ use lofty::file::TaggedFileExt;
 use lofty::{
     file::{FileType, TaggedFile},
     read_from_path,
-    tag::{Accessor, Tag, TagType},
+    tag::{Accessor, Tag},
 };
 
 use std::{
     fmt::{Debug, Formatter},
-    fs, io,
-    io::{Read, stdin},
-    path::{Path, PathBuf},
+    path::PathBuf,
 };
 
 pub struct Track {

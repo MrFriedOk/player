@@ -16,20 +16,20 @@ pub struct Setup {
     exit: bool,
     dir: PathBuf,
     bufs: Vec<PathBuf>,
-    tracks: Vec<Track>,
+    // tracks: Vec<Track>,
 }
 
 impl Setup {
     pub fn new() -> Self {
         let dir: PathBuf = load_dir().unwrap();
         let bufs: Vec<PathBuf> = walk(&dir);
-        let tracks: Vec<Track> = vec![];
+        //let tracks: Vec<Track> = vec![];
         Self {
             first: true,
             exit: false,
             dir,
             bufs,
-            tracks,
+            //tracks,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {

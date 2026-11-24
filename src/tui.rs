@@ -8,8 +8,15 @@ use std::io;
 use std::path::PathBuf;
 
 #[derive(Default)]
+enum Screen {
+    List,
+    Visualizer,
+}
+
+#[derive(Default)]
 pub struct App {
     exit: bool,
+    active_screen: Screen,
 }
 
 impl App {
@@ -27,7 +34,7 @@ impl App {
     pub fn handle_events(&mut self) -> io::Result<()> {
         match event::read()? {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
-                KeyCode::Char('q') => self.exit(),
+                KeyCode::Char(c) => self.exit(),
                 KeyCode::Esc => self.exit(),
                 _ => (),
             },

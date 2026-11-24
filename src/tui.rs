@@ -1,6 +1,6 @@
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
-use ratatui::widgets::Widget;
+use ratatui::widgets::{Block, Paragraph, Widget};
 use ratatui::{DefaultTerminal, Frame};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
 use std::io;
@@ -10,32 +10,25 @@ pub struct App {
     exit: bool,
 }
 
-impl App {
-    pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
-        while !self.exit {
-            terminal.draw(|frame| self.draw(frame))?;
-            self.handle_events()?;
+pub fn run(terminal: &mut DefaultTerminal) -> std::io::Result<()> {
+    let mut query = String::new();
+    loop {
+        terminal.draw(|frame| draw(frame, &query))?;
+        if let Event::Key(key) = event::read()? {
+            match key.code {
+                KeyCode::Esc => return Ok(()),
+                KeyCode::Char(c) => query.push(c),
+                KeyCode::Backspace => {
+                    query.pop();
+                }
+                _ => {}
+            }
         }
-        Ok(())
-    }
-    pub fn draw(&self, frame: &mut Frame) {
-        frame.render_widget(self, frame.area());
-    }
-    pub fn handle_events(&mut self) -> io::Result<()> {
-        match event::read()? {
-            Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
-                KeyCode::Char('q') | KeyCode::Esc => self.exit(),
-                _ => (),
-            },
-            _ => (),
-        }
-        Ok(())
-    }
-    pub fn exit(&mut self) {
-        self.exit = true;
     }
 }
 
-impl Widget for &App {
-    fn render(self, area: Rect, buf: &mut Buffer) {}
+pub fn draw(frame: &mut Frame, query: &str) {
+    let tabs = Tabs::new();
+    let bar = Paragraph::new(query).block(Block::bordered().title("Search"));
+    frame.render_widget(bar, frame.area());
 }

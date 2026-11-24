@@ -13,7 +13,7 @@ use std::path::PathBuf;
 pub mod track;
 pub mod tui;
 use track::Track;
-use tui::App;
+use tui::*;
 
 fn load_dir() -> Result<PathBuf, String> {
     let user_dir: UserDirs = UserDirs::new().ok_or("couldn't find home dir?")?;
@@ -48,17 +48,9 @@ fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
     matches
 }
 
-fn main() -> color_eyre::Result<()> {
-    color_eyre::install()?;
-    ratatui::run(|terminal| App::default().run(terminal))
-
-    //let dir: PathBuf = load_dir().unwrap();
-    //let mut tracks: Vec<Track> = Vec::new();
-    //println!("default audio directory, {:?}", dir);
-    //let files: Vec<PathBuf> = walk(&dir);
-    //for file in &files {
-    //    if let Some(track) = Track::from_path(file) {
-    //        tracks.push(track);
-    //    }
-    //}
+fn main() -> std::io::Result<()> {
+    let mut terminal = ratatui::init();
+    let result = run(&mut terminal);
+    ratatui::restore();
+    result
 }

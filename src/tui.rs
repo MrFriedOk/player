@@ -32,10 +32,10 @@ impl App {
     }
 
     pub fn render(&self, frame: &mut Frame) {
-        let layout = Layout::vertical([Constraint::Length(1), Constraint::Length(3)]);
+        let layout = Layout::vertical([Constraint::Length(1), Constraint::Length(1)]);
         let [tabs, main] = frame.area().layout(&layout);
 
-        frame.render_widget(Tabs::new(["Home", "List"]), tabs);
+        self.render_tabs(frame, tabs);
     }
 
     pub fn handle_events(&mut self) -> io::Result<()> {
@@ -52,5 +52,7 @@ impl App {
     pub fn exit(&mut self) {
         self.exit = true;
     }
-    fn tabs(&self, frame: &mut Frame, area: Rect) {}
+    fn render_tabs(&self, frame: &mut Frame, area: Rect) {
+        frame.render_widget(Tabs::new(["Home", "List"]), area);
+    }
 }

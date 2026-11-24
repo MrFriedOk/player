@@ -4,9 +4,9 @@ use nucleo_matcher::{
     Config, Matcher,
     pattern::{CaseMatching, Normalization, Pattern},
 };
-use ratatui::backend::CrosstermBackend;
 use ratatui::widgets::Widget;
 use ratatui::{DefaultTerminal, Frame};
+use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
 use std::io;
 use walkdir::WalkDir;
 //use rodio::*;
@@ -62,11 +62,15 @@ impl App {
         Ok(())
     }
     pub fn draw(&self, frame: &mut Frame) {
-        todo!()
+        frame.render_widget(self, frame.area());
     }
     pub fn handle_events(&mut self) -> io::Result<()> {
         todo!()
     }
+}
+
+impl Widget for &App {
+    fn render(self, area: Rect, buf: &mut Buffer) {}
 }
 
 fn main() -> color_eyre::Result<()> {

@@ -58,7 +58,7 @@ impl Setup {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
                 KeyCode::Esc => self.exit(),
                 KeyCode::Char(char) => self.input.push(char),
-                KeyCode::Enter => self.send(),
+                KeyCode::Enter => self.send()?,
                 _ => (),
             },
             _ => (),
@@ -70,8 +70,8 @@ impl Setup {
         let area: Rect = frame.area();
         let block: Block = Block::bordered().title("input");
         let msg_area: Rect = Rect {
-            x: area.width,
-            y: area.height,
+            x: area.width / 4,
+            y: area.height / 4,
             width: area.width / 2,
             height: area.height / 2,
         };
@@ -84,7 +84,9 @@ impl Setup {
     }
 
     fn send(&mut self) -> Result<()> {
-        let dir: PathBuf = home_dir();
+        if let Some(mut path) = home_dir() {
+            path.push(&*self.input)
+        }
 
         Ok(())
     }

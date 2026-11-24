@@ -1,5 +1,7 @@
 use lofty::file::TaggedFileExt;
 
+use std::io::Result;
+
 use lofty::picture::error::PictureParseError;
 use lofty::picture::{Picture, PictureType};
 use lofty::{
@@ -68,7 +70,7 @@ impl Track {
         })
     }
 
-    pub fn get_pic(&mut self) {
+    pub fn get_pic(&mut self) -> Result<()> {
         let pic = self
             .tag
             .pictures()
@@ -77,6 +79,7 @@ impl Track {
             .data()
             .to_vec();
 
-        self.picture = Some(pic)
+        self.picture = Some(pic);
+        Ok(())
     }
 }

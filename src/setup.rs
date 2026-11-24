@@ -1,3 +1,4 @@
+use std::env::home_dir;
 use std::path::PathBuf;
 
 use crossterm::event;
@@ -57,6 +58,7 @@ impl Setup {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
                 KeyCode::Esc => self.exit(),
                 KeyCode::Char(char) => self.input.push(char),
+                KeyCode::Enter => self.send(),
                 _ => (),
             },
             _ => (),
@@ -68,8 +70,8 @@ impl Setup {
         let area: Rect = frame.area();
         let block: Block = Block::bordered().title("input");
         let msg_area: Rect = Rect {
-            x: area.width / 2,
-            y: area.height / 2,
+            x: area.width,
+            y: area.height,
             width: area.width / 2,
             height: area.height / 2,
         };
@@ -79,5 +81,11 @@ impl Setup {
 
     fn exit(&mut self) {
         self.exit = true;
+    }
+
+    fn send(&mut self) -> Result<()> {
+        let dir: PathBuf = home_dir();
+
+        Ok(())
     }
 }

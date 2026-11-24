@@ -43,7 +43,7 @@ impl App {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
                 //KeyCode::Char(char) => self.exit(),
                 KeyCode::Esc => self.exit(),
-                KeyCode::Tab => self.active_screen += 1 % 2,
+                KeyCode::Tab => self.active_screen = (self.active_screen + 1) % 2,
                 _ => (),
             },
             _ => (),

@@ -1,5 +1,8 @@
-use rodio::{Decoder, MixerDeviceSink, source::Source};
-use std::{BufReader, PathBuf};
+use rodio::Decoder;
+use std::fs::File;
+use std::io::BufReader;
+use std::io::Result;
+use std::path::PathBuf;
 
 fn player(buf: PathBuf) -> Result<()> {
     let mut handle =

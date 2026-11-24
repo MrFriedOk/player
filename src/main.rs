@@ -81,7 +81,7 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
     files
 }
 
-fn search(input: String, tracks: Vec<Track>) -> Track {
+fn search(input: String, tracks: Vec<Track>) -> Vec<Track> {
     //let input: String = input.to_lowercase();
     //for track in &tracks {
     //    println!("{:?}", track.haystack);
@@ -94,9 +94,16 @@ fn search(input: String, tracks: Vec<Track>) -> Track {
     let matches = Pattern::parse(&input, CaseMatching::Ignore, Normalization::Smart)
         .match_list(tracks, &mut matcher);
 
-    for match2 in matches {
+    for match2 in &matches {
         println!("{:?}, score: {}", match2.0.artist, match2.1);
     }
+
+    let mut matched_tracks: Vec<Track> = Vec::new();
+
+    for track in matches {
+        matched_tracks.push(track.0);
+    }
+    matched_tracks
 }
 
 fn main() {
@@ -113,6 +120,6 @@ fn main() {
     stdin().read_line(&mut input)?.to_string();
 
     //println!("{:?}", &files);
-    search(input.to_owned(), tracks)
+    search(input.to_owned(), tracks);
     //scan(&dir);
 }

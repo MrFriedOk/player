@@ -90,7 +90,7 @@ fn search(input: String, tracks: Vec<Track>) {
         .match_list(tracks, &mut matcher);
 
     for match2 in matches {
-        println!("{:?}", match2.0.artist);
+        println!("{:?}, score: {}", match2.0.artist, match2.1);
     }
 }
 

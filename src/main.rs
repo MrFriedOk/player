@@ -111,7 +111,7 @@ fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
     matches
 }
 
-fn main() -> Result<(), std::io::Error> {
+fn main() {
     let dir: PathBuf = load_dir().unwrap();
     let mut tracks: Vec<Track> = Vec::new();
     println!("default audio directory, {:?}", dir);
@@ -122,14 +122,12 @@ fn main() -> Result<(), std::io::Error> {
         }
     }
     let mut input: String = "".to_owned();
-    stdin().read_line(&mut input)?.to_string();
+    stdin().read_line(&mut input).unwrap();
 
     //println!("{:?}", &files);
-    let matches: Vec<(Track, u32)> = search(input.to_owned(), tracks);
+    let matches: Vec<(Track, u32)> = search("jojo".to_owned(), tracks);
     for track in matches {
         println!("something");
     }
     //scan(&dir);
-
-    Ok(())
 }

@@ -24,16 +24,14 @@ pub struct App {
 impl App {
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
         while !self.exit {
-            terminal.draw(|frame| self.draw(frame))?;
+            terminal.draw(|frame| self.render(frame))?;
 
             self.handle_events()?;
         }
         Ok(())
     }
 
-    pub fn draw(&self, frame: &mut Frame) {
-        frame.render_widget(self, frame.area());
-    }
+    pub fn render(&self, frame: &mut Frame) {}
 
     pub fn handle_events(&mut self) -> io::Result<()> {
         match event::read()? {
@@ -50,11 +48,4 @@ impl App {
         self.exit = true;
     }
     fn tabs(&self, frame: &mut Frame, area: Rect) {}
-}
-
-impl Widget for &App {
-    fn render(self, area: Rect, buf: &mut Buffer) {
-        let layout = Layout::vertical([Constraint::Length(1), Constraint::Fill(1)]).spacing(1);
-        let [top, main] = area.layout(&layout);
-    }
 }

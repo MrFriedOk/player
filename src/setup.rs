@@ -22,6 +22,7 @@ pub struct Setup {
     dir: Option<PathBuf>,
     bufs: Vec<PathBuf>,
     // tracks: Vec<Track>,
+    input: String,
 }
 
 impl Setup {
@@ -35,6 +36,7 @@ impl Setup {
             dir: None,
             bufs: Vec::new(),
             //tracks,
+            input: String::new(),
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
@@ -51,6 +53,7 @@ impl Setup {
         match event::read()? {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
                 KeyCode::Esc => self.exit(),
+                KeyCode::Char(char) => self.input.push(char),
                 _ => (),
             },
             _ => (),

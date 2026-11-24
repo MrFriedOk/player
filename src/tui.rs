@@ -65,6 +65,8 @@ impl App {
     }
 
     fn render_screen(&self, frame: &mut Frame, area: Rect) {
-        Block::new();
+        let border = Block::bordered();
+
+        frame.render_widget(border, area);
     }
 }

@@ -7,6 +7,7 @@ use walkdir::WalkDir;
 //use ratatui::*;
 //use rodio::*;
 use std::{
+    fmt::Debug,
     fs,
     io::{Read, stdin},
     path::{Path, PathBuf},
@@ -35,6 +36,10 @@ impl AsRef<str> for Track {
     fn as_ref(&self) -> &str {
         &self.haystack
     }
+}
+
+impl Debug for Track {
+    fn fmt(&self) {}
 }
 
 impl Track {
@@ -120,7 +125,8 @@ fn main() -> Result<(), std::io::Error> {
     stdin().read_line(&mut input)?.to_string();
 
     //println!("{:?}", &files);
-    search(input.to_owned(), tracks);
+    let matches: Vec<Track> = search(input.to_owned(), tracks);
+    println!("{:?}", &matches);
     //scan(&dir);
 
     Ok(())

@@ -2,7 +2,7 @@ use crate::player;
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::layout::{Constraint, Layout};
-use ratatui::widgets::Widget;
+use ratatui::widgets::{Tabs, Widget};
 use ratatui::{DefaultTerminal, Frame};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
 use std::io;
@@ -31,7 +31,12 @@ impl App {
         Ok(())
     }
 
-    pub fn render(&self, frame: &mut Frame) {}
+    pub fn render(&self, frame: &mut Frame) {
+        let layout = Layout::vertical([Constraint::Length(1), Constraint::Length(3)]);
+        let [tabs, main] = frame.area().layout(&layout);
+
+        frame.render_widget(Tabs::new(["Home", "List"]), tabs);
+    }
 
     pub fn handle_events(&mut self) -> io::Result<()> {
         match event::read()? {

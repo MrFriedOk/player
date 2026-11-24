@@ -1,7 +1,12 @@
 use std::path::PathBuf;
 
+use crossterm::event;
+use crossterm::event::Event;
+use crossterm::event::KeyCode;
+use crossterm::event::KeyEventKind;
 use ratatui::DefaultTerminal;
 use ratatui::Frame;
+use ratatui::layout::Rect;
 
 use crate::track::Track;
 use crate::{load_dir, walk};
@@ -33,17 +38,33 @@ impl Setup {
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
+        let tracks: Vec<Track> = Vec::new();
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
 
             self.handle_events()?;
         }
-        Ok(Vec::new()) //return the Vec once done, make sure to change this lol
+        Ok(tracks) //return the Vec once done, make sure to change this lol
     }
 
     fn handle_events(&mut self) -> Result<()> {
+        match event::read()? {
+            Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
+                KeyCode::Esc => self.exit(),
+                _ => (),
+            },
+            _ => (),
+        }
         Ok(())
     }
 
-    fn render(&self, frame: &mut Frame) {}
+    fn render(&self, frame: &mut Frame) {
+        let area = frame.area();
+        //let content:
+        //frame.render_widget(content, area);
+    }
+
+    fn exit(&mut self) {
+        self.exit = true;
+    }
 }

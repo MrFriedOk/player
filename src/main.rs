@@ -91,7 +91,7 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
     files
 }
 
-fn search(input: String, tracks: Vec<Track>) -> Vec<Track> {
+fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
     //let input: String = input.to_lowercase();
     //for track in &tracks {
     //    println!("{:?}", track.haystack);
@@ -108,12 +108,7 @@ fn search(input: String, tracks: Vec<Track>) -> Vec<Track> {
         println!("{:?}, score: {}", match2.0.artist, match2.1);
     }
 
-    let mut matched_tracks: Vec<Track> = Vec::new();
-
-    for track in matches {
-        matched_tracks.push(track.0);
-    }
-    matched_tracks
+    matches
 }
 
 fn main() -> Result<(), std::io::Error> {
@@ -130,8 +125,10 @@ fn main() -> Result<(), std::io::Error> {
     stdin().read_line(&mut input)?.to_string();
 
     //println!("{:?}", &files);
-    let matches: Vec<Track> = search(input.to_owned(), tracks);
-    println!("{:?}", &matches);
+    let matches: Vec<(Track, u32)> = search(input.to_owned(), tracks);
+    for track in matches {
+        println!("something");
+    }
     //scan(&dir);
 
     Ok(())

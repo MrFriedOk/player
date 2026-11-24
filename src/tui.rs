@@ -2,8 +2,8 @@ use crate::player;
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::layout::{Constraint, Layout};
-use ratatui::widgets::{Tabs, Widget};
-use ratatui::{DefaultTerminal, Frame};
+use ratatui::widgets::{Block, Tabs, Widget};
+use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
 use std::io;
 use std::path::PathBuf;
@@ -36,6 +36,8 @@ impl App {
         let [tabs, main] = frame.area().layout(&layout);
 
         self.render_tabs(frame, tabs);
+
+        self.render_screen(frame, main);
     }
 
     fn handle_events(&mut self) -> io::Result<()> {
@@ -54,6 +56,15 @@ impl App {
         self.exit = true;
     }
     fn render_tabs(&self, frame: &mut Frame, area: Rect) {
-        frame.render_widget(Tabs::new(["Home", "List"]).select(self.active_screen), area);
+        frame.render_widget(
+            Tabs::new(["Home", "List"])
+                .select(self.active_screen)
+                .padding(" ", " "),
+            area,
+        );
+    }
+
+    fn render_screen(&self, frame: &mut Frame, area: Rect) {
+        Block::new();
     }
 }

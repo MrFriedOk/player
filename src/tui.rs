@@ -24,7 +24,7 @@ impl App {
     pub fn handle_events(&mut self) -> io::Result<()> {
         match event::read()? {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
-                KeyCode::Char('q') => self.exit(),
+                KeyCode::Char('q') | KeyCode::Esc => self.exit(),
                 _ => (),
             },
             _ => (),

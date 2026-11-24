@@ -6,14 +6,14 @@ use nucleo_matcher::{
     pattern::{CaseMatching, Normalization, Pattern},
 };
 
+use rodio::{Decoder, MixerDeviceSink, source::Source};
+use std::{fs::File, path::PathBuf};
 use walkdir::WalkDir;
-//use rodio::*;
-use std::path::PathBuf;
 
 pub mod track;
 pub mod tui;
 use track::Track;
-use tui::*;
+use tui::App;
 
 fn load_dir() -> Result<PathBuf, String> {
     let user_dir: UserDirs = UserDirs::new().ok_or("couldn't find home dir?")?;
@@ -48,9 +48,28 @@ fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
     matches
 }
 
-fn main() -> std::io::Result<()> {
-    let mut terminal = ratatui::init();
-    let result = run(&mut terminal);
-    ratatui::restore();
-    result
+fn player(buf: PathBuf) -> Result<()> {
+    let handle = rodio::DeviceSinkBuilder::open_default_sink().expect("open default audio stream");
+    let player = rodio::Player::connect_new(&handle.mixer());
+    let file = File::open(buf).unwrap();
+    let source = Decoder::try_from(file).unwrap();
+    handle.mixer().add(source);
+    Ok(())
+}
+
+fn main() -> color_eyre::Result<()> {
+    color_eyre::install()?;
+    ratatui::run(|terminal| App::default().run(terminal))
+
+    player(load_dir().unwrap().push("Kroi/SPIN/'01. SPIN (Instrumental).flac'"))
+
+    //let dir: PathBuf = load_dir().unwrap();
+    //let mut tracks: Vec<Track> = Vec::new();
+    //println!("default audio directory, {:?}", dir);
+    //let files: Vec<PathBuf> = walk(&dir);
+    //for file in &files {
+    //    if let Some(track) = Track::from_path(file) {
+    //        tracks.push(track);
+    //    }
+    //}
 }

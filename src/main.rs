@@ -34,7 +34,7 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
 
-    ratatui::run(|terminal| Setup::run(terminal))?;
+    ratatui::run(|terminal| Setup::new().run(terminal))?;
 
     let dir: PathBuf = load_dir().unwrap();
     let bufs: Vec<PathBuf> = walk(&dir);

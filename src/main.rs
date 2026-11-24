@@ -1,18 +1,12 @@
 use color_eyre::Result;
 
 use directories::UserDirs;
-use nucleo_matcher::{
-    Config, Matcher,
-    pattern::{CaseMatching, Normalization, Pattern},
-};
 
-use rodio::{
-    Decoder, MixerDeviceSink,
-    source::{SineWave, Source},
-};
-use std::{fs::File, io::BufReader, path::PathBuf, time::Duration};
+use std::path::PathBuf;
 use walkdir::WalkDir;
 
+pub mod player;
+pub mod search;
 pub mod track;
 pub mod tui;
 use track::Track;
@@ -33,38 +27,6 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
         files.push(entry.into_path());
     }
     files
-}
-
-fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
-    //let input: String = input.to_lowercase();
-    //or track in &tracks {
-    //    println!("{:?}", track.haystack);
-    //}
-
-    //create a new matcher with default config, see the nucleo docs for default config.
-    //next, define matches, which is a Vec of the Track and the score the Track got. requires
-    //AsRef<str>, implemented in my Track object and simply returns the Track's haystack as a str.
-    let mut matcher: Matcher = Matcher::new(Config::DEFAULT.match_paths());
-    let matches = Pattern::parse(&input, CaseMatching::Ignore, Normalization::Smart)
-        .match_list(tracks, &mut matcher);
-
-    matches
-}
-
-fn player(buf: PathBuf) -> Result<()> {
-    let mut handle =
-        rodio::DeviceSinkBuilder::open_default_sink().expect("open default audio stream");
-    let player = rodio::Player::connect_new(&handle.mixer());
-    handle.log_on_drop(false);
-
-    let buf = BufReader::new(File::open(buf).unwrap());
-
-    let source = Decoder::try_from(buf).unwrap();
-
-    player.append(source);
-
-    //player.sleep_until_end(); this breaks everything
-    Ok(())
 }
 
 fn main() -> color_eyre::Result<()> {

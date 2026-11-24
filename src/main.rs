@@ -73,9 +73,11 @@ fn main() -> color_eyre::Result<()> {
     let bufs: Vec<PathBuf> = walk(&dir);
     let mut tracks: Vec<Track> = Vec::new();
     for buf in bufs {
-        tracks.push(Track::from_path(&buf))
+        if let Some(track) = Track::from_path(&buf) {
+            tracks.push(track);
+        }
     }
-    ratatui::run(|terminal| App::new(tracks).run(terminal));
+    ratatui::run(|terminal| App::new(tracks).run(terminal))?;
 
     Ok(())
 

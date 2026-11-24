@@ -33,8 +33,9 @@ impl App {
     }
 
     fn render(&self, frame: &mut Frame) {
-        let v_layout = Layout::vertical([Constraint::Length(1), Constraint::Min(0)]);
-        let h_layout: Layout = Layout::horizontal([Constraint::Length(1), Constraint::Length(1)]);
+        let v_layout = Layout::vertical([Constraint::Fill(1), Constraint::Min(0)]);
+        let h_layout: Layout =
+            Layout::horizontal([Constraint::Percentage(33), Constraint::Percentage(77)]);
         let [tabs, main] = frame.area().layout(&v_layout);
         let [left, right] = main.layout(&h_layout);
 
@@ -65,7 +66,6 @@ impl App {
         frame.render_widget(
             Tabs::new(["Home", "List"])
                 .select(self.active_screen)
-                .padding(" ", " ")
                 .block(block),
             area,
         );

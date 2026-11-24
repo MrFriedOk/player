@@ -7,8 +7,10 @@ use walkdir::WalkDir;
 
 pub mod player;
 pub mod search;
+pub mod setup;
 pub mod track;
 pub mod tui;
+use setup::Setup;
 use track::Track;
 use tui::App;
 
@@ -31,6 +33,9 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
 
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
+
+    ratatui::run(|terminal| Setup::run(terminal))?;
+
     let dir: PathBuf = load_dir().unwrap();
     let bufs: Vec<PathBuf> = walk(&dir);
     let mut tracks: Vec<Track> = Vec::new();

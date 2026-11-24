@@ -8,8 +8,7 @@ use walkdir::WalkDir;
 //use rodio::*;
 use std::{
     fmt::{Debug, Formatter},
-    fs,
-    io,
+    fs, io,
     io::{Read, stdin},
     path::{Path, PathBuf},
 };
@@ -94,7 +93,7 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
 
 fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
     //let input: String = input.to_lowercase();
-    //for track in &tracks {
+    //or track in &tracks {
     //    println!("{:?}", track.haystack);
     //}
 
@@ -108,7 +107,7 @@ fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
     matches
 }
 
-fn main() -> io::Result<()>{
+fn main() {
     let dir: PathBuf = load_dir().unwrap();
     let mut tracks: Vec<Track> = Vec::new();
     println!("default audio directory, {:?}", dir);
@@ -118,16 +117,9 @@ fn main() -> io::Result<()>{
             tracks.push(track);
         }
     }
-    let mut input: String = String::new();
-    let stdin = stdin();
-    stdin.read_to_string(&mut input).expect("bad input?")?;
-    Ok(())
-    println!("{}", input);
 
-    //println!("{:?}", &files);
-    let matches: Vec<(Track, u32)> = search(input.to_string().to_owned(), tracks);
+    let matches: Vec<(Track, u32)> = search("jojo's bizarre".to_string().to_owned(), tracks);
     for track in matches {
         println!("{:?}{}", track.0, track.1);
     }
-    //scan(&dir);
 }

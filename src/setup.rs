@@ -6,7 +6,7 @@ use crate::track::Track;
 //use std::io;
 use std::error::Error;
 
-type Result<T, E> = Result<T, Box<dyn Error>>;
+type Result<T> = Result<T, Box<dyn Error>>;
 
 pub struct Setup {
     first: bool,

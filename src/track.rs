@@ -1,5 +1,7 @@
 use lofty::file::TaggedFileExt;
 
+use lofty::picture::Picture;
+use lofty::picture::error::PictureParseError;
 use lofty::{
     file::{FileType, TaggedFile},
     read_from_path,
@@ -20,6 +22,7 @@ pub struct Track {
     pub artist: String,
     pub title: String,
     pub album: String,
+    pub picture: Option<Picture>,
 }
 
 impl AsRef<str> for Track {
@@ -47,6 +50,7 @@ impl Track {
         let artist: String = tag.artist()?.into_owned();
         let title: String = tag.title()?.into_owned();
         let album: String = tag.album()?.into_owned();
+
         //let thing = tag.tag_type();
         Some(Self {
             file_name: file_name.clone(),
@@ -60,6 +64,11 @@ impl Track {
             artist,
             title,
             album,
+            picture: None, //i dont think it's a good idea to load every picture of every song on startup
         })
+    }
+
+    pub fn get_pic(&mut self) -> Result<Picture, PictureParseError> {
+        let picture: Picture = self.tag.pictures();
     }
 }

@@ -8,6 +8,7 @@ use walkdir::WalkDir;
 //use rodio::*;
 use std::{
     fs,
+    io::{Read, stdin},
     path::{Path, PathBuf},
 };
 
@@ -80,11 +81,15 @@ fn walk(dir: &PathBuf) -> Vec<PathBuf> {
     files
 }
 
-fn search(input: String, tracks: Vec<Track>) {
+fn search(input: String, tracks: Vec<Track>) -> Track {
     //let input: String = input.to_lowercase();
-    for track in &tracks {
-        println!("{:?}", track.haystack);
-    }
+    //for track in &tracks {
+    //    println!("{:?}", track.haystack);
+    //}
+
+    //create a new matcher with default config, see the nucleo docs for default config.
+    //next, define matches, which is a Vec of the Track and the score the Track got. requires
+    //AsRef<str>, implemented in my Track object and simply returns the Track's haystack as a str.
     let mut matcher: Matcher = Matcher::new(Config::DEFAULT.match_paths());
     let matches = Pattern::parse(&input, CaseMatching::Ignore, Normalization::Smart)
         .match_list(tracks, &mut matcher);
@@ -104,7 +109,10 @@ fn main() {
             tracks.push(track);
         }
     }
+    let mut input: String = "".to_owned();
+    stdin().read_line(&mut input)?.to_string();
+
     //println!("{:?}", &files);
-    search("jojo's bizarre".to_owned(), tracks)
+    search(input.to_owned(), tracks)
     //scan(&dir);
 }

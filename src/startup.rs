@@ -1,3 +1,4 @@
+use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::{DefaultTerminal, Terminal};
@@ -7,7 +8,7 @@ use crate::track::Track;
 use crate::walk;
 use color_eyre::Result;
 use std::path::PathBuf;
-use std::sync::mpsc::{self, TryRecvError};
+use std::sync::mpsc;
 use std::thread;
 
 pub struct Startup {
@@ -29,8 +30,22 @@ impl Startup {
         self.load_tracks()?;
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
+
+            self.handle_events()?;
         }
         Ok(self.tracks)
+    }
+
+    fn handle_events(&mut self) -> Result<()> {
+        match event::read()? {
+            Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
+                KeyCode::Esc => self.exit(),
+                _ => (),
+            },
+            _ => (),
+        }
+
+        Ok(())
     }
 
     fn render(&self, frame: &mut Frame) {
@@ -50,7 +65,7 @@ impl Startup {
     fn load_tracks(&mut self) -> Result<()> {
         let (tx, rx) = mpsc::channel::<Track>();
         let dir: PathBuf = self.config.dir.clone();
-        println!("{:?}", dir);
+        //println!("{:?}", dir);
 
         thread::spawn(move || {
             let dirs: Vec<PathBuf> = walk(&dir).expect("couldn't walk directory");
@@ -70,23 +85,10 @@ impl Startup {
             //return Ok(Vec::new());
         });
 
-        //while let Ok(track) = rx.try_recv() {
-        // println!("{:?}", track);
-
-        loop {
-            match rx.try_recv() {
-                Ok(track) => {
-                    //self.tracks.push(track);
-                    println!("{:?}", track)
-                }
-                Err(TryRecvError::Empty) => break,
-                Err(TryRecvError::Disconnected) => {
-                    self.exit();
-                    break;
-                }
-            }
+        while let Ok(track) = rx.try_recv() {
+            // println!("{:?}", track);
+            self.tracks.push(track);
         }
-        //}
         //self.exit();
 
         Ok(())

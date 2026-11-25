@@ -67,6 +67,8 @@ fn main() -> color_eyre::Result<()> {
     //}
     let tracks: Vec<Track> = ratatui::run(|terminal| Startup::new(config).run(terminal))?;
 
+    println!("{:?}", tracks);
+
     ratatui::run(|terminal| App::new(tracks).run(terminal))?;
 
     Ok(())

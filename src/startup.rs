@@ -58,7 +58,8 @@ impl Startup {
                 //self.tracks.push(Track::from_path(dir).unwrap());
                 //tx.send(Track::from_path(dir));
                 if let Some(dir) = Track::from_path(dir) {
-                    tx.send(dir);
+                    let _ = tx.send(dir);
+                    return Ok(());
                 } else {
                     eprint!("error");
                 }

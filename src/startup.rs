@@ -24,7 +24,7 @@ impl Startup {
     }
     pub fn run(self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
         let mut tracks: Vec<Track> = Vec::new();
-        load_tracks(self.config.dir.clone());
+        self.load_tracks();
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
         }
@@ -45,13 +45,14 @@ impl Startup {
     fn exit(&mut self) {
         self.exit = true;
     }
-}
-fn load_tracks(dir: PathBuf) -> Result<Vec<Track>> {
-    let (tx, rx) = mpsc::channel();
+    fn load_tracks(&self) -> Result<Vec<Track>> {
+        let (tx, rx) = mpsc::channel();
+        let dir: PathBuf = self.config.dir.clone();
 
-    thread::spawn(|| {
-        let dirs: Vec<PathBuf> = walk(&dir)?;
+        thread::spawn(|| {
+            let dirs: Vec<PathBuf> = walk(&dir)?;
 
-        return Ok(Vec::new());
-    });
+            return Ok(Vec::new());
+        });
+    }
 }

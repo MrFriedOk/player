@@ -5,7 +5,7 @@ use ratatui::{DefaultTerminal, Terminal};
 use crate::setup::Config;
 use crate::track::Track;
 use crate::walk;
-use std::io::{Error, Result};
+use color_eyre::Result;
 use std::path::PathBuf;
 use std::sync::mpsc;
 use std::thread;
@@ -56,7 +56,12 @@ impl Startup {
 
             for dir in &dirs {
                 //self.tracks.push(Track::from_path(dir).unwrap());
-                tx.send(Track::from_path(dir).unwrap()).unwrap();
+                //tx.send(Track::from_path(dir));
+                if let Some(dir) = Track::from_path(dir) {
+                    tx.send(dir);
+                } else {
+                    eprint!("error");
+                }
             }
 
             //return Ok(Vec::new());

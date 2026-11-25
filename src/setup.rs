@@ -37,7 +37,7 @@ pub struct Setup {
     status: Status,
 }
 
-struct Config {
+pub struct Config {
     setup: bool,
     dir: PathBuf,
 }
@@ -65,6 +65,14 @@ impl Setup {
             terminal.draw(|frame| self.render(frame))?;
 
             self.handle_events()?;
+        }
+        if let Some(config) = self.dir {
+            Ok(Config {
+                setup: true,
+                dir: config,
+            })
+        } else {
+            Err(std::io::Error::last_os_error())
         }
         //Ok(tracks) //return the Vec once done, make sure to change this lol
     }

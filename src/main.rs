@@ -10,7 +10,7 @@ pub mod search;
 pub mod setup;
 pub mod track;
 pub mod tui;
-use setup::Setup;
+use setup::{Config, Setup};
 use track::Track;
 use tui::App;
 
@@ -53,7 +53,7 @@ fn probe_dir(dir: &Path) -> (usize, bool) {
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
 
-    let tracks: Vec<Track> = ratatui::run(|terminal| Setup::new().run(terminal))?;
+    let tracks: Config = ratatui::run(|terminal| Setup::new().run(terminal))?;
 
     //let dir: PathBuf = load_dir().unwrap();
     //let bufs: Vec<PathBuf> = walk(&dir);

@@ -22,6 +22,7 @@ use ron::ser::PrettyConfig;
 use ron::ser::to_string_pretty;
 use serde::Deserialize;
 use serde::Serialize;
+use serde::de::value::Error;
 
 use crate::probe_dir;
 use crate::track::Track;
@@ -79,7 +80,7 @@ fn load_config() -> Result<Option<Config>> {
     }
 }
 
-fn save_config(dir: Option<&PathBuf>) -> Result<Config> {
+fn save_config(dir: &PathBuf) -> Result<Config> {
     //thinking out loud, this function should probably be a Result because i can't expect it to
     //work. Err on if config dir cant be found, ? functions that should return Result because they
     //SHOULD work. where should i call this function tho?
@@ -88,17 +89,10 @@ fn save_config(dir: Option<&PathBuf>) -> Result<Config> {
         let config = config_dir.join(PathBuf::from("player-rs/config.ron"));
         create_dir_all(&*config)?;
 
-        if let Some(dir) = dir {
-            let text = to_string_pretty(dir, PrettyConfig::default()).unwrap();
-            write(&config, text)?;
-            Ok(Config::from_path(config)?)
-        } else {
-            println!("i genuinely dont know anymore");
-            Err(std::io::Error::new(
-                std::io::ErrorKind::NotADirectory,
-                "some fwweaking error idk",
-            ))
-        }
+        let text = to_string_pretty(dir, PrettyConfig::default()).unwrap();
+
+        write(&config, text)?;
+        Ok(Config::from_path(config)?)
     } else {
         Err(std::io::Error::new(
             std::io::ErrorKind::NotADirectory,
@@ -134,7 +128,15 @@ impl Setup {
 
                 self.handle_events()?;
             }
-            Ok(save_config(self.dir.as_ref()).ok())
+            if let Some(dir) = self.dir {
+                return Ok(Some(save_config(&dir)?));
+            } else {
+                return Err(std::io::Error::new(
+                    std::io::ErrorKind::PermissionDenied,
+                    "idk",
+                ));
+            }
+            //Ok(save_config(&self.dir));
         }
     }
 

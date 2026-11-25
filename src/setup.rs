@@ -50,7 +50,7 @@ impl Setup {
             //tracks,
             input: String::new(),
             status: Status::CheckingDir {
-                text: "".to_owned(),
+                text: String::new(),
             }, //String::new(),
         }
     }
@@ -155,6 +155,9 @@ impl Setup {
             self.input.clear();
         } else {
             if let Some(path) = home_dir() {
+                self.status = Status::CheckingDir {
+                    text: String::from("hi"), //path.to_string_lossy().to_string(),
+                };
                 let path: PathBuf = path.join(&*self.input);
                 self.status = Status::CheckingDir {
                     text: format!("{}", path.to_string_lossy()),

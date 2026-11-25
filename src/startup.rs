@@ -48,10 +48,10 @@ impl Startup {
         self.exit = true;
     }
     fn load_tracks(&self) -> Result<()> {
-        let (tx, rx) = mpsc::channel();
+        let (tx, rx) = mpsc::channel::<Track>();
         let dir: PathBuf = self.config.dir.clone();
 
-        thread::spawn(|| -> Result<()> {
+        thread::spawn(move || -> Result<()> {
             let dirs: Vec<PathBuf> = walk(&dir)?;
 
             //return Ok(Vec::new());

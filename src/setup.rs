@@ -52,7 +52,9 @@ impl Setup {
             bufs: Vec::new(),
             //tracks,
             input: String::new(),
-            status: String::new(),
+            status: Status::Checking {
+                text: "checking".to_owned(),
+            }, //String::new(),
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
@@ -87,8 +89,7 @@ impl Setup {
             None => "none".to_owned(),
         };
         let area: Rect = frame.area();
-        let block: Block =
-            Block::bordered().title(format!("input  {}  using dir {} ", self.status, dir_text));
+        let block: Block = Block::bordered().title(format!("input  using dir {} ", dir_text));
         let msg_area: Rect = Rect {
             x: area.width / 4,
             y: area.height / 4,
@@ -108,21 +109,26 @@ impl Setup {
     }
 
     fn send(&mut self) -> Result<()> {
-        self.status = "checking".to_owned();
+        //self.status = "checking".to_owned();
         if let Some(path) = home_dir() {
             let path: PathBuf = path.join(&*self.input);
 
             if path.is_dir() && path.exists() {
                 let (count, big) = probe_dir(&path);
                 if big {
-                    self.status =
-                        format!("that's a big directory, {} you sure?", count).to_string();
+                    self.status = Status::Confirm {
+                        text: format!("that's a big directory, {} you sure?", count),
+                    }
+                    //format!("that's a big directory, {} you sure?", count).to_string();
                 }
                 self.dir = Some(path);
                 self.input.clear();
             } else {
                 self.input.clear();
-                self.status = "bad input!".to_owned();
+                self.status = Status::Failed {
+                    text: "bad input!".to_owned(),
+                }
+                //self.status = "bad input!".to_owned();
             }
             //self.dir = Some(path);
         }

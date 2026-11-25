@@ -97,7 +97,7 @@ impl Setup {
                 )
                 .title(format!("using dir {} ", text)),
             Status::Confirm { ref text, dir: _ } => Block::bordered()
-                .title_bottom("confirm?")
+                .title_bottom("confirm? y/n")
                 .title(format!("{}", text)),
             Status::Failed { text: _ } => Block::bordered()
                 .title_bottom("failed!")
@@ -130,6 +130,9 @@ impl Setup {
             Status::Confirm { text, dir } => {
                 if self.input == "y" {
                     self.dir = Some(dir.to_path_buf());
+                    self.status = Status::Success {
+                        text: format!("using dir {}", dir.to_string_lossy()),
+                    }
                 }
                 if self.input == "n" {
                     self.status = Status::CheckingDir {
@@ -156,7 +159,9 @@ impl Setup {
                             self.status = Status::Confirm {
                                 text: format!("that's a big directory, you sure? y/n"),
                                 dir: path.clone(),
-                            }
+                            };
+                            self.input.clear();
+                            return Ok(());
                             //format!("that's a big directory, {} you sure?", count).to_string();
                         }
                         //self.dir = Some(path);

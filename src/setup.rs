@@ -7,6 +7,7 @@ use std::fs::write;
 use std::path::Path;
 use std::path::PathBuf;
 
+use color_eyre::eyre::bail;
 use crossterm::event;
 use crossterm::event::Event;
 use crossterm::event::KeyCode;
@@ -27,8 +28,8 @@ use serde::de::value::Error;
 use crate::probe_dir;
 use crate::track::Track;
 //use std::io;
-use std::io::Result;
-//use color_eyre::Result;
+//use std::io::Result;
+use color_eyre::Result;
 
 //type Result<T> = Result<T, Box<dyn Error>>;
 
@@ -73,10 +74,7 @@ fn load_config() -> Result<Option<Config>> {
             Ok(None)
         }
     } else {
-        Err(std::io::Error::new(
-            std::io::ErrorKind::NotADirectory,
-            "couldn't find config directory",
-        ))
+        bail!("no config dir!")
     }
 }
 
@@ -94,10 +92,7 @@ fn save_config(dir: &PathBuf) -> Result<Config> {
         write(&config, text)?;
         Ok(Config::from_path(config)?)
     } else {
-        Err(std::io::Error::new(
-            std::io::ErrorKind::NotADirectory,
-            "couldn't find config directory",
-        ))
+        bail!("no config dir!")
     }
 }
 
@@ -121,23 +116,19 @@ impl Setup {
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Config> {
         let config = load_config()?;
         if let Some(config) = config {
-            return Ok(Some(config));
-        } else {
-            while !self.exit {
-                terminal.draw(|frame| self.render(frame))?;
-
-                self.handle_events()?;
-            }
-            if let Some(dir) = self.dir {
-                return Ok(Some(save_config(&dir)?));
-            } else {
-                return Err(std::io::Error::new(
-                    std::io::ErrorKind::PermissionDenied,
-                    "idk",
-                ));
-            }
-            //Ok(save_config(&self.dir));
+            return Ok(config);
         }
+        while !self.exit {
+            terminal.draw(|frame| self.render(frame))?;
+
+            self.handle_events()?;
+        }
+        if let Some(dir) = self.dir {
+            Ok(save_config(&dir)?)
+        } else {
+            bail!("setup failed!")
+        }
+        //Ok(save_config(&self.dir));
     }
 
     fn handle_events(&mut self) -> Result<()> {

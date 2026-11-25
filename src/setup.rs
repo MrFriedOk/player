@@ -126,8 +126,8 @@ impl Setup {
 
     fn send(&mut self) -> Result<()> {
         //self.status = "checking".to_owned();
-        match &self.status {
-            Status::Confirm { text, dir } => {
+        match self.status {
+            Status::Confirm { ref text, ref dir } => {
                 if self.input == "y" {
                     self.dir = Some(dir.to_path_buf());
                     self.status = Status::Success {

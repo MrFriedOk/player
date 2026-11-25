@@ -27,6 +27,7 @@ pub struct Setup {
     bufs: Vec<PathBuf>,
     // tracks: Vec<Track>,
     input: String,
+    status: String,
 }
 
 impl Setup {
@@ -41,6 +42,7 @@ impl Setup {
             bufs: Vec::new(),
             //tracks,
             input: String::new(),
+            status: String::new(),
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
@@ -71,7 +73,11 @@ impl Setup {
 
     fn render(&self, frame: &mut Frame) {
         let area: Rect = frame.area();
-        let block: Block = Block::bordered().title("input");
+        let block: Block = Block::bordered().title(format!(
+            "input  {}  using dir {:?} ",
+            self.status,
+            self.dir.as_ref()
+        ));
         let msg_area: Rect = Rect {
             x: area.width / 4,
             y: area.height / 4,
@@ -80,10 +86,10 @@ impl Setup {
         };
         let text: Paragraph = Paragraph::new(&*self.input).block(block);
         frame.render_widget(text, msg_area);
-        if let Some(text) = &self.dir {
-            let text: Paragraph = Paragraph::new(text.to_string_lossy().into_owned());
-            frame.render_widget(text, msg_area);
-        }
+        //if let Some(text) = &self.dir {
+        //    let text: Paragraph = Paragraph::new(text.to_string_lossy().into_owned());
+        //    frame.render_widget(text, msg_area);
+        //}
     }
 
     fn exit(&mut self) {
@@ -91,8 +97,9 @@ impl Setup {
     }
 
     fn send(&mut self) -> Result<()> {
-        if let Some(mut path) = home_dir() {
-            path.push(&*self.input)
+        self.status = "checking".to_owned();
+        if let Some(path) = home_dir() {
+            self.dir = Some(path);
         }
 
         Ok(())

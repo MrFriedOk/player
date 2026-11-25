@@ -22,13 +22,13 @@ fn load_dir() -> Result<PathBuf, String> {
     Ok(audio_dir.to_path_buf())
 }
 
-fn walk(dir: &PathBuf) -> Vec<PathBuf> {
+fn walk(dir: &PathBuf) -> Result<Vec<PathBuf>> {
     let mut files: Vec<PathBuf> = Vec::new();
     for entry in WalkDir::new(dir).into_iter().filter_map(|e| e.ok()) {
         //println!("{:?}", entry.path())
         files.push(entry.into_path());
     }
-    files
+    Ok(files)
 }
 
 fn main() -> color_eyre::Result<()> {

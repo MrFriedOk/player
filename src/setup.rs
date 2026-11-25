@@ -99,6 +99,8 @@ impl Setup {
     fn send(&mut self) -> Result<()> {
         self.status = "checking".to_owned();
         if let Some(path) = home_dir() {
+            let path: PathBuf = path.join(&*self.input);
+
             self.dir = Some(path);
         }
 

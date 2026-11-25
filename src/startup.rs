@@ -7,6 +7,7 @@ use crate::track::Track;
 use crate::walk;
 use std::io::{Error, Result};
 use std::path::PathBuf;
+use std::sync::mpsc;
 use std::thread;
 
 pub struct Startup {
@@ -23,7 +24,7 @@ impl Startup {
     }
     pub fn run(self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
         let mut tracks: Vec<Track> = Vec::new();
-        load_tracks(self.config.dir);
+        load_tracks(self.config.dir.clone());
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
         }
@@ -45,9 +46,12 @@ impl Startup {
         self.exit = true;
     }
 }
-fn load_tracks(dir: PathBuf) -> Vec<Track> {
+fn load_tracks(dir: PathBuf) -> Result<Vec<Track>> {
+    let (tx, rx) = mpsc::channel();
+
     thread::spawn(|| {
-        let dir = dir;
-        for path in walk(&dir) {}
+        let dirs: Vec<PathBuf> = walk(&dir)?;
+
+        return Ok(Vec::new());
     });
 }

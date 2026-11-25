@@ -38,7 +38,7 @@ pub struct Setup {
 
 pub struct Config {
     setup: bool,
-    dir: PathBuf,
+    pub dir: PathBuf,
 }
 
 impl Setup {

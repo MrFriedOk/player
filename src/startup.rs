@@ -20,6 +20,7 @@ impl Startup {
     }
     pub fn run(self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
         let mut tracks: Vec<Track> = Vec::new();
+        self.load_tracks();
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
         }
@@ -40,4 +41,6 @@ impl Startup {
     fn exit(&mut self) {
         self.exit = true;
     }
+
+    fn load_tracks(&self) {}
 }

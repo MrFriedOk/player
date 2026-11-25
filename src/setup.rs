@@ -15,6 +15,7 @@ use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::widgets::Block;
 use ratatui::widgets::Paragraph;
+use ron::from_str;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -45,13 +46,14 @@ pub struct Setup {
 
 #[derive(Serialize, Deserialize)]
 pub struct Config {
-    setup: bool,
     pub dir: PathBuf,
 }
 
 impl Config {
-    fn from_path(path: PathBuf) -> Self {
-        Self { setup, dir }
+    fn from_path(path: PathBuf) -> Result<Self> {
+        let dir = read_to_string(path)?;
+        let dir = ron::from_str(&dir)?;
+        Ok(Self { dir })
     }
 }
 

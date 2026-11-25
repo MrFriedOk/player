@@ -89,9 +89,11 @@ impl Startup {
 
         self.rx = Some(rx);
 
-        while let Some(Ok(track)) = self.rx.try_recv() {
+        if let Some(ref rx) = self.rx {
             // println!("{:?}", track);
-            self.tracks.push(track);
+            while let Ok(track) = rx.try_recv() {
+                self.tracks.push(track);
+            }
         }
         //self.exit();
 

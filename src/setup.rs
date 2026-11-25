@@ -59,7 +59,9 @@ impl Setup {
                 KeyCode::Esc => self.exit(),
                 KeyCode::Char(char) => self.input.push(char),
                 KeyCode::Enter => self.send()?,
-                KeyCode::Backspace => self.input = self.input.pop().unwrap().to_string(),
+                KeyCode::Backspace => {
+                    self.input.pop();
+                }
                 _ => (),
             },
             _ => (),

@@ -66,7 +66,10 @@ fn load_config() -> Result<Option<Config>> {
             Ok(None)
         }
     } else {
-        Err(std::io::Error)
+        Err(std::io::Error::new(
+            std::io::ErrorKind::NotADirectory,
+            "couldn't find config directory",
+        ))
     }
 }
 

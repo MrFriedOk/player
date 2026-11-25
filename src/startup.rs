@@ -10,6 +10,7 @@ use color_eyre::Result;
 use std::path::PathBuf;
 use std::sync::mpsc;
 use std::thread;
+use std::time::Duration;
 
 pub struct Startup {
     exit: bool,
@@ -84,6 +85,7 @@ impl Startup {
             //return Ok(Vec::new());
         });
 
+        thread::sleep(Duration::from_secs(5));
         while let Ok(track) = rx.try_recv() {
             // println!("{:?}", track);
             self.tracks.push(track);

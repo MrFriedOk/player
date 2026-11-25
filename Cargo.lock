@@ -1573,6 +1573,7 @@ dependencies = [
  "ratatui",
  "rodio",
  "ron",
+ "serde",
  "walkdir",
 ]
 

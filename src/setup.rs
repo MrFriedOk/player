@@ -10,6 +10,8 @@ use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::widgets::Block;
 use ratatui::widgets::Paragraph;
+use serde::Deserialize;
+use serde::Serialize;
 
 use crate::probe_dir;
 use crate::track::Track;
@@ -36,6 +38,7 @@ pub struct Setup {
     status: Status,
 }
 
+#[derive(Serialize, Deserialize)]
 pub struct Config {
     setup: bool,
     pub dir: PathBuf,
@@ -59,13 +62,11 @@ impl Setup {
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Config> {
-        let tracks: Vec<Track> = Vec::new();
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
 
             self.handle_events()?;
         }
-        //Ok(tracks) //return the Vec once done, make sure to change this lol
     }
 
     fn handle_events(&mut self) -> Result<()> {

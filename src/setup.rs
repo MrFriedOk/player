@@ -127,13 +127,25 @@ impl Setup {
         if let Status::Confirm { text: _, dir } = &self.status {
             let dir: PathBuf = dir.clone();
 
-            match self.input.as_str().to_ascii_lowercase() {
+            match self.input.to_ascii_lowercase().as_str() {
                 "y" => {
                     self.status = Status::Success {
                         text: format!("using dir {}", dir.display()),
                     }
                 }
+                "n" => {
+                    self.status = Status::CheckingDir {
+                        text: String::new(),
+                    }
+                }
+                _ => {
+                    self.status = Status::Confirm {
+                        text: "?".to_owned(),
+                        dir,
+                    }
+                }
             }
+            self.input.clear();
         } else {
             if let Some(path) = home_dir() {
                 let path: PathBuf = path.join(&*self.input);
@@ -147,7 +159,6 @@ impl Setup {
                             text: format!("that's a big directory, you sure? y/n"),
                             dir: path.clone(),
                         };
-                        self.input.clear();
                         return Ok(());
                         //format!("that's a big directory, {} you sure?", count).to_string();
                     }
@@ -156,7 +167,6 @@ impl Setup {
                         text: format!("found {} files", count),
                         dir: path,
                     };
-                    self.input.clear();
                 } else {
                     self.input.clear();
                     self.status = Status::Failed {
@@ -166,6 +176,7 @@ impl Setup {
                     //self.dir = Some(path);
                 }
             }
+            self.input.clear()
         }
         Ok(())
     }

@@ -69,7 +69,13 @@ impl Setup {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
                 KeyCode::Esc => self.exit(),
                 KeyCode::Char(char) => self.input.push(char),
-                KeyCode::Enter => self.send()?,
+                KeyCode::Enter => {
+                    if let Status::Success { .. } = self.status {
+                        self.exit();
+                    } else {
+                        self.send()?
+                    }
+                }
                 KeyCode::Backspace => {
                     self.input.pop();
                 }
@@ -100,8 +106,8 @@ impl Setup {
                 .title_bottom("failed!")
                 .title(format!("bad input?")),
             Status::Success { ref text } => Block::bordered()
-                .title_bottom("success!!")
-                .title(format!("using {}", text)),
+                .title_bottom("success!! press enter to continue")
+                .title(format!("{}", text)),
         };
         let msg_area: Rect = Rect {
             x: area.width / 4,
@@ -156,7 +162,9 @@ impl Setup {
                     let (count, big) = probe_dir(&path);
                     if big {
                         self.status = Status::Confirm {
-                            text: format!("that's a big directory, you sure? y/n"),
+                            text: format!(
+                                "that's a big directory, you sure? walking caps at 20k files"
+                            ),
                             dir: path.clone(),
                         };
                         return Ok(());
@@ -164,7 +172,7 @@ impl Setup {
                     }
                     //self.dir = Some(path);
                     self.status = Status::Confirm {
-                        text: format!("found {} files", count),
+                        text: format!("found {} files in {}", count, path.display()),
                         dir: path,
                     };
                 } else {

@@ -1,3 +1,4 @@
+use color_eyre::eyre::bail;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::Frame;
 use ratatui::layout::Rect;
@@ -89,12 +90,9 @@ impl Startup {
 
         self.rx = Some(rx);
 
-        if let Some(ref rx) = self.rx {
-            // println!("{:?}", track);
-            while let Ok(track) = rx.try_recv() {
-                self.tracks.push(track);
-            }
-        }
+        let Some(rec) = self.rx else { bail!("s") }
+        //while rec.
+
         //self.exit();
 
         Ok(())

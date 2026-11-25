@@ -50,6 +50,7 @@ impl Startup {
     fn load_tracks(&mut self) -> Result<()> {
         let (tx, rx) = mpsc::channel::<Track>();
         let dir: PathBuf = self.config.dir.clone();
+        println!("{:?}", dir);
 
         thread::spawn(move || {
             let dirs: Vec<PathBuf> = walk(&dir).expect("couldn't walk directory");
@@ -73,7 +74,7 @@ impl Startup {
             // println!("{:?}", track);
             self.tracks.push(track);
         }
-        self.exit();
+        //self.exit();
 
         Ok(())
     }

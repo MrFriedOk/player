@@ -27,14 +27,15 @@ fn load_dir() -> Result<PathBuf, String> {
 fn walk(dir: &PathBuf) -> std::io::Result<Vec<PathBuf>> {
     let mut files: Vec<PathBuf> = Vec::new();
     for entry in WalkDir::new(dir)
-        .max_depth(5)
+        .max_depth(8)
         .follow_links(false)
         .into_iter()
         .filter_map(|e| e.ok())
-        .filter(|e| e.file_type().is_dir())
+        .filter(|e| e.file_type().is_file())
     {
-        //println!("{:?}", entry.path())
+        //println!("{:?}", entry);
         files.push(entry.into_path());
+        //println!("{:?}", files);
     }
     Ok(files)
 }

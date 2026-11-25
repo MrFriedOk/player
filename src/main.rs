@@ -29,6 +29,7 @@ fn walk(dir: &PathBuf) -> Result<Vec<PathBuf>> {
         .follow_links(false)
         .into_iter()
         .filter_map(|e| e.ok())
+        .filter(|entry| entry.file_type().is_file())
     {
         //println!("{:?}", entry.path())
         files.push(entry.into_path());
@@ -40,7 +41,6 @@ fn probe_dir(dir: &Path) -> (usize, bool) {
     let count = WalkDir::new(dir)
         .max_depth(5)
         .follow_links(false)
-        .into_iter()
         .into_iter()
         .filter_map(|entry| entry.ok())
         .filter(|entry| entry.file_type().is_file())

@@ -14,6 +14,7 @@ use ratatui::widgets::Block;
 use ratatui::widgets::BorderType;
 use ratatui::widgets::Paragraph;
 
+use crate::probe_dir;
 use crate::track::Track;
 use crate::{load_dir, walk};
 //use std::io;
@@ -112,9 +113,15 @@ impl Setup {
                         .to_string_lossy()
                         .into_owned()
                 ); //"success!".to_owned();
+
+                let (count, big) = probe_dir(&path);
+                if big {
+                    self.status = "that's a big directory, you sure?".to_owned();
+                }
                 self.dir = Some(path);
                 self.input.clear();
             } else {
+                self.input.clear();
                 self.status = "bad input!".to_owned();
             }
             //self.dir = Some(path);

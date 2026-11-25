@@ -123,60 +123,46 @@ impl Setup {
 
     fn send(&mut self) -> Result<()> {
         //self.status = "checking".to_owned();
-        match &self.status {
-            Status::Confirm { text: _, dir } => {
-                if self.input == "y" {
-                    self.dir = Some(dir.to_path_buf());
+
+        if let Status::Confirm { text: _, dir } = &self.status {
+            let dir: PathBuf = dir.clone();
+
+            match self.input.as_str().to_ascii_lowercase() {
+                "y" => {
                     self.status = Status::Success {
-                        text: format!("using dir {}", dir.to_string_lossy()),
+                        text: format!("using dir {}", dir.display()),
                     }
                 }
-                if self.input == "n" {
-                    self.status = Status::CheckingDir {
-                        text: "".to_owned(),
-                    };
-                    self.input.clear()
-                } else {
-                    self.status = Status::Confirm {
-                        text: "?".to_owned(),
-                        dir: dir.to_path_buf(),
-                    };
-                    self.input.clear();
-                }
             }
-            if let Status::Confirm {text: _, dir} = &self.status {
-                let dir: PathBuf = dir.clone();
-            }
-            _ => {
-                if let Some(path) = home_dir() {
-                    let path: PathBuf = path.join(&*self.input);
-                    self.status = Status::CheckingDir {
-                        text: format!("{}", path.to_string_lossy()),
-                    };
-                    if path.is_dir() && path.exists() {
-                        let (count, big) = probe_dir(&path);
-                        if big {
-                            self.status = Status::Confirm {
-                                text: format!("that's a big directory, you sure? y/n"),
-                                dir: path.clone(),
-                            };
-                            self.input.clear();
-                            return Ok(());
-                            //format!("that's a big directory, {} you sure?", count).to_string();
-                        }
-                        //self.dir = Some(path);
+        } else {
+            if let Some(path) = home_dir() {
+                let path: PathBuf = path.join(&*self.input);
+                self.status = Status::CheckingDir {
+                    text: format!("{}", path.to_string_lossy()),
+                };
+                if path.is_dir() && path.exists() {
+                    let (count, big) = probe_dir(&path);
+                    if big {
                         self.status = Status::Confirm {
-                            text: format!("found {} files", count),
-                            dir: path,
+                            text: format!("that's a big directory, you sure? y/n"),
+                            dir: path.clone(),
                         };
                         self.input.clear();
-                    } else {
-                        self.input.clear();
-                        self.status = Status::Failed {
-                            text: "bad input!".to_owned(),
-                        }
-                        //self.status = "bad input!".to_owned();
+                        return Ok(());
+                        //format!("that's a big directory, {} you sure?", count).to_string();
                     }
+                    //self.dir = Some(path);
+                    self.status = Status::Confirm {
+                        text: format!("found {} files", count),
+                        dir: path,
+                    };
+                    self.input.clear();
+                } else {
+                    self.input.clear();
+                    self.status = Status::Failed {
+                        text: "bad input!".to_owned(),
+                    }
+                    //self.status = "bad input!".to_owned();
                     //self.dir = Some(path);
                 }
             }

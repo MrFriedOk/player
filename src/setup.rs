@@ -127,7 +127,7 @@ impl Setup {
 
                 self.handle_events()?;
             }
-            return Ok(save_config(&self.dir.unwrap())?);
+            return Ok(save_config(&self.dir.expect("WHAT????"))?);
         }
     }
 

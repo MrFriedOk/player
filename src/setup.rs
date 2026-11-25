@@ -23,6 +23,13 @@ use std::io::Result;
 
 //type Result<T> = Result<T, Box<dyn Error>>;
 
+pub enum Status {
+    Checking { text: String },
+    Failed { text: String },
+    Success { text: String },
+    Confirm { text: String },
+}
+
 pub struct Setup {
     first: bool,
     exit: bool,
@@ -30,7 +37,7 @@ pub struct Setup {
     bufs: Vec<PathBuf>,
     // tracks: Vec<Track>,
     input: String,
-    status: String,
+    status: Status,
 }
 
 impl Setup {

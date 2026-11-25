@@ -88,10 +88,17 @@ fn save_config(dir: Option<&PathBuf>) -> Result<Config> {
         let config = config_dir.join(PathBuf::from("player-rs/config.ron"));
         create_dir_all(&*config)?;
 
-        let text = to_string_pretty(dir.expect("WHYYYYYYY"), PrettyConfig::default()).unwrap();
-
-        write(&config, text)?;
-        Ok(Config::from_path(config)?)
+        if let Some(dir) = dir {
+            let text = to_string_pretty(dir, PrettyConfig::default()).unwrap();
+            write(&config, text)?;
+            Ok(Config::from_path(config)?)
+        } else {
+            println!("i genuinely dont know anymore");
+            Err(std::io::Error::new(
+                std::io::ErrorKind::NotADirectory,
+                "some fwweaking error idk",
+            ))
+        }
     } else {
         Err(std::io::Error::new(
             std::io::ErrorKind::NotADirectory,

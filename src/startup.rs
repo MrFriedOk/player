@@ -9,7 +9,7 @@ use crate::track::Track;
 use crate::walk;
 use color_eyre::Result;
 use std::path::PathBuf;
-use std::sync::mpsc::{self, Receiver};
+use std::sync::mpsc::{self, Receiver, TryRecvError};
 use std::thread;
 use std::time::Duration;
 
@@ -90,9 +90,14 @@ impl Startup {
 
         self.rx = Some(rx);
 
-        let Some(rec) = self.rx else { bail!("s") }
-        //while rec.
-
+        let Some(rec) = &self.rx else { bail!("s") };
+        loop {
+            match rec.try_recv() {
+                Ok(track) => self.tracks.push(track),
+                Err(TryRecvError::Empty) => break,
+                Err(TryRecvError::Disconnected) => self.exit(),
+            }
+        }
         //self.exit();
 
         Ok(())

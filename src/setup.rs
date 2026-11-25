@@ -117,17 +117,17 @@ impl Setup {
             }, //String::new(),
         }
     }
-    pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Config> {
+    pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Option<Config>> {
         let config = load_config()?;
         if let Some(config) = config {
-            return Ok(config);
+            return Ok(Some(config));
         } else {
             while !self.exit {
                 terminal.draw(|frame| self.render(frame))?;
 
                 self.handle_events()?;
             }
-            return Ok(save_config(&self.dir.expect("WHAT????"))?);
+            Ok(self.dir)
         }
     }
 

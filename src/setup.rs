@@ -13,7 +13,6 @@ use ratatui::widgets::Paragraph;
 
 use crate::probe_dir;
 use crate::track::Track;
-use crate::{load_dir, walk};
 //use std::io;
 use std::io::Result;
 //use color_eyre::Result;

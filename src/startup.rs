@@ -1,7 +1,9 @@
 use ratatui::Frame;
+use ratatui::layout::Rect;
 use ratatui::{DefaultTerminal, Terminal};
 
 use crate::setup::Config;
+use crate::track::Track;
 use std::io::{Error, Result};
 
 pub struct Startup {
@@ -16,12 +18,26 @@ impl Startup {
             config,
         }
     }
-    pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
+    pub fn run(self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
+        let mut tracks: Vec<Track> = Vec::new();
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
         }
-        Ok(())
+        Ok(tracks)
     }
 
-    fn render(&self, frame: &mut Frame) {}
+    fn render(&self, frame: &mut Frame) {
+        let area: Rect = frame.area();
+
+        let content_area: Rect = Rect {
+            x: area.width / 4,
+            y: area.width / 4,
+            width: area.width / 2,
+            height: area.height / 2,
+        };
+    }
+
+    fn exit(&mut self) {
+        self.exit = true;
+    }
 }

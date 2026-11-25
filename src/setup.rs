@@ -7,6 +7,7 @@ use crossterm::event;
 use crossterm::event::Event;
 use crossterm::event::KeyCode;
 use crossterm::event::KeyEventKind;
+use directories::BaseDirs;
 use ratatui::DefaultTerminal;
 use ratatui::Frame;
 use ratatui::layout::Rect;
@@ -46,6 +47,14 @@ pub struct Config {
     pub dir: PathBuf,
 }
 
+fn load_config() -> Result {
+    if let Some(base) = BaseDirs::new() {
+        let config = base.config_dir();
+    } else {
+        Err
+    }
+}
+
 impl Setup {
     pub fn new() -> Self {
         //let dir: PathBuf = load_dir().unwrap();
@@ -64,14 +73,10 @@ impl Setup {
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Config> {
-        if let path = std::path::Path::new("config.ron") {
-            return Ok(Config = ron::from_str(read_to_string(*path)));
-        } else {
-            while !self.exit {
-                terminal.draw(|frame| self.render(frame))?;
+        while !self.exit {
+            terminal.draw(|frame| self.render(frame))?;
 
-                self.handle_events()?;
-            }
+            self.handle_events()?;
         }
     }
 

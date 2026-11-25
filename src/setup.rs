@@ -127,7 +127,7 @@ impl Setup {
 
                 self.handle_events()?;
             }
-            Ok(Some(save_config(self.dir)).expect("IUGHQUGHQIUGHQIUGHQIWUGHQWIUGH"))
+            Ok(save_config(self.dir.as_ref()).ok())
         }
     }
 

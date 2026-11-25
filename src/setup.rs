@@ -127,6 +127,7 @@ impl Setup {
         if let Some(dir) = self.dir {
             Ok(save_config(&dir)?)
         } else {
+            println!("{:?}", self.dir);
             bail!("setup failed!")
         }
         //Ok(save_config(&self.dir));
@@ -206,7 +207,8 @@ impl Setup {
                 "y" => {
                     self.status = Status::Success {
                         text: format!("using dir {}", dir.display()),
-                    }
+                    };
+                    self.dir = Some(dir);
                 }
                 "n" => {
                     self.status = Status::CheckingDir {

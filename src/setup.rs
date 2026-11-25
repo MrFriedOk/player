@@ -24,7 +24,7 @@ use std::io::Result;
 //type Result<T> = Result<T, Box<dyn Error>>;
 
 pub enum Status {
-    Checking { text: String },
+    CheckingDir { text: String },
     Failed { text: String },
     Success { text: String },
     Confirm { text: String },
@@ -52,7 +52,7 @@ impl Setup {
             bufs: Vec::new(),
             //tracks,
             input: String::new(),
-            status: Status::Checking {
+            status: Status::CheckingDir {
                 text: "checking".to_owned(),
             }, //String::new(),
         }
@@ -90,9 +90,12 @@ impl Setup {
         };
         let area: Rect = frame.area();
         //if let Status::Success { text } = self.status {}
-        let block: Block = Block::bordered()
-            .title_bottom("bottom text")
-            .title(format!("input  using dir {} ", dir_text));
+        let block: Block = match self.status { 
+            Status::CheckingDir { text } => Block::bordered()
+            .title_bottom("looks like this is your first time, please input a directory. paths are absolute, be careful!")
+            .title(format!("using dir {} ", text)),
+            Status::Confirm {}
+        };
         let msg_area: Rect = Rect {
             x: area.width / 4,
             y: area.height / 4,

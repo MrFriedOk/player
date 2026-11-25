@@ -24,7 +24,7 @@ impl Startup {
             tracks: Vec::new(),
         }
     }
-    pub fn run(self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
+    pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
         //let mut tracks: Vec<Track> = Vec::new();
         self.load_tracks()?;
         while !self.exit {
@@ -47,16 +47,25 @@ impl Startup {
     fn exit(&mut self) {
         self.exit = true;
     }
-    fn load_tracks(&self) -> Result<()> {
+    fn load_tracks(&mut self) -> Result<()> {
         let (tx, rx) = mpsc::channel::<Track>();
         let dir: PathBuf = self.config.dir.clone();
 
         thread::spawn(move || -> Result<()> {
             let dirs: Vec<PathBuf> = walk(&dir)?;
 
+            for dir in &dirs {
+                //self.tracks.push(Track::from_path(dir).unwrap());
+                tx.send(Track::from_path(dir).unwrap()).unwrap();
+            }
+
             //return Ok(Vec::new());
             Ok(())
         });
+
+        while let Ok(track) = rx.try_recv() {
+            self.tracks.push(track);
+        }
 
         Ok(())
     }

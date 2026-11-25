@@ -7,7 +7,7 @@ use crate::track::Track;
 use crate::walk;
 use color_eyre::Result;
 use std::path::PathBuf;
-use std::sync::mpsc;
+use std::sync::mpsc::{self, TryRecvError};
 use std::thread;
 
 pub struct Startup {
@@ -70,10 +70,23 @@ impl Startup {
             //return Ok(Vec::new());
         });
 
-        while let Ok(track) = rx.try_recv() {
-            // println!("{:?}", track);
-            self.tracks.push(track);
+        //while let Ok(track) = rx.try_recv() {
+        // println!("{:?}", track);
+
+        loop {
+            match rx.try_recv() {
+                Ok(track) => {
+                    //self.tracks.push(track);
+                    println!("{:?}", track)
+                }
+                Err(TryRecvError::Empty) => break,
+                Err(TryRecvError::Disconnected) => {
+                    self.exit();
+                    break;
+                }
+            }
         }
+        //}
         //self.exit();
 
         Ok(())

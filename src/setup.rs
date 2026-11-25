@@ -1,4 +1,6 @@
 use std::env::home_dir;
+use std::fs::File;
+use std::fs::read_to_string;
 use std::path::PathBuf;
 
 use crossterm::event;
@@ -62,10 +64,14 @@ impl Setup {
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Config> {
-        while !self.exit {
-            terminal.draw(|frame| self.render(frame))?;
+        if let path = std::path::Path::new("config.ron") {
+            return Ok(Config = ron::from_str(read_to_string(*path)));
+        } else {
+            while !self.exit {
+                terminal.draw(|frame| self.render(frame))?;
 
-            self.handle_events()?;
+                self.handle_events()?;
+            }
         }
     }
 

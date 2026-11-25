@@ -129,9 +129,11 @@ impl Setup {
         match &self.status {
             Status::Confirm { text, dir } => {
                 if self.input == "y" {
-                    println!("ok");
+                    self.dir = Some(dir.to_path_buf());
                 } else {
-                    println!("nok");
+                    self.status = Status::CheckingDir {
+                        text: "".to_owned(),
+                    };
                 }
             }
             _ => {

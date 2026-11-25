@@ -2,7 +2,7 @@ use color_eyre::Result;
 
 use directories::UserDirs;
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use walkdir::WalkDir;
 
 pub mod player;
@@ -34,6 +34,20 @@ fn walk(dir: &PathBuf) -> Result<Vec<PathBuf>> {
         files.push(entry.into_path());
     }
     Ok(files)
+}
+
+fn probe_dir(dir: &Path) -> (usize, bool) {
+    let count = WalkDir::new(dir)
+        .max_depth(5)
+        .follow_links(false)
+        .into_iter()
+        .into_iter()
+        .filter_map(|entry| entry.ok())
+        .filter(|entry| entry.file_type().is_file())
+        .take(20_001)
+        .count();
+
+    (count, count > 20_001)
 }
 
 fn main() -> color_eyre::Result<()> {

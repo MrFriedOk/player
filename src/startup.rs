@@ -13,6 +13,7 @@ use std::thread;
 pub struct Startup {
     exit: bool,
     config: Config,
+    tracks: Vec<Track>,
 }
 
 impl Startup {
@@ -20,15 +21,16 @@ impl Startup {
         Self {
             exit: false,
             config,
+            tracks: Vec::new(),
         }
     }
     pub fn run(self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
-        let mut tracks: Vec<Track> = Vec::new();
-        self.load_tracks();
+        //let mut tracks: Vec<Track> = Vec::new();
+        self.load_tracks()?;
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
         }
-        Ok(tracks)
+        Ok(self.tracks)
     }
 
     fn render(&self, frame: &mut Frame) {
@@ -45,14 +47,17 @@ impl Startup {
     fn exit(&mut self) {
         self.exit = true;
     }
-    fn load_tracks(&self) -> Result<Vec<Track>> {
+    fn load_tracks(&self) -> Result<()> {
         let (tx, rx) = mpsc::channel();
         let dir: PathBuf = self.config.dir.clone();
 
-        thread::spawn(|| {
+        thread::spawn(|| -> Result<()> {
             let dirs: Vec<PathBuf> = walk(&dir)?;
 
-            return Ok(Vec::new());
+            //return Ok(Vec::new());
+            Ok(())
         });
+
+        Ok(())
     }
 }

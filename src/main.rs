@@ -24,7 +24,7 @@ fn load_dir() -> Result<PathBuf, String> {
     Ok(audio_dir.to_path_buf())
 }
 
-fn walk(dir: &PathBuf) -> Result<Vec<PathBuf>> {
+fn walk(dir: &PathBuf) -> std::io::Result<Vec<PathBuf>> {
     let mut files: Vec<PathBuf> = Vec::new();
     for entry in WalkDir::new(dir)
         .max_depth(5)

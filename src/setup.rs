@@ -53,7 +53,7 @@ impl Setup {
             //tracks,
             input: String::new(),
             status: Status::CheckingDir {
-                text: "checking".to_owned(),
+                text: "".to_owned(),
             }, //String::new(),
         }
     }
@@ -90,19 +90,19 @@ impl Setup {
         };
         let area: Rect = frame.area();
         //if let Status::Success { text } = self.status {}
-        let block: Block = match self.status { 
-            Status::CheckingDir { text } => Block::bordered()
-            .title_bottom("looks like this is your first time, please input a directory. paths are absolute, be careful!")
-            .title(format!("using dir {} ", text)),
-            Status::Confirm {text} => Block::bordered()
-            .title_bottom("that's a lot of files, you sure?")
-            .title(format!("found {} files", text)),
-            Status::Failed {text} => Block::bordered()
-            .title_bottom("failed!")
-            .title(format!("bad input?", text)),
-            Status::Success {text} => Block::bordered()
-            .title_bottom("success!!")
-            .title(format!("using {}", text)),
+        let block: Block = match self.status {
+            Status::CheckingDir { ref text } => Block::bordered()
+                .title_bottom("please input a directory. paths are absolute, be careful!")
+                .title(format!("using dir {} ", text)),
+            Status::Confirm { ref text } => Block::bordered()
+                .title_bottom("that's a lot of files, you sure?")
+                .title(format!("found {} files", text)),
+            Status::Failed { text: _ } => Block::bordered()
+                .title_bottom("failed!")
+                .title(format!("bad input?")),
+            Status::Success { ref text } => Block::bordered()
+                .title_bottom("success!!")
+                .title(format!("using {}", text)),
         };
         let msg_area: Rect = Rect {
             x: area.width / 4,
@@ -131,7 +131,7 @@ impl Setup {
                 let (count, big) = probe_dir(&path);
                 if big {
                     self.status = Status::Confirm {
-                        text: format!("that's a big directory, {} you sure?", count),
+                        text: format!("that's a big directory, you sure?"),
                     }
                     //format!("that's a big directory, {} you sure?", count).to_string();
                 }

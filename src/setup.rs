@@ -1,4 +1,5 @@
 use std::env::home_dir;
+use std::io::Error;
 use std::path::PathBuf;
 
 use crossterm::event;
@@ -15,8 +16,8 @@ use ratatui::widgets::Paragraph;
 use crate::track::Track;
 use crate::{load_dir, walk};
 //use std::io;
-use color_eyre::Result;
-use std::error::Error;
+use std::io::Result;
+//use color_eyre::Result;
 
 //type Result<T> = Result<T, Box<dyn Error>>;
 
@@ -101,7 +102,12 @@ impl Setup {
         if let Some(path) = home_dir() {
             let path: PathBuf = path.join(&*self.input);
 
-            self.dir = Some(path);
+            if path.is_dir() && path.exists() {
+                self.dir = Some(path);
+            } else {
+                self.status = "bad input!".to_owned();
+            }
+            //self.dir = Some(path);
         }
 
         Ok(())

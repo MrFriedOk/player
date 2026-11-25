@@ -1,6 +1,7 @@
 use std::env::home_dir;
 use std::fs::File;
 use std::fs::read_to_string;
+use std::path::Path;
 use std::path::PathBuf;
 
 use crossterm::event;
@@ -47,11 +48,18 @@ pub struct Config {
     pub dir: PathBuf,
 }
 
-fn load_config() -> Result {
+fn load_config() -> Result<Option<Config>> {
     if let Some(base) = BaseDirs::new() {
-        let config = base.config_dir();
+        let config_dir = base.config_dir();
+        let config = config_dir.join(PathBuf::from("player-rs/config.ron"));
+
+        if config.exists() {
+            Ok(Some(config))
+        } else {
+            Ok(None)
+        }
     } else {
-        Err
+        Err(Error)
     }
 }
 

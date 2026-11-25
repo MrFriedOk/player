@@ -37,6 +37,11 @@ pub struct Setup {
     status: Status,
 }
 
+struct Config {
+    setup: bool,
+    dir: PathBuf,
+}
+
 impl Setup {
     pub fn new() -> Self {
         //let dir: PathBuf = load_dir().unwrap();
@@ -54,14 +59,14 @@ impl Setup {
             }, //String::new(),
         }
     }
-    pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
+    pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Config> {
         let tracks: Vec<Track> = Vec::new();
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
 
             self.handle_events()?;
         }
-        Ok(tracks) //return the Vec once done, make sure to change this lol
+        //Ok(tracks) //return the Vec once done, make sure to change this lol
     }
 
     fn handle_events(&mut self) -> Result<()> {

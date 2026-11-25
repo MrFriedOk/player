@@ -55,15 +55,7 @@ fn probe_dir(dir: &Path) -> (usize, bool) {
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
 
-    if let Some(config) = ratatui::run(|terminal| Setup::new().run(terminal).expect("what")) {
-        let tracks: Vec<Track> = ratatui::run(|terminal| Startup::new(config).run(terminal))?;
-
-        ratatui::run(|terminal| App::new(tracks).run(terminal))?;
-
-        Ok(())
-    } else {
-        Ok(())
-    }
+    let config: Config = ratatui::run(|terminal| Setup::new().run(terminal))?;
 
     //let dir: PathBuf = load_dir().unwrap();
     //let bufs: Vec<PathBuf> = walk(&dir);
@@ -73,6 +65,11 @@ fn main() -> color_eyre::Result<()> {
     //        tracks.push(track);
     //    }
     //}
+    let tracks: Vec<Track> = ratatui::run(|terminal| Startup::new(config).run(terminal))?;
+
+    ratatui::run(|terminal| App::new(tracks).run(terminal))?;
+
+    Ok(())
 
     //let dir: PathBuf = load_dir().unwrap();
     //let mut tracks: Vec<Track> = Vec::new();

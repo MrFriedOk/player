@@ -118,7 +118,7 @@ impl Setup {
             }, //String::new(),
         }
     }
-    pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Option<Config>> {
+    pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Config> {
         let config = load_config()?;
         if let Some(config) = config {
             return Ok(Some(config));

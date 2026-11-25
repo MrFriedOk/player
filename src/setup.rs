@@ -18,6 +18,8 @@ use ratatui::layout::Rect;
 use ratatui::widgets::Block;
 use ratatui::widgets::Paragraph;
 use ron::from_str;
+use ron::ser::PrettyConfig;
+use ron::ser::to_string_pretty;
 use serde::Deserialize;
 use serde::Serialize;
 
@@ -86,7 +88,9 @@ fn save_config(dir: &PathBuf) -> Result<Config> {
         let config = config_dir.join(PathBuf::from("player-rs/config.ron"));
         create_dir_all(&*config)?;
 
-        write(config.as_ref(), dir.to_string_lossy().to_string())?;
+        let text = to_string_pretty(dir, PrettyConfig::default())?;
+
+        write(config.as_ref(), ?;
     } else {
         Err(std::io::Error::new(
             std::io::ErrorKind::NotADirectory,

@@ -106,7 +106,7 @@ impl Setup {
                 .title_bottom("failed!")
                 .title(format!("bad input?")),
             Status::Success { ref text } => Block::bordered()
-                .title_bottom("success!! press enter to continue")
+                .title_bottom("success!! press enter to continue. your input will be saved")
                 .title(format!("{}", text)),
         };
         let msg_area: Rect = Rect {
@@ -131,7 +131,8 @@ impl Setup {
         //self.status = "checking".to_owned();
 
         if let Status::Confirm { text: _, dir } = &self.status {
-            let dir: PathBuf = dir.clone();
+            let dir: PathBuf = dir.clone(); //was required here, im sorry!!!! needed ownership to
+            //dir and i think this is cheap
 
             match self.input.to_ascii_lowercase().as_str() {
                 "y" => {
@@ -167,6 +168,7 @@ impl Setup {
                             ),
                             dir: path.clone(),
                         };
+                        self.input.clear();
                         return Ok(());
                         //format!("that's a big directory, {} you sure?", count).to_string();
                     }

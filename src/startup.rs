@@ -8,7 +8,7 @@ use crate::track::Track;
 use crate::walk;
 use color_eyre::Result;
 use std::path::PathBuf;
-use std::sync::mpsc;
+use std::sync::mpsc::{self, Receiver};
 use std::thread;
 use std::time::Duration;
 
@@ -16,6 +16,7 @@ pub struct Startup {
     exit: bool,
     config: Config,
     tracks: Vec<Track>,
+    rx: Option<Receiver<Track>>,
 }
 
 impl Startup {
@@ -24,6 +25,7 @@ impl Startup {
             exit: false,
             config,
             tracks: Vec::new(),
+            rx: None,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
@@ -85,8 +87,9 @@ impl Startup {
             //return Ok(Vec::new());
         });
 
-        thread::sleep(Duration::from_secs(5));
-        while let Ok(track) = rx.try_recv() {
+        self.rx = Some(rx);
+
+        while let Some(Ok(track)) = self.rx.try_recv() {
             // println!("{:?}", track);
             self.tracks.push(track);
         }

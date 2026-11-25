@@ -72,8 +72,9 @@ impl Startup {
             //println!("{:?}", dirs);
 
             for dir in dirs {
-                //self.tracks.push(Track::from_path(dir).unwrap());
-                tx.send(Track::from_path(&dir).unwrap());
+                if let Some(track) = Track::from_path(&dir) {
+                    tx.send(track).unwrap();
+                }
             }
 
             //return Ok(Vec::new());

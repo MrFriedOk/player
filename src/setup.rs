@@ -1,4 +1,5 @@
 use std::env::home_dir;
+use std::fs::canonicalize;
 use std::io::Error;
 use std::path::PathBuf;
 
@@ -104,9 +105,9 @@ impl Setup {
             let path: PathBuf = path.join(&*self.input);
 
             if path.is_dir() && path.exists() {
+                self.status = format!("{:?}", canonicalize(&path)); //"success!".to_owned();
                 self.dir = Some(path);
-
-                self.status = "success!".to_owned();
+                self.input.clear();
             } else {
                 self.status = "bad input!".to_owned();
             }

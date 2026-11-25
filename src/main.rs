@@ -47,7 +47,7 @@ fn probe_dir(dir: &Path) -> (usize, bool) {
         .take(20_001)
         .count();
 
-    (count, count > 20_001)
+    (count, count > 20_000)
 }
 
 fn main() -> color_eyre::Result<()> {

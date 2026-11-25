@@ -106,17 +106,10 @@ impl Setup {
             let path: PathBuf = path.join(&*self.input);
 
             if path.is_dir() && path.exists() {
-                self.status = format!(
-                    "{}",
-                    canonicalize(&path)
-                        .unwrap_or_default()
-                        .to_string_lossy()
-                        .into_owned()
-                ); //"success!".to_owned();
-
                 let (count, big) = probe_dir(&path);
                 if big {
-                    self.status = "that's a big directory, you sure?".to_owned();
+                    self.status =
+                        format!("that's a big directory, {} you sure?", count).to_string();
                 }
                 self.dir = Some(path);
                 self.input.clear();

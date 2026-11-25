@@ -85,13 +85,13 @@ fn save_config(dir: &PathBuf) -> Result<Config> {
     //SHOULD work. where should i call this function tho?
     if let Some(base) = BaseDirs::new() {
         let config_dir = base.config_dir();
-        let config = config_dir.join(PathBuf::from("player-rs/config.ron"));
+        let config = config_dir.join(PathBuf::from("player-rs"));
         create_dir_all(&*config)?;
 
         let text = to_string_pretty(dir, PrettyConfig::default()).unwrap();
 
-        write(&config, text)?;
-        Ok(Config::from_path(config)?)
+        write(&config.join("config.ron"), text)?;
+        Ok(Config::from_path(config.join("config.ron"))?)
     } else {
         bail!("no config dir!")
     }

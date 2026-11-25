@@ -31,7 +31,7 @@ fn walk(dir: &PathBuf) -> std::io::Result<Vec<PathBuf>> {
         .follow_links(false)
         .into_iter()
         .filter_map(|e| e.ok())
-        .filter(|entry| entry.file_type().is_file())
+        .filter(|e| e.file_type().is_dir())
     {
         //println!("{:?}", entry.path())
         files.push(entry.into_path());

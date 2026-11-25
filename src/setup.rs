@@ -88,9 +88,10 @@ fn save_config(dir: &PathBuf) -> Result<Config> {
         let config = config_dir.join(PathBuf::from("player-rs/config.ron"));
         create_dir_all(&*config)?;
 
-        let text = to_string_pretty(dir, PrettyConfig::default())?;
+        let text = to_string_pretty(dir, PrettyConfig::default()).unwrap();
 
-        write(config.as_ref(), ?;
+        write(config.as_ref(), text)?;
+        Ok(Config::from_path(config)?)
     } else {
         Err(std::io::Error::new(
             std::io::ErrorKind::NotADirectory,

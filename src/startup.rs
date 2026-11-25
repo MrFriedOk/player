@@ -30,7 +30,7 @@ impl Startup {
         self.load_tracks()?;
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
-
+            println!("{:?}", self.tracks);
             self.handle_events()?;
         }
         Ok(self.tracks)
@@ -73,13 +73,7 @@ impl Startup {
 
             for dir in dirs {
                 //self.tracks.push(Track::from_path(dir).unwrap());
-                //tx.send(Track::from_path(dir));
-                let Some(track) = Track::from_path(&dir) else {
-                    continue;
-                };
-                if tx.send(track).is_err() {
-                    break;
-                }
+                tx.send(Track::from_path(&dir).unwrap());
             }
 
             //return Ok(Vec::new());

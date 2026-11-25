@@ -5,6 +5,7 @@ use ratatui::{DefaultTerminal, Terminal};
 use crate::setup::Config;
 use crate::track::Track;
 use std::io::{Error, Result};
+use std::thread;
 
 pub struct Startup {
     exit: bool,
@@ -42,5 +43,9 @@ impl Startup {
         self.exit = true;
     }
 
-    fn load_tracks(&self) {}
+    fn load_tracks(&self) {
+        thread::spawn(|| {
+            let dir = self.config.dir;
+        });
+    }
 }

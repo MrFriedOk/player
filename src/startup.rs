@@ -73,7 +73,7 @@ impl Startup {
 
             for dir in dirs {
                 if let Some(track) = Track::from_path(&dir) {
-                    let track2 = &*track.as_ref();
+                    let track2 = &track.clone();
                     if let Err(err) = tx.send(track) {
                         eprintln!("{err} tried to send {:?}", track2);
                         break;

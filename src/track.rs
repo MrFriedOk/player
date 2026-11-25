@@ -33,6 +33,12 @@ impl AsRef<str> for Track {
     }
 }
 
+impl Clone for Track {
+    fn clone(&self) -> Self {
+        *self
+    }
+}
+
 impl Debug for Track {
     fn fmt(&self, formatter: &mut Formatter<'_>) -> std::fmt::Result {
         formatter

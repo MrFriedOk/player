@@ -71,11 +71,11 @@ impl Startup {
             let dirs: Vec<PathBuf> = walk(&dir).expect("couldn't walk directory");
             //println!("{:?}", dirs);
 
-            for dir in dirs {
+            for (i, dir) in dirs.into_iter().enumerate() {
                 if let Some(track) = Track::from_path(&dir) {
                     let track2 = &track.clone();
                     if let Err(err) = tx.send(track) {
-                        eprintln!("{err} tried to send {:?}", track2);
+                        eprintln!("{i} {err} tried to send {:?}", track2);
                         break;
                     };
                 }

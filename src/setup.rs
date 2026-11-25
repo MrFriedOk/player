@@ -73,12 +73,13 @@ impl Setup {
     }
 
     fn render(&self, frame: &mut Frame) {
+        let dir_text: String = match self.dir.as_ref() {
+            Some(dir) => dir.to_string_lossy().to_string(),
+            None => "none".to_owned(),
+        };
         let area: Rect = frame.area();
-        let block: Block = Block::bordered().title(format!(
-            "input  {}  using dir {:?} ",
-            self.status,
-            self.dir.as_ref()
-        ));
+        let block: Block =
+            Block::bordered().title(format!("input  {}  using dir {} ", self.status, dir_text));
         let msg_area: Rect = Rect {
             x: area.width / 4,
             y: area.height / 4,
@@ -104,12 +105,13 @@ impl Setup {
 
             if path.is_dir() && path.exists() {
                 self.dir = Some(path);
+
+                self.status = "success!".to_owned();
             } else {
                 self.status = "bad input!".to_owned();
             }
             //self.dir = Some(path);
         }
-
         Ok(())
     }
 }

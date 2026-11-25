@@ -1,6 +1,4 @@
 use std::env::home_dir;
-use std::fs::canonicalize;
-use std::io::Error;
 use std::path::PathBuf;
 
 use crossterm::event;
@@ -11,7 +9,6 @@ use ratatui::DefaultTerminal;
 use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::widgets::Block;
-use ratatui::widgets::BorderType;
 use ratatui::widgets::Paragraph;
 
 use crate::probe_dir;
@@ -126,8 +123,8 @@ impl Setup {
 
     fn send(&mut self) -> Result<()> {
         //self.status = "checking".to_owned();
-        match self.status {
-            Status::Confirm { ref text, ref dir } => {
+        match &self.status {
+            Status::Confirm { text: _, dir } => {
                 if self.input == "y" {
                     self.dir = Some(dir.to_path_buf());
                     self.status = Status::Success {
@@ -146,6 +143,9 @@ impl Setup {
                     };
                     self.input.clear();
                 }
+            }
+            if let Status::Confirm {text: _, dir} = &self.status {
+                let dir: PathBuf = dir.clone();
             }
             _ => {
                 if let Some(path) = home_dir() {

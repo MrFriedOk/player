@@ -89,7 +89,10 @@ impl Setup {
             None => "none".to_owned(),
         };
         let area: Rect = frame.area();
-        let block: Block = Block::bordered().title(format!("input  using dir {} ", dir_text));
+        //if let Status::Success { text } = self.status {}
+        let block: Block = Block::bordered()
+            .title_bottom("bottom text")
+            .title(format!("input  using dir {} ", dir_text));
         let msg_area: Rect = Rect {
             x: area.width / 4,
             y: area.height / 4,

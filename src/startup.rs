@@ -95,7 +95,7 @@ impl Startup {
             match rec.try_recv() {
                 Ok(track) => self.tracks.push(track),
                 Err(TryRecvError::Empty) => break,
-                Err(TryRecvError::Disconnected) => self.exit(),
+                Err(TryRecvError::Disconnected) => break,
             }
         }
         //self.exit();

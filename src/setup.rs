@@ -97,7 +97,7 @@ impl Setup {
                 )
                 .title(format!("using dir {} ", text)),
             Status::Confirm { ref text, dir: _ } => Block::bordered()
-                .title_bottom("that's a lot of files, you sure?")
+                .title_bottom("confirm?")
                 .title(format!("{}", text)),
             Status::Failed { text: _ } => Block::bordered()
                 .title_bottom("failed!")
@@ -130,10 +130,18 @@ impl Setup {
             Status::Confirm { text, dir } => {
                 if self.input == "y" {
                     self.dir = Some(dir.to_path_buf());
-                } else {
+                }
+                if self.input == "n" {
                     self.status = Status::CheckingDir {
                         text: "".to_owned(),
                     };
+                    self.input.clear()
+                } else {
+                    self.status = Status::Confirm {
+                        text: "?".to_owned(),
+                        dir: dir.to_path_buf(),
+                    };
+                    self.input.clear();
                 }
             }
             _ => {
@@ -147,11 +155,15 @@ impl Setup {
                         if big {
                             self.status = Status::Confirm {
                                 text: format!("that's a big directory, you sure? y/n"),
-                                dir: path,
+                                dir: path.clone(),
                             }
                             //format!("that's a big directory, {} you sure?", count).to_string();
                         }
                         //self.dir = Some(path);
+                        self.status = Status::Confirm {
+                            text: format!("found {} files", count),
+                            dir: path,
+                        };
                         self.input.clear();
                     } else {
                         self.input.clear();

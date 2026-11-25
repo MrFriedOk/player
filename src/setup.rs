@@ -57,8 +57,9 @@ pub struct Config {
 
 impl Config {
     fn from_path(path: PathBuf) -> Result<Self> {
-        let dir = read_to_string(path)?;
-        let dir = ron::from_str(&dir).unwrap();
+        let dir = read_to_string(path).expect("couldn't read ron");
+        println!("{}", dir);
+        let dir = ron::from_str(&dir).expect("couldn't deserialize ron");
         Ok(Self { dir })
     }
 }

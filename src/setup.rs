@@ -67,8 +67,10 @@ fn load_config() -> Result<Option<Config>> {
     if let Some(base) = BaseDirs::new() {
         let config_dir = base.config_dir();
 
-        if let config = config_dir.join(PathBuf::from("nvim")) {
-            Ok(Some(Config::from_path(config)?))
+        let config = config_dir.join(PathBuf::from("player-rs/"));
+
+        if config.join("config.ron").exists() {
+            Ok(Some(Config::from_path(config.join("config.ron"))?))
         } else {
             Ok(None)
         }

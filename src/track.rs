@@ -15,6 +15,7 @@ use std::{
     path::PathBuf,
 };
 
+#[derive(Clone)]
 pub struct Track {
     file_name: String,
     file_type: FileType,
@@ -30,12 +31,6 @@ pub struct Track {
 impl AsRef<str> for Track {
     fn as_ref(&self) -> &str {
         &self.haystack
-    }
-}
-
-impl Clone for Track {
-    fn clone(&self) -> Self {
-        *self
     }
 }
 

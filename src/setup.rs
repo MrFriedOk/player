@@ -70,6 +70,7 @@ fn load_config() -> Result<Option<Config>> {
         let config = config_dir.join(PathBuf::from("player-rs/"));
 
         if config.join("config.ron").exists() {
+            println!("{:?}", config.join("config.ron"));
             Ok(Some(Config::from_path(config.join("config.ron"))?))
         } else {
             Ok(None)
@@ -90,7 +91,7 @@ fn save_config(dir: &PathBuf) -> Result<Config> {
 
         let text = to_string_pretty(dir, PrettyConfig::default()).unwrap();
 
-        write(&config.join("config.ron"), text)?;
+        write(config.join("config.ron"), text)?;
         Ok(Config::from_path(config.join("config.ron"))?)
     } else {
         bail!("no config dir!")

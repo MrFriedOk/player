@@ -51,25 +51,25 @@ impl Startup {
         let (tx, rx) = mpsc::channel::<Track>();
         let dir: PathBuf = self.config.dir.clone();
 
-        thread::spawn(move || -> Result<()> {
-            let dirs: Vec<PathBuf> = walk(&dir)?;
+        thread::spawn(move || {
+            let dirs: Vec<PathBuf> = walk(&dir).expect("couldn't walk directory");
 
-            for dir in &dirs {
+            for dir in dirs {
                 //self.tracks.push(Track::from_path(dir).unwrap());
                 //tx.send(Track::from_path(dir));
-                if let Some(dir) = Track::from_path(dir) {
-                    let _ = tx.send(dir);
-                    return Ok(());
-                } else {
-                    eprint!("error");
+                let Some(track) = Track::from_path(&dir) else {
+                    continue;
+                };
+                if tx.send(track).is_err() {
+                    break;
                 }
             }
 
             //return Ok(Vec::new());
-            Ok(())
         });
 
         while let Ok(track) = rx.try_recv() {
+            println!("{:?}", track);
             self.tracks.push(track);
         }
         self.exit();

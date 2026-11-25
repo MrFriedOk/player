@@ -94,7 +94,15 @@ impl Setup {
             Status::CheckingDir { text } => Block::bordered()
             .title_bottom("looks like this is your first time, please input a directory. paths are absolute, be careful!")
             .title(format!("using dir {} ", text)),
-            Status::Confirm {}
+            Status::Confirm {text} => Block::bordered()
+            .title_bottom("that's a lot of files, you sure?")
+            .title(format!("found {} files", text)),
+            Status::Failed {text} => Block::bordered()
+            .title_bottom("failed!")
+            .title(format!("bad input?", text)),
+            Status::Success {text} => Block::bordered()
+            .title_bottom("success!!")
+            .title(format!("using {}", text)),
         };
         let msg_area: Rect = Rect {
             x: area.width / 4,

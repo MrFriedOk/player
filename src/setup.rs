@@ -1,4 +1,5 @@
 use std::env::home_dir;
+//use std::fmt::Error;
 use std::fs::File;
 use std::fs::read_to_string;
 use std::path::Path;
@@ -48,18 +49,24 @@ pub struct Config {
     pub dir: PathBuf,
 }
 
+impl Config {
+    fn from_path(path: PathBuf) -> Self {
+        Self { setup, dir }
+    }
+}
+
 fn load_config() -> Result<Option<Config>> {
     if let Some(base) = BaseDirs::new() {
         let config_dir = base.config_dir();
         let config = config_dir.join(PathBuf::from("player-rs/config.ron"));
 
         if config.exists() {
-            Ok(Some(config))
+            Ok(Some(Config::from(config)))
         } else {
             Ok(None)
         }
     } else {
-        Err(Error)
+        Err(std::io::Error)
     }
 }
 

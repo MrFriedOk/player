@@ -27,7 +27,7 @@ pub enum Status {
     CheckingDir { text: String },
     Failed { text: String },
     Success { text: String },
-    Confirm { text: String },
+    Confirm { text: String, dir: PathBuf },
 }
 
 pub struct Setup {
@@ -92,11 +92,13 @@ impl Setup {
         //if let Status::Success { text } = self.status {}
         let block: Block = match self.status {
             Status::CheckingDir { ref text } => Block::bordered()
-                .title_bottom("please input a directory. paths are absolute, be careful!")
+                .title_bottom(
+                    "please input a directory. starts in home. paths are absolute, be careful!",
+                )
                 .title(format!("using dir {} ", text)),
-            Status::Confirm { ref text } => Block::bordered()
+            Status::Confirm { ref text, dir: _ } => Block::bordered()
                 .title_bottom("that's a lot of files, you sure?")
-                .title(format!("found {} files", text)),
+                .title(format!("{}", text)),
             Status::Failed { text: _ } => Block::bordered()
                 .title_bottom("failed!")
                 .title(format!("bad input?")),
@@ -124,27 +126,41 @@ impl Setup {
 
     fn send(&mut self) -> Result<()> {
         //self.status = "checking".to_owned();
-        if let Some(path) = home_dir() {
-            let path: PathBuf = path.join(&*self.input);
-
-            if path.is_dir() && path.exists() {
-                let (count, big) = probe_dir(&path);
-                if big {
-                    self.status = Status::Confirm {
-                        text: format!("that's a big directory, you sure?"),
-                    }
-                    //format!("that's a big directory, {} you sure?", count).to_string();
+        match &self.status {
+            Status::Confirm { text, dir } => {
+                if self.input == "y" {
+                    println!("ok");
+                } else {
+                    println!("nok");
                 }
-                self.dir = Some(path);
-                self.input.clear();
-            } else {
-                self.input.clear();
-                self.status = Status::Failed {
-                    text: "bad input!".to_owned(),
-                }
-                //self.status = "bad input!".to_owned();
             }
-            //self.dir = Some(path);
+            _ => {
+                if let Some(path) = home_dir() {
+                    let path: PathBuf = path.join(&*self.input);
+                    self.status = Status::CheckingDir {
+                        text: format!("{}", path.to_string_lossy()),
+                    };
+                    if path.is_dir() && path.exists() {
+                        let (count, big) = probe_dir(&path);
+                        if big {
+                            self.status = Status::Confirm {
+                                text: format!("that's a big directory, you sure? y/n"),
+                                dir: path,
+                            }
+                            //format!("that's a big directory, {} you sure?", count).to_string();
+                        }
+                        //self.dir = Some(path);
+                        self.input.clear();
+                    } else {
+                        self.input.clear();
+                        self.status = Status::Failed {
+                            text: "bad input!".to_owned(),
+                        }
+                        //self.status = "bad input!".to_owned();
+                    }
+                    //self.dir = Some(path);
+                }
+            }
         }
         Ok(())
     }

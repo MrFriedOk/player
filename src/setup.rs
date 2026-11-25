@@ -52,7 +52,7 @@ pub struct Config {
 impl Config {
     fn from_path(path: PathBuf) -> Result<Self> {
         let dir = read_to_string(path)?;
-        let dir = ron::from_str(&dir)?;
+        let dir = ron::from_str(&dir).unwrap();
         Ok(Self { dir })
     }
 }
@@ -63,7 +63,7 @@ fn load_config() -> Result<Option<Config>> {
         let config = config_dir.join(PathBuf::from("player-rs/config.ron"));
 
         if config.exists() {
-            Ok(Some(Config::from(config)))
+            Ok(Some(Config::from_path(config)?))
         } else {
             Ok(None)
         }
@@ -93,10 +93,15 @@ impl Setup {
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Config> {
-        while !self.exit {
-            terminal.draw(|frame| self.render(frame))?;
+        let config = load_config()?;
+        if let Some(config) = config {
+            return Ok(config);
+        } else {
+            while !self.exit {
+                terminal.draw(|frame| self.render(frame))?;
 
-            self.handle_events()?;
+                self.handle_events()?;
+            }
         }
     }
 

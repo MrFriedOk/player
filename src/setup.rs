@@ -65,14 +65,6 @@ impl Setup {
 
             self.handle_events()?;
         }
-        if let Some(config) = self.dir {
-            Ok(Config {
-                setup: true,
-                dir: config,
-            })
-        } else {
-            Err(std::io::Error::last_os_error())
-        }
         //Ok(tracks) //return the Vec once done, make sure to change this lol
     }
 

@@ -66,6 +66,7 @@ impl Startup {
         while let Ok(track) = rx.try_recv() {
             self.tracks.push(track);
         }
+        self.exit();
 
         Ok(())
     }

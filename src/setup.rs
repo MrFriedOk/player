@@ -105,7 +105,13 @@ impl Setup {
             let path: PathBuf = path.join(&*self.input);
 
             if path.is_dir() && path.exists() {
-                self.status = format!("{:?}", canonicalize(&path)); //"success!".to_owned();
+                self.status = format!(
+                    "{}",
+                    canonicalize(&path)
+                        .unwrap_or_default()
+                        .to_string_lossy()
+                        .into_owned()
+                ); //"success!".to_owned();
                 self.dir = Some(path);
                 self.input.clear();
             } else {

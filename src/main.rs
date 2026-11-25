@@ -24,7 +24,12 @@ fn load_dir() -> Result<PathBuf, String> {
 
 fn walk(dir: &PathBuf) -> Result<Vec<PathBuf>> {
     let mut files: Vec<PathBuf> = Vec::new();
-    for entry in WalkDir::new(dir).into_iter().filter_map(|e| e.ok()) {
+    for entry in WalkDir::new(dir)
+        .max_depth(5)
+        .follow_links(false)
+        .into_iter()
+        .filter_map(|e| e.ok())
+    {
         //println!("{:?}", entry.path())
         files.push(entry.into_path());
     }

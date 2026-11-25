@@ -4,7 +4,9 @@ use ratatui::{DefaultTerminal, Terminal};
 
 use crate::setup::Config;
 use crate::track::Track;
+use crate::walk;
 use std::io::{Error, Result};
+use std::path::PathBuf;
 use std::thread;
 
 pub struct Startup {
@@ -21,7 +23,7 @@ impl Startup {
     }
     pub fn run(self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
         let mut tracks: Vec<Track> = Vec::new();
-        self.load_tracks();
+        load_tracks(self.config.dir);
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
         }
@@ -42,10 +44,10 @@ impl Startup {
     fn exit(&mut self) {
         self.exit = true;
     }
-
-    fn load_tracks(&self) {
-        thread::spawn(|| {
-            let dir = self.config.dir;
-        });
-    }
+}
+fn load_tracks(dir: PathBuf) -> Vec<Track> {
+    thread::spawn(|| {
+        let dir = dir;
+        for path in walk(&dir) {}
+    });
 }

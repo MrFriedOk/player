@@ -79,7 +79,7 @@ fn load_config() -> Result<Option<Config>> {
     }
 }
 
-fn save_config(dir: &PathBuf) -> Result<Config> {
+fn save_config(dir: Option<&PathBuf>) -> Result<Config> {
     //thinking out loud, this function should probably be a Result because i can't expect it to
     //work. Err on if config dir cant be found, ? functions that should return Result because they
     //SHOULD work. where should i call this function tho?
@@ -88,7 +88,7 @@ fn save_config(dir: &PathBuf) -> Result<Config> {
         let config = config_dir.join(PathBuf::from("player-rs/config.ron"));
         create_dir_all(&*config)?;
 
-        let text = to_string_pretty(dir, PrettyConfig::default()).unwrap();
+        let text = to_string_pretty(dir.expect("WHYYYYYYY"), PrettyConfig::default()).unwrap();
 
         write(&config, text)?;
         Ok(Config::from_path(config)?)
@@ -127,14 +127,14 @@ impl Setup {
 
                 self.handle_events()?;
             }
-            Ok(self.dir)
+            Ok(Some(save_config(self.dir)))
         }
     }
 
     fn handle_events(&mut self) -> Result<()> {
         match event::read()? {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
-                KeyCode::Esc => self.exit(),
+                //KeyCode::Esc => self.exit(),
                 KeyCode::Char(char) => self.input.push(char),
                 KeyCode::Enter => {
                     if let Status::Success { .. } = self.status {

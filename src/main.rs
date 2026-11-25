@@ -55,7 +55,8 @@ fn probe_dir(dir: &Path) -> (usize, bool) {
 fn main() -> color_eyre::Result<()> {
     color_eyre::install()?;
 
-    let config: Config = ratatui::run(|terminal| Setup::new().run(terminal))?;
+    let config: Config =
+        ratatui::run(|terminal| Setup::new().run(terminal).expect("WHY")).expect("HUH????");
 
     //let dir: PathBuf = load_dir().unwrap();
     //let bufs: Vec<PathBuf> = walk(&dir);

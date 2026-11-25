@@ -73,7 +73,10 @@ impl Startup {
 
             for dir in dirs {
                 if let Some(track) = Track::from_path(&dir) {
-                    tx.send(track).unwrap();
+                    if let Err(err) = tx.send(track) {
+                        eprintln!("{err}");
+                        break;
+                    };
                 }
             }
 

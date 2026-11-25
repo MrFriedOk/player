@@ -53,7 +53,7 @@ impl Startup {
 
         thread::spawn(move || {
             let dirs: Vec<PathBuf> = walk(&dir).expect("couldn't walk directory");
-            println!("{:?}", dirs);
+            //println!("{:?}", dirs);
 
             for dir in dirs {
                 //self.tracks.push(Track::from_path(dir).unwrap());
@@ -70,7 +70,7 @@ impl Startup {
         });
 
         while let Ok(track) = rx.try_recv() {
-            println!("{:?}", track);
+            // println!("{:?}", track);
             self.tracks.push(track);
         }
         self.exit();

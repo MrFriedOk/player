@@ -24,6 +24,7 @@ impl App {
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
+        //println!("{:?}", &self.tracks);
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
 
@@ -33,7 +34,7 @@ impl App {
     }
 
     fn render(&self, frame: &mut Frame) {
-        let v_layout = Layout::vertical([Constraint::Fill(1), Constraint::Min(0)]);
+        let v_layout = Layout::vertical([Constraint::Percentage(7), Constraint::Min(0)]);
         let h_layout: Layout =
             Layout::horizontal([Constraint::Percentage(33), Constraint::Percentage(77)]);
         let [tabs, main] = frame.area().layout(&v_layout);

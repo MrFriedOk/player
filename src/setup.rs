@@ -90,7 +90,7 @@ fn save_config(dir: &PathBuf) -> Result<Config> {
 
         let text = to_string_pretty(dir, PrettyConfig::default()).unwrap();
 
-        write(config.as_ref(), text)?;
+        write(&config, text)?;
         Ok(Config::from_path(config)?)
     } else {
         Err(std::io::Error::new(
@@ -127,7 +127,7 @@ impl Setup {
 
                 self.handle_events()?;
             }
-            return Ok(save_config(self.dir))?;
+            return Ok(save_config(&self.dir.unwrap())?);
         }
     }
 

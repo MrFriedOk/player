@@ -1,7 +1,9 @@
 use std::env::home_dir;
 //use std::fmt::Error;
 use std::fs::File;
+use std::fs::create_dir_all;
 use std::fs::read_to_string;
+use std::fs::write;
 use std::path::Path;
 use std::path::PathBuf;
 
@@ -75,6 +77,24 @@ fn load_config() -> Result<Option<Config>> {
     }
 }
 
+fn save_config(dir: &PathBuf) -> Result<Config> {
+    //thinking out loud, this function should probably be a Result because i can't expect it to
+    //work. Err on if config dir cant be found, ? functions that should return Result because they
+    //SHOULD work. where should i call this function tho?
+    if let Some(base) = BaseDirs::new() {
+        let config_dir = base.config_dir();
+        let config = config_dir.join(PathBuf::from("player-rs/config.ron"));
+        create_dir_all(&*config)?;
+
+        write(config.as_ref(), dir.to_string_lossy().to_string())?;
+    } else {
+        Err(std::io::Error::new(
+            std::io::ErrorKind::NotADirectory,
+            "couldn't find config directory",
+        ))
+    }
+}
+
 impl Setup {
     pub fn new() -> Self {
         //let dir: PathBuf = load_dir().unwrap();
@@ -102,6 +122,7 @@ impl Setup {
 
                 self.handle_events()?;
             }
+            return Ok(save_config(self.dir))?;
         }
     }
 

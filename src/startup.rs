@@ -37,8 +37,9 @@ impl Startup {
         //let mut tracks: Vec<Track> = Vec::new();
         self.load_tracks();
         while !self.exit {
-            self.collect();
             terminal.draw(|frame| self.render(frame))?;
+
+            self.collect();
         }
         Ok(self.tracks)
     }

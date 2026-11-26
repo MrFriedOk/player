@@ -28,8 +28,8 @@ impl App {
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
         //println!("{:?}", &self.tracks);
-        let mut state = ListState::default().with_selected(Some(self.select));
         while !self.exit {
+            let mut state = ListState::default().with_selected(Some(self.select));
             terminal.draw(|frame| self.render(frame, &mut state))?;
 
             self.handle_events(&mut state)?;
@@ -56,11 +56,11 @@ impl App {
                 KeyCode::Esc => self.exit(),
                 KeyCode::Tab => self.active_screen = (self.active_screen + 1) % 2,
                 KeyCode::Down => {
-                    state.select_next();
+                    //state.select_next();
                     self.select += 1
                 }
                 KeyCode::Up => {
-                    state.select_previous();
+                    //state.select_previous();
                     self.select -= 1
                 }
                 KeyCode::Enter => println!("{:?}", self.tracks[self.select]),

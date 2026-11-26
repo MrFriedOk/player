@@ -27,15 +27,16 @@ impl App {
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
         //println!("{:?}", &self.tracks);
+        let mut state = ListState::default().with_selected(Some(self.select));
         while !self.exit {
-            terminal.draw(|frame| self.render(frame))?;
+            terminal.draw(|frame| self.render(frame, &mut state))?;
 
-            self.handle_events()?;
+            self.handle_events(&mut state)?;
         }
         Ok(())
     }
 
-    fn render(&self, frame: &mut Frame) {
+    fn render(&self, frame: &mut Frame, state: &mut ListState) {
         let v_layout = Layout::vertical([Constraint::Percentage(7), Constraint::Min(0)]);
         let h_layout: Layout =
             Layout::horizontal([Constraint::Percentage(33), Constraint::Percentage(77)]);
@@ -44,15 +45,17 @@ impl App {
 
         self.render_tabs(frame, tabs);
 
-        self.render_songs(frame, left);
+        self.render_songs(frame, left, state);
     }
 
-    fn handle_events(&mut self) -> io::Result<()> {
+    fn handle_events(&mut self, state: &mut ListState) -> io::Result<()> {
         match event::read()? {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
                 //KeyCode::Char(char) => self.exit(),
                 KeyCode::Esc => self.exit(),
                 KeyCode::Tab => self.active_screen = (self.active_screen + 1) % 2,
+                KeyCode::Down => state.select_previous(),
+                KeyCode::Up => state.select_next(),
                 _ => (),
             },
             _ => (),
@@ -74,7 +77,7 @@ impl App {
         );
     }
 
-    fn render_songs(&self, frame: &mut Frame, area: Rect) {
+    fn render_songs(&self, frame: &mut Frame, area: Rect, state: &mut ListState) {
         let border = Block::bordered();
         let items: Vec<ListItem> = self
             .tracks
@@ -84,10 +87,6 @@ impl App {
         //let sections = Layout::vertical([Constraint::Percentage(20), Constraint::Min(0)]);
         let list = List::new(items);
 
-        frame.render_stateful_widget(
-            list,
-            area,
-            &mut ListState::default().with_selected(self.select),
-        );
+        frame.render_stateful_widget(list, area, state);
     }
 }

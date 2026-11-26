@@ -95,8 +95,13 @@ impl Startup {
 
     fn collect(&mut self) -> Result<()> {
         let Some(rx) = &self.rx else {
-            bail!("couldn't load track")
+            bail!("no receiver")
         };
+
+        match rx.try_recv() {
+            Ok(track) => self.tracks.push(track),
+            Err(TryRecvError::Empty) => ,
+        }
 
         Ok(())
     }

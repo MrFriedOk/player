@@ -28,4 +28,11 @@ impl Player {
         self.player = rodio::play(&self.handle.mixer(), file).unwrap();
         Ok(())
     }
+    pub fn toggle(&self) {
+        if self.player.is_paused() {
+            self.player.play()
+        } else {
+            self.player.pause()
+        }
+    }
 }

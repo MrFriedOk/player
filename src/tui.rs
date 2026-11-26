@@ -65,13 +65,19 @@ impl App {
                     }
                 } //self.select += 1,
                 KeyCode::Up => {
-                    if self.select == 0 {
+                    if self.select == 0 
                         self.select = self.tracks.len() - 1
                     } else {
                         self.select -= 1
                     }
                 }
                 KeyCode::Enter => self.player.play(&self.tracks[self.select].path_buf)?,
+                KeyCode::Char {
+                match char {
+                    ' ' => self.player.toggle()
+                    _ => (),
+            }
+                }
                 _ => (),
             },
             _ => (),

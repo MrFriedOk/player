@@ -46,7 +46,7 @@ impl App {
         Ok(())
     }
 
-    fn render(&self, frame: &mut Frame, state: &mut ListState) {
+    fn render(&mut self, frame: &mut Frame, state: &mut ListState) {
         let v_layout = Layout::vertical([Constraint::Percentage(7), Constraint::Percentage(93)]);
         let h_layout: Layout =
             Layout::horizontal([Constraint::Percentage(33), Constraint::Percentage(77)]);
@@ -62,7 +62,7 @@ impl App {
         }
     }
 
-    fn render_home(&self, frame: &mut Frame, area: Rect) {
+    fn render_home(&mut self, frame: &mut Frame, area: Rect) {
         let v_layout = Layout::vertical([
             Constraint::Percentage(10),
             Constraint::Percentage(80),
@@ -79,7 +79,9 @@ impl App {
         frame.render_widget(search, search_area);
 
         if let Some(ref bytes) = self.player.image {
-            self.render_image(frame, main, bytes).unwrap();
+            self.render_image(frame, main, bytes);
+        } else {
+            self.player.image = None
         }
     }
 

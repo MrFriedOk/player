@@ -4,7 +4,7 @@ use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::layout::{Constraint, Layout};
 use ratatui::style::{Color, Modifier};
-use ratatui::widgets::{Block, List, ListItem, ListState, Tabs, Widget};
+use ratatui::widgets::{Block, List, ListItem, ListState, Padding, Tabs, Widget};
 use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
 use std::io;
@@ -60,7 +60,9 @@ impl App {
 
         let [search_area, main] = frame.area().layout(&v_layout);
 
-        let search = Block::default();
+        let search = Block::bordered()
+            .title("search")
+            .padding(Padding::vertical(5));
         frame.render_widget(search, search_area);
     }
 

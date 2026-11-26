@@ -3,7 +3,7 @@ use crate::track::Track;
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use image::ImageReader;
-use ratatui::layout::{Constraint, Layout};
+use ratatui::layout::{Constraint, Layout, Size};
 use ratatui::style::{Color, Modifier};
 use ratatui::text::Line;
 use ratatui::widgets::{Block, List, ListItem, ListState, Padding, Tabs, Widget};
@@ -11,6 +11,7 @@ use ratatui::widgets::{GraphType, Paragraph};
 use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
 use ratatui_image::Image;
+use ratatui_image::picker::Picker;
 use std::io::{self, Cursor};
 use std::path::PathBuf;
 
@@ -78,11 +79,14 @@ impl App {
         frame.render_widget(search, search_area);
 
         if let Some(bytes) = self.player.image {
-            let dynamic_image = ImageReader::new(Cursor::new(bytes))
-                .with_guessed_format()?
-                .decode()
-                .unwrap();
+            let Ok(read_image) = ImageReader::new(Cursor::new(bytes)).with_guessed_format() else {
+                return;
+            };
+            let decoded = read_image.decode().unwrap();
+            let picker = Picker::halfblocks();
             let size = Size::new();
+
+            let image = Image::new(&picker.new_protocol(decoded, size, ratatui_image::Resize::Fit(None)))
             frame.render_widget(image, main);
         }
     }

@@ -2,6 +2,7 @@ use color_eyre::eyre::bail;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::Frame;
 use ratatui::layout::Rect;
+use ratatui::style::Modifier;
 use ratatui::widgets::Gauge;
 use ratatui::{DefaultTerminal, Terminal};
 
@@ -20,6 +21,7 @@ pub struct Startup {
     tracks: Vec<Track>,
     rx: Option<Receiver<Track>>,
     finished: bool,
+    total: Option<u16>,
 }
 
 impl Startup {
@@ -30,6 +32,7 @@ impl Startup {
             tracks: Vec::new(),
             rx: None,
             finished: false,
+            total: None,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
@@ -64,7 +67,10 @@ impl Startup {
             width: area.width / 2,
             height: area.height / 2,
         };
-        let gauge = Gauge::default().percent(self.tracks.len() as u16);
+        let gauge = Gauge::default()
+            .percent(80)
+            .label("loading tracks")
+            .style(Modifier::DIM);
 
         frame.render_widget(gauge, content_area);
     }
@@ -76,6 +82,7 @@ impl Startup {
         let (tx, rx) = channel::<Track>();
 
         let dirs = walk(&self.config.dir)?;
+        self.total = Some(dirs.len() as u16);
 
         thread::spawn(move || -> Result<()> {
             for dir in &dirs {

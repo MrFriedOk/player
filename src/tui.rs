@@ -58,7 +58,7 @@ impl App {
     fn render_home(&self, frame: &mut Frame, area: Rect) {
         let v_layout = Layout::vertical([Constraint::Percentage(10), Constraint::Percentage(90)]);
 
-        let [search_area, main] = frame.area().layout(&v_layout);
+        let [search_area, main] = area.layout(&v_layout);
 
         let search = Block::bordered()
             .title("search")

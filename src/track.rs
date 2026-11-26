@@ -89,10 +89,10 @@ impl Track {
             .iter()
             .find(|pic| pic.pic_type() == PictureType::CoverFront);
 
-        match pic {
-            Some(pic) => return Some(pic.data().to_vec()),
-            None => return None,
-        }
+        //..so what about to_vec, that just leaves pic's Picture floating around?? no, because pic
+        //is just a reference to the Picture, it's never left floating because it was never an owned
+        //value in the first place. it gets dropped after this function ends
+        Some(pic?.data().to_vec())
         // => return self.picture = Some(pic.data().to_vec()),
     }
 }

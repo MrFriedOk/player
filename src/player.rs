@@ -1,10 +1,14 @@
+use image::ImageReader;
 use image::load_from_memory;
 use ratatui_image::Image;
+use ratatui_image::picker;
+use ratatui_image::picker::Picker;
 use rodio::Decoder;
 use rodio::DeviceSinkBuilder;
 use rodio::MixerDeviceSink;
 use std::fs::File;
 use std::io::BufReader;
+use std::io::Cursor;
 use std::io::Result;
 use std::path::Path;
 use std::path::PathBuf;
@@ -34,9 +38,12 @@ impl Player {
     }
     pub fn play(&mut self, track: &Track) -> Result<()> {
         if let Some(pic) = track.get_pic() {
-            let image = load_from_memory(&pic);
+            let image = ImageReader::new(Cursor::new(&pic))
+                .with_guessed_format()?
+                .decode()?;
 
-            self.image = Some(image);
+            //match image.resize_to_fill
+            self.image = Some(Picker::halfblocks().new_protocol(image));
         };
         let file = File::open(track.path_buf)?;
         self.player = rodio::play(&self.handle.mixer(), file).unwrap();

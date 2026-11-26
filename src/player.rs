@@ -4,13 +4,15 @@ use std::io::BufReader;
 use std::io::Result;
 use std::path::PathBuf;
 
+use crate::track::Track;
+
 pub struct Command {
-    path: PathBuf,
+    track: &Track,
 }
 
 impl Command {
-    pub fn from_path(path: PathBuf) -> Self {
-        Self { path }
+    pub fn from_track(track: &Track) -> Self {
+        Self { track }
     }
     pub fn play(&self) {
         let mut handle =
@@ -18,7 +20,7 @@ impl Command {
         let player = rodio::Player::connect_new(handle.mixer());
         handle.log_on_drop(false);
 
-        let buf = BufReader::new(File::open(&self.path).unwrap());
+        let buf = BufReader::new(File::open(self.track).unwrap());
 
         let source = Decoder::try_from(buf).unwrap();
 

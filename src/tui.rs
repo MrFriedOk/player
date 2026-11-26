@@ -69,7 +69,7 @@ impl App {
                         self.select -= 1
                     }
                 } //self.select -= 1,
-                KeyCode::Enter => Command::from_path(self.tracks[self.select]).play() //println!("{:?}", self.tracks[self.select]),
+                KeyCode::Enter => Command::from_track(&self.tracks[self.select]).play() //println!("{:?}", self.tracks[self.select]),
                 _ => (),
             },
             _ => (),

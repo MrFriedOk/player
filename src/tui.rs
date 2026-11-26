@@ -56,13 +56,19 @@ impl App {
     }
 
     fn render_home(&self, frame: &mut Frame, area: Rect) {
-        let v_layout = Layout::vertical([Constraint::Percentage(10), Constraint::Percentage(90)]);
+        let v_layout = Layout::vertical([
+            Constraint::Percentage(5),
+            Constraint::Percentage(85),
+            Constraint::Percentage(10),
+        ]);
 
-        let [search_area, main] = area.layout(&v_layout);
+        let [search_area, main, playback_area] = area.layout(&v_layout);
 
-        let search = Block::bordered()
-            .title("search")
-            .padding(Padding::vertical(5));
+        //let h_layout = Layout::horizontal(Constraint::Percentage())
+
+        let search = Block::bordered().title("search");
+        let playback = Block::bordered().title("playback");
+        frame.render_widget(playback, playback_area);
         frame.render_widget(search, search_area);
     }
 

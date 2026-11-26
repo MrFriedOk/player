@@ -1,0 +1,17 @@
+let image = ImageReader::new(Cursor::new(&pic))
+                .with_guessed_format()?
+                .decode()
+                .unwrap();
+
+Image::new(
+                &Picker::halfblocks()
+                    .new_protocol(
+                        image,
+                        Size::new(
+                            image.width().div_ceil(24) as u16,
+                            image.height().div_ceil(24) as u16,
+                        ),
+                        Resize::Fit(None),
+                    )
+                    .unwrap(),
+            )

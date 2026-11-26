@@ -2,6 +2,7 @@ use crate::player;
 use crate::track::Track;
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
+use image::ImageReader;
 use ratatui::layout::{Constraint, Layout};
 use ratatui::style::{Color, Modifier};
 use ratatui::text::Line;
@@ -10,7 +11,7 @@ use ratatui::widgets::{GraphType, Paragraph};
 use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
 use ratatui_image::Image;
-use std::io;
+use std::io::{self, Cursor};
 use std::path::PathBuf;
 
 pub struct App {
@@ -75,7 +76,15 @@ impl App {
         let playback = Block::bordered().title("playback");
         frame.render_widget(playback, playback_area);
         frame.render_widget(search, search_area);
-        //frame.render_widget(self.player.image, main);
+
+        if let Some(bytes) = self.player.image {
+            let dynamic_image = ImageReader::new(Cursor::new(bytes))
+                .with_guessed_format()?
+                .decode()
+                .unwrap();
+            let size = Size::new();
+            frame.render_widget(image, main);
+        }
     }
 
     fn handle_events(&mut self) -> io::Result<()> {

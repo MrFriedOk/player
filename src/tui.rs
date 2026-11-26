@@ -58,17 +58,21 @@ impl App {
                 KeyCode::Esc => self.exit(),
                 KeyCode::Tab => self.active_screen = (self.active_screen + 1) % 2,
                 KeyCode::Down => {
-                    if self.select == self.tracks.len() + 1 {
-                        self.select = 0
-                    } else {
-                        self.select += 1
+                    if self.active_screen == 1 {
+                        if self.select == self.tracks.len() + 1 {
+                            self.select = 0
+                        } else {
+                            self.select += 1
+                        }
                     }
                 } //self.select += 1,
                 KeyCode::Up => {
-                    if self.select == 0 {
-                        self.select = self.tracks.len() - 1
-                    } else {
-                        self.select -= 1
+                    if self.active_screen == 1 {
+                        if self.select == 0 {
+                            self.select = self.tracks.len() - 1
+                        } else {
+                            self.select -= 1
+                        }
                     }
                 }
                 KeyCode::Enter => self.player.play(&self.tracks[self.select].path_buf)?,

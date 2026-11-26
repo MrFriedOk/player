@@ -1,6 +1,8 @@
 use image::ImageReader;
 use image::load_from_memory;
+use ratatui::layout::Size;
 use ratatui_image::Image;
+use ratatui_image::Resize;
 use ratatui_image::picker;
 use ratatui_image::picker::Picker;
 use rodio::Decoder;
@@ -43,7 +45,14 @@ impl Player {
                 .decode()?;
 
             //match image.resize_to_fill
-            self.image = Some(Picker::halfblocks().new_protocol(image));
+            self.image = Some(Image::new(&Picker::halfblocks().new_protocol(
+                image,
+                Size::new(
+                    image.width().div_ceil(24) as u16,
+                    image.height().div_ceil(24) as u16,
+                ),
+                Resize::Fit(None),
+            )?));
         };
         let file = File::open(track.path_buf)?;
         self.player = rodio::play(&self.handle.mixer(), file).unwrap();

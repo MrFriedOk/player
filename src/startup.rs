@@ -34,7 +34,6 @@ impl Startup {
         self.load_tracks()?;
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
-            println!("{:?}", self.tracks);
             self.handle_events()?;
         }
         Ok(self.tracks)
@@ -67,39 +66,14 @@ impl Startup {
         self.exit = true;
     }
     fn load_tracks(&mut self) -> Result<()> {
-        let (tx, rx) = mpsc::channel::<Track>();
-        let dir: PathBuf = self.config.dir.clone();
-        //println!("{:?}", dir);
-
-        thread::spawn(move || {
-            let dirs: Vec<PathBuf> = walk(&dir).expect("couldn't walk directory");
-            //println!("{:?}", dirs);
-
-            for (i, dir) in dirs.into_iter().enumerate() {
-                if let Some(track) = Track::from_path(&dir) {
-                    let track2 = &track.clone();
-                    if let Err(err) = tx.send(track) {
-                        eprintln!("{i} {err} tried to send {:?}", track2);
-                        break;
-                    };
-                }
-            }
-
-            //return Ok(Vec::new());
-        });
-
-        self.rx = Some(rx);
-
-        let Some(rec) = &self.rx else { bail!("s") };
-        loop {
-            match rec.try_recv() {
-                Ok(track) => self.tracks.push(track),
-                Err(TryRecvError::Empty) => break,
-                Err(TryRecvError::Disconnected) => break,
+        let dirs = walk(&self.config.dir)?;
+        for dir in dirs {
+            if let Some(track) = Track::from_path(&dir) {
+                self.tracks.push(track);
+            } else {
+                continue;
             }
         }
-        //self.exit();
-
         Ok(())
     }
 }

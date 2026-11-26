@@ -75,7 +75,7 @@ impl App {
         let playback = Block::bordered().title("playback");
         frame.render_widget(playback, playback_area);
         frame.render_widget(search, search_area);
-        frame.render_widget(self.player.image, main);
+        //frame.render_widget(self.player.image, main);
     }
 
     fn handle_events(&mut self) -> io::Result<()> {
@@ -104,7 +104,7 @@ impl App {
                 }
                 KeyCode::Enter => {
                     if self.active_screen == 1 {
-                        self.player.play(&self.tracks[self.select])?
+                        self.player.play(&mut self.tracks[self.select])?
                     }
                 }
                 KeyCode::Backspace => {

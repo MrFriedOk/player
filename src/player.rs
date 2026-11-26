@@ -43,7 +43,7 @@ impl Player {
             //match image.resize_to_fill
             self.image = Some(pic.to_owned());
         };
-        let file = File::open(track.path_buf)?;
+        let file = File::open(&track.path_buf)?;
         self.player = rodio::play(&self.handle.mixer(), file).unwrap();
         Ok(())
     }

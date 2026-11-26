@@ -32,7 +32,7 @@ impl App {
             let mut state = ListState::default().with_selected(Some(self.select));
             terminal.draw(|frame| self.render(frame, &mut state))?;
 
-            self.handle_events(&mut state)?;
+            self.handle_events()?;
         }
         Ok(())
     }
@@ -49,20 +49,26 @@ impl App {
         self.render_songs(frame, left, state);
     }
 
-    fn handle_events(&mut self, state: &mut ListState) -> io::Result<()> {
+    fn handle_events(&mut self) -> io::Result<()> {
         match event::read()? {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
                 //KeyCode::Char(char) => self.exit(),
                 KeyCode::Esc => self.exit(),
                 KeyCode::Tab => self.active_screen = (self.active_screen + 1) % 2,
                 KeyCode::Down => {
-                    //state.select_next();
-                    self.select += 1
-                }
+                    if self.select == self.tracks.len() {
+                        self.select = 0
+                    } else {
+                        self.select += 1
+                    }
+                } //self.select += 1,
                 KeyCode::Up => {
-                    //state.select_previous();
-                    self.select -= 1
-                }
+                    if self.select == 0 {
+                        self.select = self.tracks.len()
+                    } else {
+                        self.select -= 1
+                    }
+                } //self.select -= 1,
                 KeyCode::Enter => println!("{:?}", self.tracks[self.select]),
                 _ => (),
             },

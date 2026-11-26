@@ -25,6 +25,9 @@ impl App {
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
         //println!("{:?}", &self.tracks);
+        for track in &self.tracks {
+            println!("{:?}", track.path_buf)
+        }
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
 

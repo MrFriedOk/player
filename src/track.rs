@@ -19,8 +19,8 @@ use std::{
 pub struct Track {
     file_name: String,
     file_type: FileType,
-    path_buf: PathBuf,
-    haystack: String,
+    pub path_buf: PathBuf,
+    pub haystack: String,
     //tag: Tag,
     pub artist: String,
     pub title: String,

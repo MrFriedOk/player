@@ -74,6 +74,7 @@ impl Startup {
                 continue;
             }
         }
+        self.exit();
         Ok(())
     }
 }

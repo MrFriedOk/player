@@ -103,7 +103,7 @@ impl App {
                 }
                 KeyCode::Enter => {
                     if self.active_screen == 1 {
-                        self.player.play(&self.tracks[self.select].path_buf)?
+                        self.player.play(&self.tracks[self.select])?
                     }
                 }
                 KeyCode::Backspace => {

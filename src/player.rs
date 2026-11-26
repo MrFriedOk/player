@@ -31,7 +31,7 @@ impl Player {
             image: None,
         }
     }
-    pub fn play(&mut self, path: &PathBuf) -> Result<()> {
+    pub fn play(&mut self, path: &PathBuf, track: &Track) -> Result<()> {
         //let pic =
         let file = File::open(path)?;
         self.player = rodio::play(&self.handle.mixer(), file).unwrap();

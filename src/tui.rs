@@ -55,8 +55,15 @@ impl App {
                 //KeyCode::Char(char) => self.exit(),
                 KeyCode::Esc => self.exit(),
                 KeyCode::Tab => self.active_screen = (self.active_screen + 1) % 2,
-                KeyCode::Down => state.select_previous(),
-                KeyCode::Up => state.select_next(),
+                KeyCode::Down => {
+                    state.select_next();
+                    self.select += 1
+                }
+                KeyCode::Up => {
+                    state.select_previous();
+                    self.select -= 1
+                }
+                KeyCode::Enter => println!("{:?}", self.tracks[self.select]),
                 _ => (),
             },
             _ => (),

@@ -65,9 +65,13 @@ impl Startup {
     fn exit(&mut self) {
         self.exit = true;
     }
-    fn load_tracks(&mut self) {
+    fn load_tracks(&mut self) -> Result<()> {
         let (tx, rx) = channel::<Track>();
         self.rx = Some(rx);
+
+        let dirs = walk(&self.config.dir)?;
+
+        thread::spawn(move || for dir in walk(dirs) {});
 
         //let dirs = walk(&self.config.dir)?;
         //for dir in dirs {
@@ -78,6 +82,6 @@ impl Startup {
         //    }
         //}
         //self.exit();
-        //Ok(())
+        Ok(())
     }
 }

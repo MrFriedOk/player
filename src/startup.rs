@@ -21,7 +21,7 @@ pub struct Startup {
     tracks: Vec<Track>,
     rx: Option<Receiver<Track>>,
     finished: bool,
-    total: Option<u16>,
+    total: Option<f64>,
 }
 
 impl Startup {
@@ -39,9 +39,10 @@ impl Startup {
         //let mut tracks: Vec<Track> = Vec::new();
         self.load_tracks()?;
         while !self.exit {
-            self.collect()?;
+            //self.collect()?;
             terminal.draw(|frame| self.render(frame))?;
             self.handle_events()?;
+            self.collect();
         }
         Ok(self.tracks)
     }
@@ -69,10 +70,10 @@ impl Startup {
         };
 
         let Some(total) = self.total else { return };
-        let percent = (self.tracks.len() as u16 / total);
+        let percent = (self.tracks.len() as f64 / total);
 
         let gauge = Gauge::default()
-            .percent(percent)
+            .ratio(percent)
             .label("loading tracks")
             .style(Modifier::DIM);
 
@@ -86,7 +87,7 @@ impl Startup {
         let (tx, rx) = channel::<Track>();
 
         let dirs = walk(&self.config.dir)?;
-        self.total = Some(dirs.len() as u16);
+        self.total = Some(dirs.len() as f64);
 
         thread::spawn(move || -> Result<()> {
             for dir in &dirs {

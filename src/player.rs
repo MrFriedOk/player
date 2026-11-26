@@ -2,16 +2,17 @@ use rodio::Decoder;
 use std::fs::File;
 use std::io::BufReader;
 use std::io::Result;
+use std::path::Path;
 use std::path::PathBuf;
 
 use crate::track::Track;
 
 pub struct Command {
-    track: Track,
+    track: Path,
 }
 
 impl Command {
-    pub fn from_track(track: Track) -> Self {
+    pub fn from_track(track: Path) -> Self {
         Self { track }
     }
     pub fn play(&self) {

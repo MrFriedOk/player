@@ -42,7 +42,7 @@ impl App {
 
         self.render_tabs(frame, tabs);
 
-        self.render_screen(frame, left, right);
+        self.render_songs(frame, left);
     }
 
     fn handle_events(&mut self) -> io::Result<()> {
@@ -75,9 +75,12 @@ impl App {
     fn render_songs(&self, frame: &mut Frame, area: Rect) {
         let border = Block::bordered();
         let songs = &self.tracks;
-        let items: Vec<PathBuf> = songs.iter().map(|track| track.path_buf).collect();
+        let items: Vec<PathBuf> = songs.iter().map(|track| track.path_buf.clone()).collect();
+        let text = items
+            .iter()
+            .map(|path| path.to_string_lossy().to_ascii_lowercase());
 
-        let songs_list = List::new(items);
+        let songs_list = List::new(text);
         //let sections = Layout::vertical([Constraint::Percentage(20), Constraint::Min(0)]);
 
         frame.render_widget(songs_list, area);

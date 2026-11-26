@@ -93,12 +93,16 @@ impl Startup {
         thread::spawn(move || {
             let dir = dir;
             let Ok(dirs) = walk(&dir) else { return };
+            //println!("hi");
             for dir in dirs {
+                //println!("{:?}", dir);
                 //let Some(track) = Track::from_path(&dir) else {
                 //    break;
                 //};
                 if let Some(track) = Track::from_path(&dir) {
+                    //println!("{:?}", track);
                     if tx.send(track).is_err() {
+                        println!("error");
                         break;
                     }
                 }

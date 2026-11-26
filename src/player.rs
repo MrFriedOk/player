@@ -6,12 +6,12 @@ use std::path::PathBuf;
 
 use crate::track::Track;
 
-pub struct Command<'a> {
-    track: &'a Track,
+pub struct Command {
+    track: Track,
 }
 
-impl<'a> Command<'a> {
-    pub fn from_track(track: &'a Track) -> Self {
+impl Command {
+    pub fn from_track(track: Track) -> Self {
         Self { track }
     }
     pub fn play(&self) {

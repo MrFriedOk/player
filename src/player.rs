@@ -23,10 +23,9 @@ impl Player {
 
         Self { player, handle }
     }
-    pub fn play(&self, path: &PathBuf) -> Result<()> {
+    pub fn play(&mut self, path: &PathBuf) -> Result<()> {
         let file = File::open(path)?;
-        let source = Decoder::try_from(file)?;
-        self.player = rodio::play(&self.handle.mixer(), source)?;
+        self.player = rodio::play(&self.handle.mixer(), file).unwrap();
         Ok(())
     }
 }

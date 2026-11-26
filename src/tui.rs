@@ -1,4 +1,4 @@
-use crate::player::{self, Command};
+use crate::player;
 use crate::track::Track;
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
@@ -15,6 +15,7 @@ pub struct App {
     active_screen: usize,
     tracks: Vec<Track>,
     select: usize,
+    player: player::Player,
 }
 
 impl App {
@@ -24,6 +25,7 @@ impl App {
             active_screen: 0,
             tracks,
             select: 0,
+            player: player::Player::new(),
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
@@ -69,7 +71,7 @@ impl App {
                         self.select -= 1
                     }
                 } //self.select -= 1,
-                KeyCode::Enter => Command::from_track(&*self.tracks[self.select].path_buf).play(), //println!("{:?}", self.tracks[self.select]),
+                KeyCode::Enter => (), //Command::from_track(&*self.tracks[self.select].path_buf).play(), //println!("{:?}", self.tracks[self.select]),
                 _ => (),
             },
             _ => (),

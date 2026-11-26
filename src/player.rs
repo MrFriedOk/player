@@ -1,4 +1,5 @@
 use rodio::Decoder;
+use rodio::DeviceSinkBuilder;
 use std::fs::File;
 use std::io::BufReader;
 use std::io::Result;
@@ -13,6 +14,10 @@ pub struct Player {
 
 impl Player {
     pub fn new() -> Self {
+        let mut handle = DeviceSinkBuilder::open_default_sink().expect("open defaul audio stream");
+        let player = rodio::Player::connect_new(&handle.mixer());
+        handle.log_on_drop(false); //ig i have to do it this way?
+
         Self {}
     }
     pub fn play(&self) {

@@ -71,7 +71,15 @@ impl Startup {
 
         let dirs = walk(&self.config.dir)?;
 
-        thread::spawn(move || for dir in walk(dirs) {});
+        thread::spawn(move || -> Result<()> {
+            for dir in &dirs {
+                //tx.send(Track::from_path(dir))
+                if let Some(t) = Track::from_path(dir) {
+                    tx.send(t)?
+                }
+            }
+            Ok(())
+        });
 
         //let dirs = walk(&self.config.dir)?;
         //for dir in dirs {

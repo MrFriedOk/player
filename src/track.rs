@@ -76,17 +76,18 @@ impl Track {
         })
     }
 
-    pub fn get_pic(&mut self) -> Result<Vec<u8>> {
-        let tagged = read_from_path(self.path_buf)?;
-        let pic = self
-            .tag
+    pub fn get_pic(&mut self) -> Option<Vec<u8>> {
+        let tagged = read_from_path(&self.path_buf).ok()?;
+        let tag = tagged.primary_tag().or_else(|| tagged.first_tag())?;
+        let pic = tag
             .pictures()
             .iter()
             .find(|pic| pic.pic_type() == PictureType::CoverFront);
 
         match pic {
-            Some(pic) => return self.picture = Some(pic.data().to_vec()),
-            None => (),
+            Some(pic) => return Some(pic.data().to_vec()),
+            None => return None,
         }
+        // => return self.picture = Some(pic.data().to_vec()),
     }
 }

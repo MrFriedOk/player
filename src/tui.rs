@@ -57,6 +57,11 @@ impl App {
 
     fn render_home(&self, frame: &mut Frame, area: Rect) {
         let v_layout = Layout::vertical([Constraint::Percentage(10), Constraint::Min(0)]);
+
+        let [search_area, main] = frame.area().layout(&v_layout);
+
+        let search = Block::default();
+        frame.render_widget(search, search_area);
     }
 
     fn handle_events(&mut self) -> io::Result<()> {

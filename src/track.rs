@@ -51,9 +51,14 @@ impl Track {
         let tagged: TaggedFile = read_from_path(path).ok()?;
         let tag = tagged.primary_tag().or_else(|| tagged.first_tag()); //fallback, idk
         //if this is worth it cuz what if first_tag isn't  athing?
+        //
+        //trying out chained functions more, and_then returns an Option of my own defining(?).
+        //basically like using `let Some() else {return None}` which is the type of thing i do a lot.
+        //also didn't realize this but stuff like `into` functions, those consume the original value
+        //and produce... whatever the output is, saving LOTS of memory here.
         let artist = tag.and_then(|tag| tag.artist().map(|string| string.into_owned())); //String::new();
-        let title = String::new();
-        let album = String::new();
+        let title = tag.and_then(|tag| tag.title().map(|string| string.into_owned()));
+        let album = tag.and_then(|tag| tag.album().map(|string| string.into_owned()));
         //let tag = tagged.primary_tag().or_else(|| tagged.first_tag());
         //let artist = tag.artist()?.into_owned();
         //let title = tag.title()?.into_owned();

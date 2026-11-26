@@ -22,9 +22,9 @@ pub struct Track {
     pub path_buf: PathBuf,
     pub haystack: String,
     //tag: Tag,
-    pub artist: String,
-    pub title: String,
-    pub album: String,
+    pub artist: Option<String>,
+    pub title: Option<String>,
+    pub album: Option<String>,
     pub picture: Option<Vec<u8>>,
 }
 
@@ -51,7 +51,7 @@ impl Track {
         let tagged: TaggedFile = read_from_path(path).ok()?;
         let tag = tagged.primary_tag().or_else(|| tagged.first_tag()); //fallback, idk
         //if this is worth it cuz what if first_tag isn't  athing?
-        let artist = String::new();
+        let artist = tag.and_then(|tag| tag.artist().map(|string| string.into_owned())); //String::new();
         let title = String::new();
         let album = String::new();
         //let tag = tagged.primary_tag().or_else(|| tagged.first_tag());

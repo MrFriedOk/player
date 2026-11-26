@@ -78,12 +78,12 @@ impl App {
         frame.render_widget(playback, playback_area);
         frame.render_widget(search, search_area);
 
-        if let Some(bytes) = self.player.image {
+        if let Some(ref bytes) = self.player.image {
             let Ok(read_image) = ImageReader::new(Cursor::new(bytes)).with_guessed_format() else {
                 return;
             };
             let decoded = read_image.decode().unwrap();
-            let mut picker = Picker::halfblocks();
+            let picker = Picker::halfblocks();
 
             let font_size = picker.font_size();
             let size = Size::new(
@@ -91,8 +91,10 @@ impl App {
                 decoded.height().div_ceil(font_size.height as u32) as u16,
             );
 
-            let image = picker.new_protocol(decoded, size, ratatui_image::Resize::Fit(None));
-            let image = Image::new();
+            let image = picker
+                .new_protocol(decoded, size, ratatui_image::Resize::Fit(None))
+                .unwrap();
+            let image = Image::new(&image);
             frame.render_widget(image, main);
         }
     }

@@ -71,7 +71,7 @@ impl App {
                         self.select -= 1
                     }
                 }
-                KeyCode::Enter => self.player.play(self.tracks[self.select].path_buf)?,
+                KeyCode::Enter => self.player.play(&self.tracks[self.select].path_buf)?,
                 _ => (),
             },
             _ => (),

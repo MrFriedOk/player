@@ -33,10 +33,11 @@ impl Player {
         }
     }
     pub fn play(&mut self, track: &Track) -> Result<()> {
-        let Some(pic) = track.get_pic() else {
-            return Ok(());
+        if let Some(pic) = track.get_pic() {
+            let image = load_from_memory(&pic);
+
+            self.image = Some(image);
         };
-        let image = load_from_memory(&pic);
         let file = File::open(track.path_buf)?;
         self.player = rodio::play(&self.handle.mixer(), file).unwrap();
         Ok(())

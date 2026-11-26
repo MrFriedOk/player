@@ -39,7 +39,7 @@ impl Startup {
         //let mut tracks: Vec<Track> = Vec::new();
         self.load_tracks()?;
         while !self.exit {
-            self.collect()?;
+            self.collect();
             terminal.draw(|frame| self.render(frame))?;
             self.handle_events()?;
         }
@@ -68,12 +68,13 @@ impl Startup {
             height: area.height / 2,
         };
 
-        //let Some(total) = self.total else { return };
+        let Some(total) = self.total else { return };
         //let total = 100.;
-        //let percent = (self.tracks.len() as f64 / 10000.);
+        let percent = ((self.tracks.len() as f64 / total) * 100.) as u16;
+        println!("{}", percent);
 
         let gauge = Gauge::default()
-            .ratio(0.42)
+            .percent(percent)
             .label("loading tracks")
             .style(Modifier::DIM);
 
@@ -126,7 +127,7 @@ impl Startup {
             }
         }
 
-        self.exit();
+        //self.exit();
         Ok(())
     }
 }

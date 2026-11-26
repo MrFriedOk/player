@@ -61,24 +61,24 @@ impl Startup {
     fn render(&self, frame: &mut Frame) {
         let area: Rect = frame.area();
 
-        let content_area: Rect = Rect {
-            x: area.width / 4,
-            y: area.width / 4,
-            width: area.width / 2,
-            height: area.height / 2,
-        };
+        //let content_area: Rect = Rect {
+        //    x: area.width / 4,
+        //    y: area.width / 4,
+        //    width: area.width / 2,
+        //    height: area.height / 2,
+        //};
 
         let Some(total) = self.total else { return };
         //let total = 100.;
         let percent = ((self.tracks.len() as f64 / total) * 100.) as u16;
-        println!("{}", percent);
+        //println!("{}", percent);
 
         let gauge = Gauge::default()
             .percent(percent)
             .label("loading tracks")
             .style(Modifier::DIM);
 
-        frame.render_widget(gauge, content_area);
+        frame.render_widget(gauge, area);
     }
 
     fn exit(&mut self) {
@@ -127,7 +127,7 @@ impl Startup {
             }
         }
 
-        //self.exit();
+        self.exit();
         Ok(())
     }
 }

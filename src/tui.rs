@@ -75,6 +75,7 @@ impl App {
         let playback = Block::bordered().title("playback");
         frame.render_widget(playback, playback_area);
         frame.render_widget(search, search_area);
+        frame.render_widget(self.player.image, main);
     }
 
     fn handle_events(&mut self) -> io::Result<()> {

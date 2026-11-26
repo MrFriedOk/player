@@ -21,8 +21,8 @@ pub struct Player {
     //track: &Path,
     player: rodio::Player,
     handle: MixerDeviceSink,
-    track: Option<None>,
-    image: Option<Image>,
+    track: Option<Track>,
+    pub image: Option<Image>,
 }
 
 impl Player {
@@ -42,17 +42,22 @@ impl Player {
         if let Some(pic) = track.get_pic() {
             let image = ImageReader::new(Cursor::new(&pic))
                 .with_guessed_format()?
-                .decode()?;
+                .decode()
+                .unwrap();
 
             //match image.resize_to_fill
-            self.image = Some(Image::new(&Picker::halfblocks().new_protocol(
-                image,
-                Size::new(
-                    image.width().div_ceil(24) as u16,
-                    image.height().div_ceil(24) as u16,
-                ),
-                Resize::Fit(None),
-            )?));
+            self.image = Some(Image::new(
+                &Picker::halfblocks()
+                    .new_protocol(
+                        image,
+                        Size::new(
+                            image.width().div_ceil(24) as u16,
+                            image.height().div_ceil(24) as u16,
+                        ),
+                        Resize::Fit(None),
+                    )
+                    .unwrap(),
+            ));
         };
         let file = File::open(track.path_buf)?;
         self.player = rodio::play(&self.handle.mixer(), file).unwrap();

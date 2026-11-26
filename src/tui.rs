@@ -84,7 +84,7 @@ impl App {
             };
             let decoded = read_image.decode().unwrap();
             let picker = Picker::halfblocks();
-            let size = Size::new();
+            let size = Size::new(decoded.width().div_ceil(24) as u16,decoded.height().div_ceil(24) as u16);
 
             let image = Image::new(&picker.new_protocol(decoded, size, ratatui_image::Resize::Fit(None)))
             frame.render_widget(image, main);

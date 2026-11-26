@@ -17,7 +17,7 @@ pub struct Startup {
     exit: bool,
     config: Config,
     tracks: Vec<Track>,
-    rx: Option<Receiver<Track>>,
+    //rx: Option<Receiver<Track>>,
 }
 
 impl Startup {
@@ -26,7 +26,7 @@ impl Startup {
             exit: false,
             config,
             tracks: Vec::new(),
-            rx: None,
+            //rx: None,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {

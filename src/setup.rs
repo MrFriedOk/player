@@ -58,7 +58,7 @@ pub struct Config {
 impl Config {
     fn from_path(path: PathBuf) -> Result<Self> {
         let dir = read_to_string(path).expect("couldn't read ron");
-        println!("{}", dir);
+        //println!("{}", dir);
         let text = ron::from_str(&dir).expect("couldn't deserialize ron");
         Ok(Self { dir: text })
     }
@@ -71,7 +71,7 @@ fn load_config() -> Result<Option<Config>> {
         let config = config_dir.join(PathBuf::from("player-rs/"));
 
         if config.join("config.ron").exists() {
-            println!("{:?}", config.join("config.ron"));
+            //println!("{:?}", config.join("config.ron"));
             Ok(Some(Config::from_path(config.join("config.ron"))?))
         } else {
             Ok(None)
@@ -129,7 +129,7 @@ impl Setup {
         if let Some(dir) = self.dir {
             Ok(save_config(&dir)?)
         } else {
-            println!("{:?}", self.dir);
+            //println!("{:?}", self.dir);
             bail!("setup failed!")
         }
         //Ok(save_config(&self.dir));

@@ -7,13 +7,13 @@ use std::path::PathBuf;
 
 use crate::track::Track;
 
-pub struct Command {
-    track: Path,
+pub struct Player {
+    //track: &Path,
 }
 
-impl Command {
-    pub fn from_track(track: Path) -> Self {
-        Self { track }
+impl Player {
+    pub fn new() -> Self {
+        Self {}
     }
     pub fn play(&self) {
         let mut handle =

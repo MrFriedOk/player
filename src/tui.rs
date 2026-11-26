@@ -3,7 +3,7 @@ use crate::track::Track;
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::layout::{Constraint, Layout};
-use ratatui::widgets::{Block, Tabs, Widget};
+use ratatui::widgets::{Block, List, Tabs, Widget};
 use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
 use std::io;
@@ -72,14 +72,14 @@ impl App {
         );
     }
 
-    fn render_screen(&self, frame: &mut Frame, left: Rect, right: Rect) {
-        //let border = Block::bordered();
+    fn render_songs(&self, frame: &mut Frame, area: Rect) {
+        let border = Block::bordered();
+        let songs = &self.tracks;
+        let items: Vec<PathBuf> = songs.iter().map(|track| track.path_buf).collect();
+
+        let songs_list = List::new(items);
         //let sections = Layout::vertical([Constraint::Percentage(20), Constraint::Min(0)]);
 
-        //frame.render_widget(border, area);
-    }
-
-    fn render_songs(&self, frame: &mut Frame, area: Rect) {
-        let songs = &self.tracks;
+        frame.render_widget(songs_list, area);
     }
 }

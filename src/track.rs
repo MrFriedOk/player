@@ -49,10 +49,10 @@ impl Track {
         let file_type: FileType = FileType::from_path(path)?;
         let file_name: String = path.file_name()?.to_string_lossy().into_owned();
         let tagged: TaggedFile = read_from_path(path).ok()?;
-        let tag: Tag = tagged.primary_tag()?.to_owned();
-        let artist: String = tag.artist()?.into_owned();
-        let title: String = tag.title()?.into_owned();
-        let album: String = tag.album()?.into_owned();
+        //let tag = tagged.primary_tag().or_else(|| tagged.first_tag());
+        //let artist = tag.artist()?.into_owned();
+        //let title = tag.title()?.into_owned();
+        //let album = tag.album()?.into_owned();
 
         //let thing = tag.tag_type();
         Some(Self {

@@ -20,7 +20,6 @@ pub struct App {
     select: usize,
     player: player::Player,
     query: String,
-    image: Option<Image>,
 }
 
 impl App {
@@ -32,7 +31,6 @@ impl App {
             select: 0,
             player: player::Player::new(),
             query: String::new(),
-            image: None,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {

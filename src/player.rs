@@ -1,3 +1,4 @@
+use ratatui_image::Image;
 use rodio::Decoder;
 use rodio::DeviceSinkBuilder;
 use rodio::MixerDeviceSink;
@@ -13,6 +14,8 @@ pub struct Player {
     //track: &Path,
     player: rodio::Player,
     handle: MixerDeviceSink,
+    track: Option<None>,
+    image: Option<Image>,
 }
 
 impl Player {
@@ -21,9 +24,15 @@ impl Player {
         let player = rodio::Player::connect_new(&handle.mixer());
         handle.log_on_drop(false); //ig i have to do it this way?
 
-        Self { player, handle }
+        Self {
+            player,
+            handle,
+            track: None,
+            image: None,
+        }
     }
     pub fn play(&mut self, path: &PathBuf) -> Result<()> {
+        //let pic =
         let file = File::open(path)?;
         self.player = rodio::play(&self.handle.mixer(), file).unwrap();
         Ok(())

@@ -1,3 +1,4 @@
+use image::load_from_memory;
 use ratatui_image::Image;
 use rodio::Decoder;
 use rodio::DeviceSinkBuilder;
@@ -31,9 +32,12 @@ impl Player {
             image: None,
         }
     }
-    pub fn play(&mut self, path: &PathBuf, track: &Track) -> Result<()> {
-        //let pic =
-        let file = File::open(path)?;
+    pub fn play(&mut self, track: &Track) -> Result<()> {
+        let Some(pic) = track.get_pic() else {
+            return Ok(());
+        };
+        let image = load_from_memory(&pic);
+        let file = File::open(track.path_buf)?;
         self.player = rodio::play(&self.handle.mixer(), file).unwrap();
         Ok(())
     }

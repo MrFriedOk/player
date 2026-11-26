@@ -79,7 +79,7 @@ impl App {
         frame.render_widget(search, search_area);
 
         if let Some(ref bytes) = self.player.image {
-            render_image(bytes);
+            self.render_image(frame, main, bytes).unwrap();
         }
     }
 
@@ -163,7 +163,7 @@ impl App {
         frame.render_stateful_widget(list, area, state);
     }
 
-    fn render_image(frame: &mut Frame, area: Rect, bytes: Vec<u8>) -> Result<()> {
+    fn render_image(&self, frame: &mut Frame, area: Rect, bytes: &Vec<u8>) -> Result<()> {
         let read_image = ImageReader::new(Cursor::new(bytes)).with_guessed_format()?;
         let decoded = read_image.decode()?;
         let picker = Picker::halfblocks();

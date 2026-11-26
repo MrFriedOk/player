@@ -11,7 +11,7 @@ use crate::track::Track;
 use crate::walk;
 use color_eyre::Result;
 use std::path::PathBuf;
-use std::sync::mpsc::{self, Receiver, TryRecvError, channel};
+use std::sync::mpsc::{self, Receiver, SendError, TryRecvError, channel};
 use std::thread;
 use std::time::Duration;
 
@@ -94,10 +94,18 @@ impl Startup {
             let dir = dir;
             let Ok(dirs) = walk(&dir) else { return };
             for dir in dirs {
-                let Some(track) = Track::from_path(&dir) else {
-                    break;
-                };
-                tx.send(track);
+                //let Some(track) = Track::from_path(&dir) else {
+                //    break;
+                //};
+                if let Some(track) = Track::from_path(&dir) {
+                    if tx.send(track).is_err() {
+                        break;
+                    }
+                }
+                //tx.send(track);
+                //match tx.send(track) {
+                //    Err(SendError<Track>)
+                //}
             }
             //for dir in &dirs {
             //tx.send(Track::from_path(dir))
@@ -122,8 +130,8 @@ impl Startup {
         //Ok(())
     }
 
-    fn collect(&mut self) -> Result<()> {
-        let Some(rx) = &self.rx else { return Ok(()) };
+    fn collect(&mut self) {
+        let Some(rx) = &self.rx else { return };
 
         //loop {
         match rx.try_recv() {
@@ -134,6 +142,5 @@ impl Startup {
         }
 
         //self.exit();
-        Ok(())
     }
 }

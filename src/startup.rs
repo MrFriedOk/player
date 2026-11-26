@@ -2,6 +2,7 @@ use color_eyre::eyre::bail;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::Frame;
 use ratatui::layout::Rect;
+use ratatui::widgets::Gauge;
 use ratatui::{DefaultTerminal, Terminal};
 
 use crate::setup::Config;
@@ -35,7 +36,7 @@ impl Startup {
         //let mut tracks: Vec<Track> = Vec::new();
         self.load_tracks()?;
         while !self.exit {
-            self.collect();
+            self.collect()?;
             terminal.draw(|frame| self.render(frame))?;
             self.handle_events()?;
         }
@@ -63,6 +64,9 @@ impl Startup {
             width: area.width / 2,
             height: area.height / 2,
         };
+        let gauge = Gauge::default().percent(self.tracks.len() as u16);
+
+        frame.render_widget(gauge, content_area);
     }
 
     fn exit(&mut self) {
@@ -110,6 +114,7 @@ impl Startup {
             }
         }
 
+        self.exit();
         Ok(())
     }
 }

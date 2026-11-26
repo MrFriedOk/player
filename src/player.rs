@@ -7,11 +7,11 @@ use std::path::PathBuf;
 use crate::track::Track;
 
 pub struct Command<'a> {
-    track: &'aTrack,
+    track: &'a Track,
 }
 
-impl Command<'a> {
-    pub fn from_track(track: &Track) -> Self {
+impl<'a> Command<'a> {
+    pub fn from_track(track: &'a Track) -> Self {
         Self { track }
     }
     pub fn play(&self) {
@@ -20,7 +20,7 @@ impl Command<'a> {
         let player = rodio::Player::connect_new(handle.mixer());
         handle.log_on_drop(false);
 
-        let buf = BufReader::new(File::open(self.track).unwrap());
+        let buf = BufReader::new(File::open(&self.track.path_buf).unwrap());
 
         let source = Decoder::try_from(buf).unwrap();
 

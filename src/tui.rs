@@ -70,7 +70,7 @@ impl App {
 
         //let h_layout = Layout::horizontal(Constraint::Percentage())
 
-        let search = Paragraph::default().block(Block::bordered().title("search")); //Block::bordered().title("search");
+        let search = Paragraph::new(&*self.query).block(Block::bordered().title("search")); //Block::bordered().title("search");
         let playback = Block::bordered().title("playback");
         frame.render_widget(playback, playback_area);
         frame.render_widget(search, search_area);
@@ -103,6 +103,11 @@ impl App {
                 KeyCode::Enter => {
                     if self.active_screen == 1 {
                         self.player.play(&self.tracks[self.select].path_buf)?
+                    }
+                }
+                KeyCode::Backspace => {
+                    if self.active_screen == 0 {
+                        self.query.pop();
                     }
                 }
                 KeyCode::Char(char) => {

@@ -79,23 +79,7 @@ impl App {
         frame.render_widget(search, search_area);
 
         if let Some(ref bytes) = self.player.image {
-            let Ok(read_image) = ImageReader::new(Cursor::new(bytes)).with_guessed_format() else {
-                return;
-            };
-            let decoded = read_image.decode().unwrap();
-            let picker = Picker::halfblocks();
-
-            let font_size = picker.font_size();
-            let size = Size::new(
-                decoded.width().div_ceil(font_size.width as u32) as u16,
-                decoded.height().div_ceil(font_size.height as u32) as u16,
-            );
-
-            let image = picker
-                .new_protocol(decoded, size, ratatui_image::Resize::Fit(None))
-                .unwrap();
-            let image = Image::new(&image);
-            frame.render_widget(image, main);
+            render_image(bytes);
         }
     }
 
@@ -177,5 +161,22 @@ impl App {
             .style(Color::Rgb(255, 255, 255));
 
         frame.render_stateful_widget(list, area, state);
+    }
+
+    fn render_image(frame: &mut Frame, area: Rect, bytes: Vec<u8>) -> Result<()> {
+        let read_image = ImageReader::new(Cursor::new(bytes)).with_guessed_format()?;
+        let decoded = read_image.decode()?;
+        let picker = Picker::halfblocks();
+
+        let font_size = picker.font_size();
+        let size = Size::new(
+            decoded.width().div_ceil(font_size.width as u32) as u16,
+            decoded.height().div_ceil(font_size.height as u32) as u16,
+        );
+
+        let image = picker.new_protocol(decoded, size, ratatui_image::Resize::Fit(None))?;
+        let image = Image::new(&image);
+        frame.render_widget(image, area);
+        Ok(())
     }
 }

@@ -56,7 +56,7 @@ impl App {
                 KeyCode::Esc => self.exit(),
                 KeyCode::Tab => self.active_screen = (self.active_screen + 1) % 2,
                 KeyCode::Down => {
-                    if self.select == self.tracks.len() {
+                    if self.select == self.tracks.len() + 1 {
                         self.select = 0
                     } else {
                         self.select += 1
@@ -64,7 +64,7 @@ impl App {
                 } //self.select += 1,
                 KeyCode::Up => {
                     if self.select == 0 {
-                        self.select = self.tracks.len()
+                        self.select = self.tracks.len() - 1
                     } else {
                         self.select -= 1
                     }

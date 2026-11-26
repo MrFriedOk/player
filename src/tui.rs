@@ -3,7 +3,7 @@ use crate::track::Track;
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::layout::{Constraint, Layout};
-use ratatui::widgets::{Block, List, ListItem, Tabs, Widget};
+use ratatui::widgets::{Block, List, ListItem, ListState, Tabs, Widget};
 use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
 use std::io;
@@ -13,6 +13,7 @@ pub struct App {
     exit: bool,
     active_screen: usize,
     tracks: Vec<Track>,
+    select: usize,
 }
 
 impl App {
@@ -21,6 +22,7 @@ impl App {
             exit: false,
             active_screen: 0,
             tracks,
+            select: 0,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
@@ -80,7 +82,12 @@ impl App {
             .map(|track| ListItem::new(track.label.clone()))
             .collect();
         //let sections = Layout::vertical([Constraint::Percentage(20), Constraint::Min(0)]);
+        let list = List::new(items);
 
-        //frame.render_widget(songs_list, area);
+        frame.render_stateful_widget(
+            list,
+            area,
+            &mut ListState::default().with_selected(self.select),
+        );
     }
 }

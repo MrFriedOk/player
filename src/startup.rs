@@ -41,22 +41,22 @@ impl Startup {
         while !self.exit {
             self.collect();
             terminal.draw(|frame| self.render(frame))?;
-            self.handle_events()?;
+            //self.handle_events()?;
         }
         Ok(self.tracks)
     }
 
-    fn handle_events(&mut self) -> Result<()> {
-        match event::read()? {
-            Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
-                KeyCode::Esc => self.exit(),
-                _ => (),
-            },
-            _ => (),
-        }
+    //fn handle_events(&mut self) -> Result<()> {
+    //    match event::read()? {
+    //        Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
+    //            KeyCode::Esc => self.exit(),
+    //            _ => (),
+    //        },
+    //        _ => (),
+    //    }
 
-        Ok(())
-    }
+    //    Ok(())
+    //}
 
     fn render(&self, frame: &mut Frame) {
         let area: Rect = frame.area();
@@ -143,8 +143,8 @@ impl Startup {
                     //println!("{:?}", track);
                     self.tracks.push(track);
                 }
-                Err(TryRecvError::Empty) => println!("empty channel"), //continue,
-                Err(TryRecvError::Disconnected) => break,              //self.exit(),
+                Err(TryRecvError::Empty) => continue, //println!("empty channel"), //continue,
+                Err(TryRecvError::Disconnected) => break, //self.exit(),
             }
         }
 

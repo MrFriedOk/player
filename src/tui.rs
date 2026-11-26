@@ -70,8 +70,8 @@ impl App {
                     } else {
                         self.select -= 1
                     }
-                } //self.select -= 1,
-                KeyCode::Enter => (), //Command::from_track(&*self.tracks[self.select].path_buf).play(), //println!("{:?}", self.tracks[self.select]),
+                }
+                KeyCode::Enter => self.player.play(self.tracks[self.select].path_buf)?,
                 _ => (),
             },
             _ => (),

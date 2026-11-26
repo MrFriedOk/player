@@ -18,6 +18,7 @@ pub struct Startup {
     config: Config,
     tracks: Vec<Track>,
     rx: Option<Receiver<Track>>,
+    finished: bool,
 }
 
 impl Startup {
@@ -27,12 +28,14 @@ impl Startup {
             config,
             tracks: Vec::new(),
             rx: None,
+            finished: false,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
         //let mut tracks: Vec<Track> = Vec::new();
         self.load_tracks()?;
         while !self.exit {
+            self.collect();
             terminal.draw(|frame| self.render(frame))?;
             self.handle_events()?;
         }
@@ -67,7 +70,6 @@ impl Startup {
     }
     fn load_tracks(&mut self) -> Result<()> {
         let (tx, rx) = channel::<Track>();
-        self.rx = Some(rx);
 
         let dirs = walk(&self.config.dir)?;
 
@@ -78,9 +80,11 @@ impl Startup {
                     tx.send(t)?
                 }
             }
+            //self.finished = true;
             Ok(())
         });
 
+        self.rx = Some(rx);
         //let dirs = walk(&self.config.dir)?;
         //for dir in dirs {
         //    if let Some(track) = Track::from_path(&dir) {
@@ -98,9 +102,12 @@ impl Startup {
             bail!("no receiver")
         };
 
-        match rx.try_recv() {
-            Ok(track) => self.tracks.push(track),
-            Err(TryRecvError::Empty) => ,
+        loop {
+            match rx.try_recv() {
+                Ok(track) => self.tracks.push(track),
+                Err(TryRecvError::Empty) => continue,
+                Err(TryRecvError::Disconnected) => break,
+            }
         }
 
         Ok(())

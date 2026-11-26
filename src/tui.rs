@@ -4,7 +4,9 @@ use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::layout::{Constraint, Layout};
 use ratatui::style::{Color, Modifier};
+use ratatui::text::Line;
 use ratatui::widgets::{Block, List, ListItem, ListState, Padding, Tabs, Widget};
+use ratatui::widgets::{GraphType, Paragraph};
 use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
 use std::io;
@@ -16,6 +18,7 @@ pub struct App {
     tracks: Vec<Track>,
     select: usize,
     player: player::Player,
+    query: String,
 }
 
 impl App {
@@ -26,6 +29,7 @@ impl App {
             tracks,
             select: 0,
             player: player::Player::new(),
+            query: String::new(),
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
@@ -57,8 +61,8 @@ impl App {
 
     fn render_home(&self, frame: &mut Frame, area: Rect) {
         let v_layout = Layout::vertical([
-            Constraint::Percentage(5),
-            Constraint::Percentage(85),
+            Constraint::Percentage(10),
+            Constraint::Percentage(80),
             Constraint::Percentage(10),
         ]);
 
@@ -66,7 +70,7 @@ impl App {
 
         //let h_layout = Layout::horizontal(Constraint::Percentage())
 
-        let search = Block::bordered().title("search");
+        let search = Paragraph::default().block(Block::bordered().title("search")); //Block::bordered().title("search");
         let playback = Block::bordered().title("playback");
         frame.render_widget(playback, playback_area);
         frame.render_widget(search, search_area);
@@ -107,6 +111,8 @@ impl App {
                             ' ' => self.player.toggle(),
                             _ => (),
                         }
+                    } else {
+                        self.query.push(char);
                     }
                 }
                 _ => (),

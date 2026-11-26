@@ -25,9 +25,6 @@ impl App {
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
         //println!("{:?}", &self.tracks);
-        for track in &self.tracks {
-            println!("{:?}", track.path_buf)
-        }
         while !self.exit {
             terminal.draw(|frame| self.render(frame))?;
 
@@ -45,7 +42,7 @@ impl App {
 
         self.render_tabs(frame, tabs);
 
-        self.render_screen(frame, main);
+        self.render_screen(frame, left, right);
     }
 
     fn handle_events(&mut self) -> io::Result<()> {
@@ -75,9 +72,14 @@ impl App {
         );
     }
 
-    fn render_screen(&self, frame: &mut Frame, area: Rect) {
-        let border = Block::bordered();
+    fn render_screen(&self, frame: &mut Frame, left: Rect, right: Rect) {
+        //let border = Block::bordered();
+        //let sections = Layout::vertical([Constraint::Percentage(20), Constraint::Min(0)]);
 
-        frame.render_widget(border, area);
+        //frame.render_widget(border, area);
+    }
+
+    fn render_songs(&self, frame: &mut Frame, area: Rect) {
+        let songs = &self.tracks;
     }
 }

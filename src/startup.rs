@@ -102,7 +102,7 @@ impl Startup {
                 if let Some(track) = Track::from_path(&dir) {
                     //println!("{:?}", track);
                     if tx.send(track).is_err() {
-                        println!("error");
+                        //println!("error");
                         break;
                     }
                 }
@@ -137,14 +137,17 @@ impl Startup {
     fn collect(&mut self) {
         let Some(rx) = &self.rx else { return };
 
-        //loop {
-        match rx.try_recv() {
-            Ok(track) => self.tracks.push(track),
-            Err(TryRecvError::Empty) => (), //continue,
-            Err(TryRecvError::Disconnected) => self.exit(),
-            //  }
+        loop {
+            match rx.try_recv() {
+                Ok(track) => {
+                    //println!("{:?}", track);
+                    self.tracks.push(track);
+                }
+                Err(TryRecvError::Empty) => println!("empty channel"), //continue,
+                Err(TryRecvError::Disconnected) => break,              //self.exit(),
+            }
         }
 
-        //self.exit();
+        self.exit();
     }
 }

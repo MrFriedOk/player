@@ -48,7 +48,9 @@ impl App {
 
         self.render_tabs(frame, tabs);
 
-        self.render_songs(frame, left, state);
+        if self.active_screen == 1 {
+            self.render_songs(frame, left, state);
+        }
     }
 
     fn handle_events(&mut self) -> io::Result<()> {
@@ -75,11 +77,19 @@ impl App {
                         }
                     }
                 }
-                KeyCode::Enter => self.player.play(&self.tracks[self.select].path_buf)?,
-                KeyCode::Char(char) => match char {
-                    ' ' => self.player.toggle(),
-                    _ => (),
-                },
+                KeyCode::Enter => {
+                    if self.active_screen == 1 {
+                        self.player.play(&self.tracks[self.select].path_buf)?
+                    }
+                }
+                KeyCode::Char(char) => {
+                    if self.active_screen == 1 {
+                        match char {
+                            ' ' => self.player.toggle(),
+                            _ => (),
+                        }
+                    }
+                }
                 _ => (),
             },
             _ => (),

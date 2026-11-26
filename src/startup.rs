@@ -67,8 +67,12 @@ impl Startup {
             width: area.width / 2,
             height: area.height / 2,
         };
+
+        let Some(total) = self.total else { return };
+        let percent = (self.tracks.len() as u16 / total);
+
         let gauge = Gauge::default()
-            .percent(80)
+            .percent(percent)
             .label("loading tracks")
             .style(Modifier::DIM);
 

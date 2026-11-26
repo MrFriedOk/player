@@ -11,6 +11,7 @@ pub mod setup;
 pub mod startup;
 pub mod track;
 pub mod tui;
+use player::Command;
 use setup::{Config, Setup};
 use startup::Startup;
 use track::Track;

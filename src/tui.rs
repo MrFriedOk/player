@@ -1,4 +1,4 @@
-use crate::player;
+use crate::player::{self, Command};
 use crate::track::Track;
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
@@ -69,7 +69,7 @@ impl App {
                         self.select -= 1
                     }
                 } //self.select -= 1,
-                KeyCode::Enter => println!("{:?}", self.tracks[self.select]),
+                KeyCode::Enter => Command::play(self.tracks.iter().map(|track| track.path_buf)) //println!("{:?}", self.tracks[self.select]),
                 _ => (),
             },
             _ => (),

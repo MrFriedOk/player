@@ -83,10 +83,16 @@ impl App {
                 return;
             };
             let decoded = read_image.decode().unwrap();
-            let picker = Picker::halfblocks();
-            let size = Size::new(decoded.width().div_ceil(24) as u16,decoded.height().div_ceil(24) as u16);
+            let mut picker = Picker::halfblocks();
 
-            let image = Image::new(&picker.new_protocol(decoded, size, ratatui_image::Resize::Fit(None)))
+            let font_size = picker.font_size();
+            let size = Size::new(
+                decoded.width().div_ceil(font_size.width as u32) as u16,
+                decoded.height().div_ceil(font_size.height as u32) as u16,
+            );
+
+            let image = picker.new_protocol(decoded, size, ratatui_image::Resize::Fit(None));
+            let image = Image::new();
             frame.render_widget(image, main);
         }
     }

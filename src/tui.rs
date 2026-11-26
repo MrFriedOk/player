@@ -9,6 +9,7 @@ use ratatui::widgets::{Block, List, ListItem, ListState, Padding, Tabs, Widget};
 use ratatui::widgets::{GraphType, Paragraph};
 use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
+use ratatui_image::Image;
 use std::io;
 use std::path::PathBuf;
 
@@ -19,6 +20,7 @@ pub struct App {
     select: usize,
     player: player::Player,
     query: String,
+    image: Option<Image>,
 }
 
 impl App {
@@ -30,6 +32,7 @@ impl App {
             select: 0,
             player: player::Player::new(),
             query: String::new(),
+            image: None,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {

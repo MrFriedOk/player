@@ -9,7 +9,7 @@ use crate::track::Track;
 use crate::walk;
 use color_eyre::Result;
 use std::path::PathBuf;
-use std::sync::mpsc::{self, Receiver, TryRecvError};
+use std::sync::mpsc::{self, Receiver, TryRecvError, channel};
 use std::thread;
 use std::time::Duration;
 
@@ -17,7 +17,7 @@ pub struct Startup {
     exit: bool,
     config: Config,
     tracks: Vec<Track>,
-    //rx: Option<Receiver<Track>>,
+    rx: Option<Receiver<Track>>,
 }
 
 impl Startup {
@@ -26,7 +26,7 @@ impl Startup {
             exit: false,
             config,
             tracks: Vec::new(),
-            //rx: None,
+            rx: None,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
@@ -65,16 +65,19 @@ impl Startup {
     fn exit(&mut self) {
         self.exit = true;
     }
-    fn load_tracks(&mut self) -> Result<()> {
-        let dirs = walk(&self.config.dir)?;
-        for dir in dirs {
-            if let Some(track) = Track::from_path(&dir) {
-                self.tracks.push(track);
-            } else {
-                continue;
-            }
-        }
-        self.exit();
-        Ok(())
+    fn load_tracks(&mut self) {
+        let (tx, rx) = channel::<Track>();
+        self.rx = Some(rx);
+
+        //let dirs = walk(&self.config.dir)?;
+        //for dir in dirs {
+        //    if let Some(track) = Track::from_path(&dir) {
+        //        self.tracks.push(track);
+        //    } else {
+        //        continue;
+        //    }
+        //}
+        //self.exit();
+        //Ok(())
     }
 }

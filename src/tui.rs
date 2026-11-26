@@ -50,7 +50,13 @@ impl App {
 
         if self.active_screen == 1 {
             self.render_songs(frame, left, state);
+        } else {
+            self.render_home(frame, main);
         }
+    }
+
+    fn render_home(&self, frame: &mut Frame, area: Rect) {
+        let v_layout = Layout::vertical([Constraint::Percentage(10), Constraint::Min(0)]);
     }
 
     fn handle_events(&mut self) -> io::Result<()> {

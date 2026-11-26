@@ -20,7 +20,6 @@ pub struct Startup {
     config: Config,
     tracks: Vec<Track>,
     rx: Option<Receiver<Track>>,
-    finished: bool,
     total: Option<f64>,
 }
 
@@ -31,7 +30,6 @@ impl Startup {
             config,
             tracks: Vec::new(),
             rx: None,
-            finished: false,
             total: None,
         }
     }
@@ -41,37 +39,15 @@ impl Startup {
         while !self.exit {
             self.collect();
             terminal.draw(|frame| self.render(frame))?;
-            //self.handle_events()?;
         }
         Ok(self.tracks)
     }
 
-    //fn handle_events(&mut self) -> Result<()> {
-    //    match event::read()? {
-    //        Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
-    //            KeyCode::Esc => self.exit(),
-    //            _ => (),
-    //        },
-    //        _ => (),
-    //    }
-
-    //    Ok(())
-    //}
-
     fn render(&self, frame: &mut Frame) {
         let area: Rect = frame.area();
 
-        //let content_area: Rect = Rect {
-        //    x: area.width / 4,
-        //    y: area.width / 4,
-        //    width: area.width / 2,
-        //    height: area.height / 2,
-        //};
-
         let Some(total) = self.total else { return };
-        //let total = 100.;
         let percent = ((self.tracks.len() as f64 / total) * 100.) as u16;
-        //println!("{}", percent);
 
         let gauge = Gauge::default()
             .percent(percent)
@@ -88,50 +64,20 @@ impl Startup {
         let (tx, rx) = channel::<Track>();
 
         let dir = self.config.dir.clone();
-        //self.total = Some(dirs.len() as f64);
 
         thread::spawn(move || {
             let dir = dir;
             let Ok(dirs) = walk(&dir) else { return };
-            //println!("hi");
             for dir in dirs {
-                //println!("{:?}", dir);
-                //let Some(track) = Track::from_path(&dir) else {
-                //    break;
-                //};
                 if let Some(track) = Track::from_path(&dir) {
-                    //println!("{:?}", track);
                     if tx.send(track).is_err() {
-                        //println!("error");
                         break;
                     }
                 }
-                //tx.send(track);
-                //match tx.send(track) {
-                //    Err(SendError<Track>)
-                //}
             }
-            //for dir in &dirs {
-            //tx.send(Track::from_path(dir))
-            //if let Some(t) = Track::from_path(dir) {
-            //    tx.send(t)?
-            //}
-            //}
-            //self.finished = true;
-            //Ok(())
         });
 
         self.rx = Some(rx);
-        //let dirs = walk(&self.config.dir)?;
-        //for dir in dirs {
-        //    if let Some(track) = Track::from_path(&dir) {
-        //        self.tracks.push(track);
-        //    } else {
-        //        continue;
-        //    }
-        //}
-        //self.exit();
-        //Ok(())
     }
 
     fn collect(&mut self) {

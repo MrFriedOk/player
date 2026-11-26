@@ -74,7 +74,11 @@ impl App {
 
     fn render_songs(&self, frame: &mut Frame, area: Rect) {
         let border = Block::bordered();
-        let items = &self.tracks.iter().map(|track| track.artist).collect();
+        let items = self
+            .tracks
+            .iter()
+            .map(|track| ListItem::new(track.label))
+            .collect();
         //let sections = Layout::vertical([Constraint::Percentage(20), Constraint::Min(0)]);
 
         //frame.render_widget(songs_list, area);

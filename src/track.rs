@@ -26,6 +26,7 @@ pub struct Track {
     pub title: Option<String>,
     pub album: Option<String>,
     pub picture: Option<Vec<u8>>,
+    pub label: String,
 }
 
 impl AsRef<str> for Track {
@@ -63,6 +64,7 @@ impl Track {
         //let artist = tag.artist()?.into_owned();
         //let title = tag.title()?.into_owned();
         //let album = tag.album()?.into_owned();
+        let label: String = format!("{} - {} - {}", &title?, &artist?, &album?);
 
         //let thing = tag.tag_type();
         Some(Self {
@@ -78,6 +80,7 @@ impl Track {
             title,
             album,
             picture: None, //i dont think it's a good idea to load every picture of every song on startup
+            label,
         })
     }
 

@@ -64,7 +64,12 @@ impl Track {
         //let artist = tag.artist()?.into_owned();
         //let title = tag.title()?.into_owned();
         //let album = tag.album()?.into_owned();
-        let label: String = format!("{} - {} - {}", &title?, &artist?, &album?);
+        let label: String = format!(
+            "{} - {} - {}",
+            title.clone()?,
+            artist.clone()?,
+            album.clone()?
+        );
 
         //let thing = tag.tag_type();
         Some(Self {

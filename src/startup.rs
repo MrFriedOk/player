@@ -39,10 +39,9 @@ impl Startup {
         //let mut tracks: Vec<Track> = Vec::new();
         self.load_tracks()?;
         while !self.exit {
-            //self.collect()?;
+            self.collect()?;
             terminal.draw(|frame| self.render(frame))?;
             self.handle_events()?;
-            self.collect();
         }
         Ok(self.tracks)
     }
@@ -70,6 +69,7 @@ impl Startup {
         };
 
         let Some(total) = self.total else { return };
+        //let total = 100.;
         let percent = (self.tracks.len() as f64 / total);
 
         let gauge = Gauge::default()

@@ -26,6 +26,6 @@ impl<'a> Command<'a> {
 
         player.append(source);
 
-        player.sleep_until_end(); //this breaks everything
+        //player.sleep_until_end(); //this breaks everything
     }
 }

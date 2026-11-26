@@ -21,7 +21,7 @@ pub struct Track {
     file_type: FileType,
     path_buf: PathBuf,
     haystack: String,
-    tag: Tag,
+    //tag: Tag,
     pub artist: String,
     pub title: String,
     pub album: String,
@@ -49,6 +49,11 @@ impl Track {
         let file_type: FileType = FileType::from_path(path)?;
         let file_name: String = path.file_name()?.to_string_lossy().into_owned();
         let tagged: TaggedFile = read_from_path(path).ok()?;
+        let tag = tagged.primary_tag().or_else(|| tagged.first_tag()); //fallback, idk
+        //if this is worth it cuz what if first_tag isn't  athing?
+        let artist = String::new();
+        let title = String::new();
+        let album = String::new();
         //let tag = tagged.primary_tag().or_else(|| tagged.first_tag());
         //let artist = tag.artist()?.into_owned();
         //let title = tag.title()?.into_owned();
@@ -63,7 +68,7 @@ impl Track {
                 "{} {:?} {:?} {:?} {:?}",
                 file_name, file_type, artist, title, album,
             ),
-            tag,
+            //tag,
             artist,
             title,
             album,
@@ -71,7 +76,8 @@ impl Track {
         })
     }
 
-    pub fn get_pic(&mut self) {
+    pub fn get_pic(&mut self) -> Result<Vec<u8>> {
+        let tagged = read_from_path(self.path_buf)?;
         let pic = self
             .tag
             .pictures()
@@ -79,7 +85,7 @@ impl Track {
             .find(|pic| pic.pic_type() == PictureType::CoverFront);
 
         match pic {
-            Some(pic) => self.picture = Some(pic.data().to_vec()),
+            Some(pic) => return self.picture = Some(pic.data().to_vec()),
             None => (),
         }
     }

@@ -9,6 +9,9 @@ pub struct Command {
 }
 
 impl Command {
+    pub fn from_path(path: PathBuf) -> Self {
+        Self { path }
+    }
     pub fn play(&self) {
         let mut handle =
             rodio::DeviceSinkBuilder::open_default_sink().expect("open default audio stream");

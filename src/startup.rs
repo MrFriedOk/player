@@ -87,18 +87,26 @@ impl Startup {
     fn load_tracks(&mut self) -> Result<()> {
         let (tx, rx) = channel::<Track>();
 
-        let dirs = walk(&self.config.dir)?;
-        self.total = Some(dirs.len() as f64);
+        let dir = self.config.dir.clone();
+        //self.total = Some(dirs.len() as f64);
 
-        thread::spawn(move || -> Result<()> {
-            for dir in &dirs {
-                //tx.send(Track::from_path(dir))
-                if let Some(t) = Track::from_path(dir) {
-                    tx.send(t)?
-                }
+        thread::spawn(move || {
+            let dir = dir;
+            let Ok(dirs) = walk(&dir) else { return };
+            for dir in dirs {
+                let Some(track) = Track::from_path(&dir) else {
+                    break;
+                };
+                tx.send(track);
             }
+            //for dir in &dirs {
+            //tx.send(Track::from_path(dir))
+            //if let Some(t) = Track::from_path(dir) {
+            //    tx.send(t)?
+            //}
+            //}
             //self.finished = true;
-            Ok(())
+            //Ok(())
         });
 
         self.rx = Some(rx);
@@ -119,15 +127,15 @@ impl Startup {
             bail!("no receiver")
         };
 
-        loop {
-            match rx.try_recv() {
-                Ok(track) => self.tracks.push(track),
-                Err(TryRecvError::Empty) => continue,
-                Err(TryRecvError::Disconnected) => break,
-            }
+        //loop {
+        match rx.try_recv() {
+            Ok(track) => self.tracks.push(track),
+            Err(TryRecvError::Empty) => (), //continue,
+            Err(TryRecvError::Disconnected) => self.exit(),
+            //  }
         }
 
-        self.exit();
+        //self.exit();
         Ok(())
     }
 }

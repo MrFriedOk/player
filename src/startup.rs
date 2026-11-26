@@ -37,7 +37,7 @@ impl Startup {
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<Vec<Track>> {
         //let mut tracks: Vec<Track> = Vec::new();
-        self.load_tracks()?;
+        self.load_tracks();
         while !self.exit {
             self.collect();
             terminal.draw(|frame| self.render(frame))?;
@@ -84,7 +84,7 @@ impl Startup {
     fn exit(&mut self) {
         self.exit = true;
     }
-    fn load_tracks(&mut self) -> Result<()> {
+    fn load_tracks(&mut self) {
         let (tx, rx) = channel::<Track>();
 
         let dir = self.config.dir.clone();
@@ -119,13 +119,11 @@ impl Startup {
         //    }
         //}
         //self.exit();
-        Ok(())
+        //Ok(())
     }
 
     fn collect(&mut self) -> Result<()> {
-        let Some(rx) = &self.rx else {
-            bail!("no receiver")
-        };
+        let Some(rx) = &self.rx else { return Ok(()) };
 
         //loop {
         match rx.try_recv() {

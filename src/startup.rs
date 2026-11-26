@@ -92,4 +92,12 @@ impl Startup {
         //self.exit();
         Ok(())
     }
+
+    fn collect(&mut self) -> Result<()> {
+        let Some(rx) = &self.rx else {
+            bail!("couldn't load track")
+        };
+
+        Ok(())
+    }
 }

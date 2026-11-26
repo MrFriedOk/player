@@ -3,6 +3,7 @@ use crate::track::Track;
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::layout::{Constraint, Layout};
+use ratatui::style::{Color, Modifier};
 use ratatui::widgets::{Block, List, ListItem, ListState, Tabs, Widget};
 use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
@@ -85,7 +86,9 @@ impl App {
             .map(|track| ListItem::new(track.label.clone()))
             .collect();
         //let sections = Layout::vertical([Constraint::Percentage(20), Constraint::Min(0)]);
-        let list = List::new(items);
+        let list = List::new(items)
+            .highlight_style(Modifier::REVERSED)
+            .style(Color::Rgb(255, 255, 255));
 
         frame.render_stateful_widget(list, area, state);
     }

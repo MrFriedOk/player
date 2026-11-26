@@ -6,11 +6,11 @@ use std::path::PathBuf;
 
 use crate::track::Track;
 
-pub struct Command {
-    track: &Track,
+pub struct Command<'a> {
+    track: &'aTrack,
 }
 
-impl Command {
+impl Command<'a> {
     pub fn from_track(track: &Track) -> Self {
         Self { track }
     }

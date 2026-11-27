@@ -24,6 +24,7 @@ pub struct App {
     query: String,
     loop_one: bool,
     searching: bool,
+    search_select: usize,
 }
 
 impl App {
@@ -37,6 +38,7 @@ impl App {
             query: String::new(),
             loop_one: false,
             searching: false,
+            search_select: 0,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
@@ -95,7 +97,8 @@ impl App {
         frame.render_widget(playback, playback_area);
         frame.render_widget(search, search_area);
 
-        self.render_query_list(frame, list);
+        let mut state = ListState::default().with_selected(Some(self.search_select));
+        self.render_query_list(frame, list, &mut state);
 
         if let Some(ref bytes) = self.player.image {
             self.render_image(frame, image_container, bytes).unwrap();
@@ -198,7 +201,11 @@ impl App {
         frame.render_stateful_widget(list, area, state);
     }
 
-    fn render_query_list(&mut self, frame: &mut Frame, area: Rect) {}
+    fn render_query_list(&mut self, frame: &mut Frame, area: Rectm, state: &mut ListState) {
+        let list = List::new(["se", "no"]).block(Block::bordered());
+
+        frame.render_stateful_widget(list, area, state);
+    }
 
     fn render_image(&self, frame: &mut Frame, area: Rect, bytes: &Vec<u8>) -> Result<()> {
         let read_image = ImageReader::new(Cursor::new(bytes)).with_guessed_format()?;

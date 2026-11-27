@@ -22,6 +22,8 @@ pub struct App {
     select: usize,
     player: player::Player,
     query: String,
+    loop_one: bool,
+    searching: bool,
 }
 
 impl App {
@@ -33,6 +35,8 @@ impl App {
             select: 0,
             player: player::Player::new(),
             query: String::new(),
+            loop_one: false,
+            searching: false,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
@@ -131,7 +135,14 @@ impl App {
                             _ => (),
                         }
                     } else {
-                        self.query.push(char);
+                        if self.searching {
+                            self.query.push(char);
+                        } else {
+                            match char {
+                                '/' => self.searching = true,
+                                _ => (),
+                            }
+                        }
                     }
                 }
                 _ => (),

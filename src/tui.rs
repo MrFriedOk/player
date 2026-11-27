@@ -246,7 +246,13 @@ impl App {
 
     fn search(&mut self) -> Result<()> {
         let input = self.query.to_owned();
-        search::search(input, self.tracks.to_owned());
+        let tracks = self.tracks.to_owned();
+        self.search_result = Some(
+            search::search(input, tracks)
+                .iter()
+                .map(|output| output.0)
+                .collect(),
+        );
         Ok(())
     }
 }

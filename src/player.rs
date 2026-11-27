@@ -29,6 +29,10 @@ impl Queue {
             current: 0,
         }
     }
+
+    pub fn append_from_index(&mut self, index: usize) {
+        self.items.push(index);
+    }
 }
 
 pub struct Player {

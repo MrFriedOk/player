@@ -1,3 +1,4 @@
+use crate::player::Queue;
 use crate::track::Track;
 use crate::{player, search};
 use color_eyre::Result;
@@ -29,7 +30,7 @@ pub struct App {
     search_select: usize,
     search_result: Option<Vec<Track>>,
     random: bool,
-    queue: Vec<Track>,
+    queue: Queue,
     queue_select: usize,
 }
 
@@ -47,7 +48,7 @@ impl App {
             search_select: 0,
             search_result: None,
             random: true,
-            queue: Vec::new(),
+            queue: Queue::new(),
             queue_select: 0,
         }
     }

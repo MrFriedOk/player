@@ -75,15 +75,18 @@ impl App {
 
         let [playlists, visual] = main.layout(&h_layout);
 
+        let visual_v_layout =
+            Layout::vertical([Constraint::Percentage(50), Constraint::Percentage(50)]);
+
+        let [visualizer, image_container] = visual.layout(&visual_v_layout);
+
         let search = Paragraph::new(&*self.query).block(Block::bordered().title("search")); //Block::bordered().title("search");
         let playback = Block::bordered().title("playback");
         frame.render_widget(playback, playback_area);
         frame.render_widget(search, search_area);
 
         if let Some(ref bytes) = self.player.image {
-            self.render_image(frame, main, bytes);
-        } else {
-            self.player.image = None
+            self.render_image(frame, image_container, bytes).unwrap();
         }
     }
 

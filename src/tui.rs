@@ -157,7 +157,9 @@ impl App {
                     if self.active_screen == 1 {
                         self.player.play(&mut self.tracks[self.select])?
                     } else {
-                        self.search()?;
+                        if !self.query.is_empty() && self.search_result.is_none() {
+                            self.search()?;
+                        }
                     }
                 }
                 KeyCode::Backspace => {
@@ -242,12 +244,6 @@ impl App {
         let read_image = ImageReader::new(Cursor::new(bytes)).with_guessed_format()?;
         let decoded = read_image.decode()?;
         let picker = Picker::halfblocks();
-
-        //let font_size = picker.font_size();
-        //let size = Size::new(
-        //    decoded.width().div_ceil(font_size.width as u32) as u16,
-        //    decoded.height().div_ceil(font_size.height as u32) as u16,
-        //);
 
         let size = Size::new(area.width, area.height);
 

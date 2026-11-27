@@ -224,8 +224,8 @@ impl App {
                                     self.query.clear();
                                     self.search_result = None
                                 }
-                                'r' => self.random = true,
-                                'l' => self.loop_one = true,
+                                'r' => self.random = !self.random,
+                                'l' => self.loop_one = !self.loop_one,
                                 _ => (),
                             }
                         }
@@ -339,5 +339,7 @@ impl App {
             .map(|track| ListItem::new(&*track.label))
             .collect();
         let list = List::new(["se", "no"]).block(Block::bordered().title("queue"));
+
+        frame.render_widget(list, area);
     }
 }

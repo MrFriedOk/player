@@ -75,16 +75,8 @@ impl Player {
     }
 
     pub fn update(&mut self, queue: &mut Queue) -> Result<()> {
-        if self.player.empty()
-            && let Some(current) = queue.current
-        {
-            self.play(&mut queue.items[current])?;
-        } else {
-            if let Some(mut current) = queue.current {
-                current += 1;
-            } else {
-                return Ok(());
-            }
+        if !self.player.empty() {
+            return Ok(());
         }
         Ok(())
     }

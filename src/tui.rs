@@ -4,7 +4,7 @@ use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use image::ImageReader;
 use ratatui::layout::{Constraint, Layout, Size};
-use ratatui::style::{Color, Modifier};
+use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::Line;
 use ratatui::widgets::{Block, List, ListItem, ListState, Padding, Tabs, Widget};
 use ratatui::widgets::{GraphType, Paragraph};
@@ -84,7 +84,12 @@ impl App {
 
         let [visualizer, image_container] = visual.layout(&visual_v_layout);
 
-        let search = Paragraph::new(&*self.query).block(Block::bordered().title("search")); //Block::bordered().title("search");
+        let title = if self.searching {
+            "searching"
+        } else {
+            "search"
+        };
+        let search = Paragraph::new(&*self.query).block(Block::bordered().title(title)); //Block::bordered().title("search");
         let playback = Block::bordered().title("playback");
         frame.render_widget(playback, playback_area);
         frame.render_widget(search, search_area);
@@ -98,7 +103,13 @@ impl App {
         match event::read()? {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
                 //KeyCode::Char(char) => self.exit(),
-                KeyCode::Esc => self.exit(),
+                KeyCode::Esc => {
+                    if self.searching {
+                        self.searching = false
+                    } else {
+                        self.exit()
+                    }
+                }
                 KeyCode::Tab => self.active_screen = (self.active_screen + 1) % 2,
                 KeyCode::Down => {
                     if self.active_screen == 1 {
@@ -125,7 +136,9 @@ impl App {
                 }
                 KeyCode::Backspace => {
                     if self.active_screen == 0 {
-                        self.query.pop();
+                        if self.searching {
+                            self.query.pop();
+                        }
                     }
                 }
                 KeyCode::Char(char) => {

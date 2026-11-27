@@ -55,7 +55,7 @@ impl App {
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
         //println!("{:?}", &self.tracks);
         while !self.exit {
-            self.queue.load();
+            self.queue.load(self.player);
             let mut state = ListState::default().with_selected(Some(self.select));
             terminal.draw(|frame| self.render(frame, &mut state))?;
 

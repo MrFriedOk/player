@@ -34,6 +34,8 @@ impl Queue {
         let track = track.to_owned();
         self.items.push(track);
     }
+
+    pub fn load(&mut self, player: Player) {}
 }
 
 pub struct Player {

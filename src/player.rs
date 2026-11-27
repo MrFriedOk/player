@@ -18,20 +18,21 @@ use std::path::PathBuf;
 use crate::track::Track;
 
 pub struct Queue {
-    pub items: Vec<usize>,
-    pub current: usize,
+    pub items: Vec<Track>,
+    pub current: Option<Track>,
 }
 
 impl Queue {
     pub fn new() -> Self {
         Self {
             items: Vec::new(),
-            current: 0,
+            current: None,
         }
     }
 
-    pub fn append_from_index(&mut self, index: usize) {
-        self.items.push(index);
+    pub fn append_from_index(&mut self, track: &Track) {
+        let track = track.to_owned();
+        self.items.push(track);
     }
 }
 

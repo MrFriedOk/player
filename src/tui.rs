@@ -91,7 +91,6 @@ impl App {
     }
 
     fn load_queue(&mut self) -> Result<()> {
-        self.player.play(self.search_result[self.queue.current]);
         Ok(())
     }
 

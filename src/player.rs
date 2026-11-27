@@ -74,6 +74,14 @@ impl Player {
         Ok(())
     }
 
+    pub fn update(&self, queue: &Queue) {
+        if self.player.empty()
+            && let Some(current) = queue.current
+        {
+            self.play(&mut queue.items[current]);
+        }
+    }
+
     pub fn append(&mut self, track: &mut Track) -> Result<(String, PathBuf)> {
         let (label, path_buf) = (track.label.to_owned(), track.path_buf.to_owned());
         let file = File::open(&path_buf)?;

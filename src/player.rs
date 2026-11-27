@@ -82,6 +82,8 @@ impl Player {
         } else {
             if let Some(mut current) = queue.current {
                 current += 1;
+            } else {
+                return Ok(());
             }
         }
         Ok(())

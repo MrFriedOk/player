@@ -218,7 +218,9 @@ impl App {
     }
 
     fn render_query_list(&mut self, frame: &mut Frame, area: Rect, state: &mut ListState) {
-        let list = List::new(["se", "no"])
+        
+        let Some(items) = self.search_result.iter().map(|track| );
+        let list = List::new(items)
             .block(Block::bordered())
             .highlight_style(Modifier::REVERSED);
 

@@ -189,9 +189,10 @@ impl App {
                         if !self.query.is_empty() && self.search_result.is_none() {
                             self.search()?;
                         } else {
-                            if let Some(ref mut tracks) = self.search_result {
+                            if self.search_result.is_some() {
                                 //let _ = self.player.append(&mut tracks[self.select])?;
-                                self.player.play(&mut tracks[self.search_select])?
+                                self.queue.items.push(self.select);
+                                //self.player.play(&mut tracks[self.search_select])?
                             }
                         }
                     }

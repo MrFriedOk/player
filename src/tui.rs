@@ -86,7 +86,7 @@ impl App {
         frame.render_widget(search, search_area);
 
         if let Some(ref bytes) = self.player.image {
-            self.render_image(frame, image_container, bytes).unwrap();
+            self.render_image(frame, visual, bytes).unwrap();
         }
     }
 

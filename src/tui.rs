@@ -25,6 +25,7 @@ pub struct App {
     loop_one: bool,
     searching: bool,
     search_select: usize,
+    search_result: Option<Vec<Track>>,
 }
 
 impl App {
@@ -39,6 +40,7 @@ impl App {
             loop_one: false,
             searching: false,
             search_select: 0,
+            search_result: None,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {

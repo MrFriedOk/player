@@ -71,7 +71,9 @@ impl App {
 
         let [search_area, main, playback_area] = area.layout(&v_layout);
 
-        //let h_layout = Layout::horizontal(Constraint::Percentage())
+        let h_layout = Layout::horizontal([Constraint::Percentage(33), Constraint::Percentage(77)]);
+
+        let [playlists, visual] = main.layout(&h_layout);
 
         let search = Paragraph::new(&*self.query).block(Block::bordered().title("search")); //Block::bordered().title("search");
         let playback = Block::bordered().title("playback");

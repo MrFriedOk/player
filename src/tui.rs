@@ -109,6 +109,10 @@ impl App {
         frame.render_widget(playback, playback_area);
         frame.render_widget(search, search_area);
 
+        self.render_visualizer(frame, visualizer);
+
+        self.render_playlists(frame, playlists);
+
         let mut state = ListState::default().with_selected(Some(self.search_select));
         self.render_query_list(frame, list, &mut state);
 
@@ -228,7 +232,6 @@ impl App {
     }
 
     fn render_songs(&self, frame: &mut Frame, area: Rect, state: &mut ListState) {
-        let border = Block::bordered();
         let items: Vec<ListItem> = self
             .tracks
             .iter()
@@ -270,7 +273,7 @@ impl App {
         let image = picker.new_protocol(
             decoded,
             size,
-            ratatui_image::Resize::Scale(Some(ratatui_image::FilterType::Nearest)),
+            ratatui_image::Resize::Scale(Some(ratatui_image::FilterType::Lanczos3)),
         )?;
         let image = Image::new(&image);
         frame.render_widget(image, area);
@@ -295,4 +298,8 @@ impl App {
         self.searching = false;
         Ok(())
     }
+
+    fn render_visualizer(&self, frame: &mut Frame, area: Rect) {}
+
+    fn render_playlists(&mut self, frame: &mut Frame, area: Rect) {}
 }

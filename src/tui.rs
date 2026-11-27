@@ -165,7 +165,8 @@ impl App {
         //let sections = Layout::vertical([Constraint::Percentage(20), Constraint::Min(0)]);
         let list = List::new(items)
             .highlight_style(Modifier::REVERSED)
-            .style(Color::Rgb(255, 255, 255));
+            .style(Color::Rgb(255, 255, 255))
+            .block(Block::bordered().title("songs poorly ordered"));
 
         frame.render_stateful_widget(list, area, state);
     }

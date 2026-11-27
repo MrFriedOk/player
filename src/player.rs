@@ -44,10 +44,11 @@ impl Player {
         Ok(())
     }
 
-    pub fn append(&mut self, track: &mut Track) {
-        let source = "";
-
-        self.player.append(source);
+    pub fn append(&mut self, track: &mut Track) -> Result<(String, PathBuf)> {
+        let (label, path_buf) = (track.label, track.path_buf);
+        let file = File::open(track.path_buf)?;
+        let source = self.player.append(source);
+        Ok((label, path_buf))
     }
 
     pub fn play(&mut self, track: &mut Track) -> Result<()> {

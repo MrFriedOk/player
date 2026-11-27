@@ -146,7 +146,7 @@ impl App {
                     } else {
                         if let Some(ref results) = self.search_result {
                             if self.search_select == 0 {
-                                self.search_select = results.len();
+                                self.search_select = results.len() - 1;
                             } else {
                                 self.search_select -= 1
                             }
@@ -258,6 +258,9 @@ impl App {
     }
 
     fn search(&mut self) -> Result<()> {
+        if self.search_result.is_some() {
+            self.search_result = None;
+        };
         let input = self.query.to_owned();
         let tracks = self.tracks.to_owned();
         //ig clone works here?? i'm doing a lot of cloning in this function, but ik it's required
@@ -269,6 +272,7 @@ impl App {
                 .map(|output| output.0.clone())
                 .collect(),
         );
+        self.searching = false;
         Ok(())
     }
 }

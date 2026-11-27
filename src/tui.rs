@@ -247,10 +247,13 @@ impl App {
     fn search(&mut self) -> Result<()> {
         let input = self.query.to_owned();
         let tracks = self.tracks.to_owned();
+        //ig clone works here?? i'm doing a lot of cloning in this function, but ik it's required
+        //*somewhere* here, otherwise original list is gone. i assume tracks will not outlive this
+        //function (wtf you mean, of course it wont. this isnt garbage collection, this is rust)
         self.search_result = Some(
             search::search(input, tracks)
                 .iter()
-                .map(|output| output.0)
+                .map(|output| output.0.clone())
                 .collect(),
         );
         Ok(())

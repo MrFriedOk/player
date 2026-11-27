@@ -19,9 +19,9 @@ use crate::track::Track;
 
 pub struct Player {
     //track: &Path,
-    player: rodio::Player,
-    handle: MixerDeviceSink,
-    track: Option<Track>,
+    pub player: rodio::Player,
+    pub handle: MixerDeviceSink,
+    //track: Option<Track>,
     pub image: Option<Vec<u8>>,
 }
 
@@ -34,10 +34,15 @@ impl Player {
         Self {
             player,
             handle,
-            track: None,
+            //track: None,
             image: None,
         }
     }
+
+    pub fn record(&self) -> Result<()> {
+        Ok(())
+    }
+
     pub fn play(&mut self, track: &mut Track) -> Result<()> {
         if let Some(pic) = &track.get_pic() {
             //match image.resize_to_fill

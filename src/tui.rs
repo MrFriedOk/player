@@ -152,6 +152,8 @@ impl App {
                 KeyCode::Enter => {
                     if self.active_screen == 1 {
                         self.player.play(&mut self.tracks[self.select])?
+                    } else {
+                        self.search();
                     }
                 }
                 KeyCode::Backspace => {
@@ -239,6 +241,10 @@ impl App {
         let image = picker.new_protocol(decoded, size, ratatui_image::Resize::Fit(None))?;
         let image = Image::new(&image);
         frame.render_widget(image, area);
+        Ok(())
+    }
+
+    fn search(&mut self) -> Result<()> {
         Ok(())
     }
 }

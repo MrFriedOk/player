@@ -6,7 +6,7 @@ use image::ImageReader;
 use ratatui::layout::{Constraint, Layout, Size};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::Line;
-use ratatui::widgets::{Block, List, ListItem, ListState, Padding, Tabs, Widget};
+use ratatui::widgets::{Block, List, ListItem, ListState, Padding, Tabs, TitlePosition, Widget};
 use ratatui::widgets::{GraphType, Paragraph};
 use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
@@ -63,7 +63,15 @@ impl App {
         let [tabs, main] = frame.area().layout(&v_layout);
         let [left, right] = main.layout(&h_layout);
 
-        self.render_tabs(frame, tabs);
+        let mut label = String::new();
+        if self.random {
+            label.push('r')
+        }
+        if self.loop_one {
+            label.push('l')
+        }
+
+        self.render_tabs(frame, tabs, label);
 
         if self.active_screen == 1 {
             self.render_songs(frame, left, state);
@@ -209,14 +217,7 @@ impl App {
         self.exit = true;
     }
 
-    fn render_tabs(&self, frame: &mut Frame, area: Rect) {
-        let mut label = String::new();
-        if self.random {
-            label.push('r')
-        }
-        if self.loop_one {
-            label.push('l')
-        }
+    fn render_tabs(&self, frame: &mut Frame, area: Rect, label: String) {
         let block: Block = Block::bordered().title(label);
         frame.render_widget(
             Tabs::new(["Home", "List"])

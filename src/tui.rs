@@ -86,7 +86,7 @@ impl App {
         frame.render_widget(search, search_area);
 
         if let Some(ref bytes) = self.player.image {
-            self.render_image(frame, visual, bytes).unwrap();
+            self.render_image(frame, image_container, bytes).unwrap();
         }
     }
 
@@ -175,11 +175,13 @@ impl App {
         let decoded = read_image.decode()?;
         let picker = Picker::halfblocks();
 
-        let font_size = picker.font_size();
-        let size = Size::new(
-            decoded.width().div_ceil(font_size.width as u32) as u16,
-            decoded.height().div_ceil(font_size.height as u32) as u16,
-        );
+        //let font_size = picker.font_size();
+        //let size = Size::new(
+        //    decoded.width().div_ceil(font_size.width as u32) as u16,
+        //    decoded.height().div_ceil(font_size.height as u32) as u16,
+        //);
+
+        let size = Size::new(area.width, area.height);
 
         let image = picker.new_protocol(decoded, size, ratatui_image::Resize::Fit(None))?;
         let image = Image::new(&image);

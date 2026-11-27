@@ -80,10 +80,10 @@ impl Player {
         }
 
         let next = queue.current.map_or(0, |current| current + 1);
-        match &mut queue.items.get(next) {
-            Some(mut track) => {
+        match queue.items.get_mut(next) {
+            Some(track) => {
                 queue.current = Some(next);
-                self.play(&mut track)?
+                self.play(track)?
             }
             None => queue.current = None,
         }

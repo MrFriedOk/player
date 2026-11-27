@@ -124,6 +124,12 @@ impl App {
                         } else {
                             self.select += 1
                         }
+                    } else {
+                        if self.search_select == 0 + 1 {
+                            self.search_select = 0
+                        } else {
+                            self.search_select += 1
+                        }
                     }
                 } //self.select += 1,
                 KeyCode::Up => {
@@ -132,6 +138,12 @@ impl App {
                             self.select = self.tracks.len() - 1
                         } else {
                             self.select -= 1
+                        }
+                    } else {
+                        if self.search_select == 0 {
+                            self.search_select = 0
+                        } else {
+                            self.search_select -= 1
                         }
                     }
                 }
@@ -201,8 +213,10 @@ impl App {
         frame.render_stateful_widget(list, area, state);
     }
 
-    fn render_query_list(&mut self, frame: &mut Frame, area: Rectm, state: &mut ListState) {
-        let list = List::new(["se", "no"]).block(Block::bordered());
+    fn render_query_list(&mut self, frame: &mut Frame, area: Rect, state: &mut ListState) {
+        let list = List::new(["se", "no"])
+            .block(Block::bordered())
+            .highlight_style(Modifier::REVERSED);
 
         frame.render_stateful_widget(list, area, state);
     }

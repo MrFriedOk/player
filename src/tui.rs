@@ -6,7 +6,9 @@ use image::ImageReader;
 use ratatui::layout::{Constraint, Layout, Size};
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::Line;
-use ratatui::widgets::{Block, List, ListItem, ListState, Padding, Tabs, TitlePosition, Widget};
+use ratatui::widgets::{
+    Block, Chart, List, ListItem, ListState, Padding, Tabs, TitlePosition, Widget,
+};
 use ratatui::widgets::{GraphType, Paragraph};
 use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
@@ -299,7 +301,15 @@ impl App {
         Ok(())
     }
 
-    fn render_visualizer(&self, frame: &mut Frame, area: Rect) {}
+    fn render_visualizer(&self, frame: &mut Frame, area: Rect) {
+        let chart = Chart::default().block(Block::bordered().title("viz"));
 
-    fn render_playlists(&mut self, frame: &mut Frame, area: Rect) {}
+        frame.render_widget(chart, area);
+    }
+
+    fn render_playlists(&mut self, frame: &mut Frame, area: Rect) {
+        let list = List::new(["hi", "no"]).block(Block::bordered().title("playlists"));
+
+        frame.render_widget(list, area);
+    }
 }

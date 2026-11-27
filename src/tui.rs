@@ -26,6 +26,7 @@ pub struct App {
     searching: bool,
     search_select: usize,
     search_result: Option<Vec<Track>>,
+    random: bool,
 }
 
 impl App {
@@ -41,6 +42,7 @@ impl App {
             searching: false,
             search_select: 0,
             search_result: None,
+            random: true,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
@@ -189,6 +191,8 @@ impl App {
                                     self.query.clear();
                                     self.search_result = None
                                 }
+                                'r' => self.random = true,
+                                'l' => self.loop_one = true,
                                 _ => (),
                             }
                         }
@@ -206,7 +210,14 @@ impl App {
     }
 
     fn render_tabs(&self, frame: &mut Frame, area: Rect) {
-        let block: Block = Block::bordered();
+        let mut label = String::new();
+        if self.random {
+            label.push('r')
+        }
+        if self.loop_one {
+            label.push('l')
+        }
+        let block: Block = Block::bordered().title(label);
         frame.render_widget(
             Tabs::new(["Home", "List"])
                 .select(self.active_screen)

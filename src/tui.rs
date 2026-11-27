@@ -267,7 +267,11 @@ impl App {
 
         let size = Size::new(area.width, area.height);
 
-        let image = picker.new_protocol(decoded, size, ratatui_image::Resize::Fit(None))?;
+        let image = picker.new_protocol(
+            decoded,
+            size,
+            ratatui_image::Resize::Scale(Some(ratatui_image::FilterType::Nearest)),
+        )?;
         let image = Image::new(&image);
         frame.render_widget(image, area);
         Ok(())

@@ -53,7 +53,7 @@ impl Startup {
         let gauge = Gauge::default()
             .percent(percent)
             .label("loading tracks")
-            .style(Modifier::DIM);
+            .style(Modifier::REVERSED);
 
         frame.render_widget(gauge, area);
     }

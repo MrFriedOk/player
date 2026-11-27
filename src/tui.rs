@@ -99,7 +99,12 @@ impl App {
         let visual_v_layout =
             Layout::vertical([Constraint::Percentage(50), Constraint::Percentage(50)]);
 
-        let [visualizer, image_container] = visual.layout(&visual_v_layout);
+        let [visualizer, other] = visual.layout(&visual_v_layout);
+
+        let other_h_layout =
+            Layout::horizontal([Constraint::Percentage(50), Constraint::Percentage(50)]);
+
+        let [idk, image_container] = other.layout(&other_h_layout);
 
         let title = if self.searching {
             "searching, esc to cancel"

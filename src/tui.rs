@@ -184,7 +184,11 @@ impl App {
                             self.query.push(char);
                         } else {
                             match char {
-                                '/' => self.searching = true,
+                                '/' => {
+                                    self.searching = true;
+                                    self.query.clear();
+                                    self.search_result = None
+                                }
                                 _ => (),
                             }
                         }

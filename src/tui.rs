@@ -112,7 +112,7 @@ impl App {
         let other_h_layout =
             Layout::horizontal([Constraint::Percentage(50), Constraint::Percentage(50)]);
 
-        let [idk, image_container] = other.layout(&other_h_layout);
+        let [queue, image_container] = other.layout(&other_h_layout);
 
         let title = if self.searching {
             "searching, esc to cancel"
@@ -125,6 +125,8 @@ impl App {
         frame.render_widget(search, search_area);
 
         self.render_visualizer(frame, visualizer);
+
+        self.render_queue(frame, queue);
 
         self.render_playlists(frame, playlists);
 
@@ -328,5 +330,10 @@ impl App {
         let list = List::new(["hi", "no"]).block(Block::bordered().title("playlists"));
 
         frame.render_widget(list, area);
+    }
+
+    fn render_queue(&mut self, frame: &mut Frame, area: Rect) {
+        let items = self.tracks.iter().map(|track| )
+        let list = List::new(["se","no"]).block(Block::bordered().title("queue"));
     }
 }

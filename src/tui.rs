@@ -333,7 +333,11 @@ impl App {
     }
 
     fn render_queue(&mut self, frame: &mut Frame, area: Rect) {
-        let items = self.tracks.iter().map(|track| )
-        let list = List::new(["se","no"]).block(Block::bordered().title("queue"));
+        let items: Vec<ListItem> = self
+            .tracks
+            .iter()
+            .map(|track| ListItem::new(&*track.label))
+            .collect();
+        let list = List::new(["se", "no"]).block(Block::bordered().title("queue"));
     }
 }

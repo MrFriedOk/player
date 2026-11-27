@@ -12,7 +12,7 @@ use ratatui::{DefaultTerminal, Frame, symbols};
 use ratatui::{backend::CrosstermBackend, buffer::Buffer, layout::Rect};
 use ratatui_image::Image;
 use ratatui_image::picker::Picker;
-use std::io::{self, Cursor};
+use std::io::Cursor;
 use std::path::PathBuf;
 
 pub struct App {
@@ -107,7 +107,7 @@ impl App {
         }
     }
 
-    fn handle_events(&mut self) -> io::Result<()> {
+    fn handle_events(&mut self) -> Result<()> {
         match event::read()? {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
                 //KeyCode::Char(char) => self.exit(),
@@ -153,7 +153,7 @@ impl App {
                     if self.active_screen == 1 {
                         self.player.play(&mut self.tracks[self.select])?
                     } else {
-                        self.search();
+                        self.search()?;
                     }
                 }
                 KeyCode::Backspace => {

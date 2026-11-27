@@ -17,6 +17,20 @@ use std::path::PathBuf;
 
 use crate::track::Track;
 
+pub struct Queue {
+    pub items: Vec<usize>,
+    pub current: usize,
+}
+
+impl Queue {
+    pub fn new() -> Self {
+        Self {
+            items: Vec::new(),
+            current: 0,
+        }
+    }
+}
+
 pub struct Player {
     //track: &Path,
     pub player: rodio::Player,

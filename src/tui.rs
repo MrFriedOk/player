@@ -189,7 +189,8 @@ impl App {
                             self.search()?;
                         } else {
                             if let Some(ref mut tracks) = self.search_result {
-                                self.player.play(&mut tracks[self.search_select])?
+                                let _ = self.player.append(&mut tracks[self.select])?;
+                                //self.player.play(&mut tracks[self.search_select])?
                             }
                         }
                     }

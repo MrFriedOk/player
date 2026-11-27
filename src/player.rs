@@ -1,3 +1,4 @@
+use color_eyre::Result;
 use image::ImageReader;
 use image::load_from_memory;
 use ratatui::layout::Size;
@@ -11,7 +12,6 @@ use rodio::MixerDeviceSink;
 use std::fs::File;
 use std::io::BufReader;
 use std::io::Cursor;
-use std::io::Result;
 use std::path::Path;
 use std::path::PathBuf;
 
@@ -45,9 +45,10 @@ impl Player {
     }
 
     pub fn append(&mut self, track: &mut Track) -> Result<(String, PathBuf)> {
-        let (label, path_buf) = (track.label, track.path_buf);
-        let file = File::open(track.path_buf)?;
-        let source = self.player.append(source);
+        let (label, path_buf) = (track.label.to_owned(), track.path_buf.to_owned());
+        let file = File::open(&path_buf)?;
+        let source = Decoder::try_from(file)?;
+        self.player.append(source);
         Ok((label, path_buf))
     }
 

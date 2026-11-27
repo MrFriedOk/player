@@ -30,7 +30,7 @@ impl Queue {
         }
     }
 
-    pub fn append_from_index(&mut self, track: &Track) {
+    pub fn append_from_track(&mut self, track: &Track) {
         let track = track.to_owned();
         self.items.push(track);
     }

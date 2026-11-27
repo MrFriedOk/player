@@ -35,7 +35,12 @@ impl Queue {
         self.items.push(track);
     }
 
-    pub fn load(&mut self, player: Player) {}
+    pub fn load(&mut self, player: &mut Player) -> Result<()> {
+        if let Some(current) = self.current {
+            player.play(&mut self.items[current])?;
+        }
+        Ok(())
+    }
 }
 
 pub struct Player {

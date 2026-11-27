@@ -19,7 +19,7 @@ use crate::track::Track;
 
 pub struct Queue {
     pub items: Vec<Track>,
-    pub current: Option<Track>,
+    pub current: Option<usize>,
 }
 
 impl Queue {

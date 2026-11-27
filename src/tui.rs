@@ -190,15 +190,15 @@ impl App {
                     if self.active_screen == 1 {
                         //let _ = self.player.append(&mut self.tracks[self.select])?;
                         //self.player.play(&mut self.tracks[self.select])?
-                        self.queue.items.push(self.select);
+                        self.queue.items.push(self.tracks[self.select].to_owned());
                     } else {
                         if !self.query.is_empty() && self.search_result.is_none() {
                             self.search()?;
                         } else {
                             if self.search_result.is_some() {
-                                //let _ = self.player.append(&mut tracks[self.select])?;
-                                self.queue.items.push(self.search_select);
-                                //self.player.play(&mut tracks[self.search_select])?
+                                if let Some(ref tracks) = self.search_result {
+                                    self.queue.items.push(tracks[self.search_select].to_owned());
+                                };
                             }
                         }
                     }

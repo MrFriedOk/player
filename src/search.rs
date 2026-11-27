@@ -4,7 +4,7 @@ use nucleo_matcher::{
     pattern::{CaseMatching, Normalization, Pattern},
 };
 
-fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
+pub fn search(input: String, tracks: Vec<Track>) -> Vec<(Track, u32)> {
     //let input: String = input.to_lowercase();
     //or track in &tracks {
     //    println!("{:?}", track.haystack);

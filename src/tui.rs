@@ -1,5 +1,5 @@
-use crate::player;
 use crate::track::Track;
+use crate::{player, search};
 use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use image::ImageReader;
@@ -245,6 +245,8 @@ impl App {
     }
 
     fn search(&mut self) -> Result<()> {
+        let input = self.query.to_owned();
+        search::search(input, self.tracks.to_owned());
         Ok(())
     }
 }

@@ -85,9 +85,9 @@ impl App {
         let [visualizer, image_container] = visual.layout(&visual_v_layout);
 
         let title = if self.searching {
-            "searching"
+            "searching, esc to cancel"
         } else {
-            "search"
+            "search, / to query"
         };
         let search = Paragraph::new(&*self.query).block(Block::bordered().title(title)); //Block::bordered().title("search");
         let playback = Block::bordered().title("playback");

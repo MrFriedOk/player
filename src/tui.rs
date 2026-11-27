@@ -29,6 +29,8 @@ pub struct App {
     search_select: usize,
     search_result: Option<Vec<Track>>,
     random: bool,
+    queue: Vec<Track>,
+    queue_select: usize,
 }
 
 impl App {
@@ -45,6 +47,8 @@ impl App {
             search_select: 0,
             search_result: None,
             random: true,
+            queue: Vec::new(),
+            queue_select: 0,
         }
     }
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
@@ -54,6 +58,8 @@ impl App {
             terminal.draw(|frame| self.render(frame, &mut state))?;
 
             self.handle_events()?;
+
+            //println!("{:?}",self.player.handle.)
         }
         Ok(())
     }

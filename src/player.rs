@@ -36,11 +36,18 @@ impl Player {
             handle,
             //track: None,
             image: None,
+            //queue: Vec<Track>
         }
     }
 
     pub fn record(&self) -> Result<()> {
         Ok(())
+    }
+
+    pub fn append(&mut self, track: &mut Track) {
+        let source = "";
+
+        self.player.append(source);
     }
 
     pub fn play(&mut self, track: &mut Track) -> Result<()> {

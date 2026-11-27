@@ -55,6 +55,7 @@ impl App {
     pub fn run(mut self, terminal: &mut DefaultTerminal) -> Result<()> {
         //println!("{:?}", &self.tracks);
         while !self.exit {
+            self.load_queue()?;
             let mut state = ListState::default().with_selected(Some(self.select));
             terminal.draw(|frame| self.render(frame, &mut state))?;
 
@@ -87,6 +88,11 @@ impl App {
         } else {
             self.render_home(frame, main);
         }
+    }
+
+    fn load_queue(&mut self) -> Result<()> {
+        self.player.play(self.search_result[self.queue.current]);
+        Ok(())
     }
 
     fn render_home(&mut self, frame: &mut Frame, area: Rect) {
@@ -184,14 +190,15 @@ impl App {
                 KeyCode::Enter => {
                     if self.active_screen == 1 {
                         //let _ = self.player.append(&mut self.tracks[self.select])?;
-                        self.player.play(&mut self.tracks[self.select])?
+                        //self.player.play(&mut self.tracks[self.select])?
+                        self.queue.items.push(self.select);
                     } else {
                         if !self.query.is_empty() && self.search_result.is_none() {
                             self.search()?;
                         } else {
                             if self.search_result.is_some() {
                                 //let _ = self.player.append(&mut tracks[self.select])?;
-                                self.queue.items.push(self.select);
+                                self.queue.items.push(self.search_select);
                                 //self.player.play(&mut tracks[self.search_select])?
                             }
                         }

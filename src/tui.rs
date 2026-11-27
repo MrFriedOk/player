@@ -121,14 +121,14 @@ impl App {
                 KeyCode::Tab => self.active_screen = (self.active_screen + 1) % 2,
                 KeyCode::Down => {
                     if self.active_screen == 1 {
-                        if self.select == self.tracks.len() + 1 {
+                        if self.select == self.tracks.len() - 1 {
                             self.select = 0
                         } else {
                             self.select += 1
                         }
                     } else {
                         if let Some(ref results) = self.search_result {
-                            if self.search_select == results.len() + 1 {
+                            if self.search_select == results.len() - 1 {
                                 self.search_select = 0
                             } else {
                                 self.search_select += 1

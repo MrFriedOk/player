@@ -31,11 +31,15 @@ impl Queue {
     }
 
     pub fn append_from_track(&mut self, track: &Track) {
+        if self.current.is_none() {
+            self.current = Some(0);
+        }
         let track = track.to_owned();
         self.items.push(track);
     }
 
     pub fn load(&mut self, player: &mut Player) -> Result<()> {
+        //self.current = Some(1);
         if let Some(current) = self.current {
             player.play(&mut self.items[current])?;
         }

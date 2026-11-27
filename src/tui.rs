@@ -334,11 +334,12 @@ impl App {
 
     fn render_queue(&mut self, frame: &mut Frame, area: Rect) {
         let items: Vec<ListItem> = self
-            .tracks
+            .queue
+            .items
             .iter()
             .map(|track| ListItem::new(&*track.label))
             .collect();
-        let list = List::new(["se", "no"]).block(Block::bordered().title("queue"));
+        let list = List::new(items).block(Block::bordered().title("queue"));
 
         frame.render_widget(list, area);
     }

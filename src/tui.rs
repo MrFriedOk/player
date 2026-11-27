@@ -127,10 +127,12 @@ impl App {
                             self.select += 1
                         }
                     } else {
-                        if self.search_select == 0 + 1 {
-                            self.search_select = 0
-                        } else {
-                            self.search_select += 1
+                        if let Some(ref results) = self.search_result {
+                            if self.search_select == results.len() + 1 {
+                                self.search_select = 0
+                            } else {
+                                self.search_select += 1
+                            }
                         }
                     }
                 } //self.select += 1,
@@ -142,10 +144,12 @@ impl App {
                             self.select -= 1
                         }
                     } else {
-                        if self.search_select == 0 {
-                            self.search_select = 0
-                        } else {
-                            self.search_select -= 1
+                        if let Some(ref results) = self.search_result {
+                            if self.search_select == 0 {
+                                self.search_select = results.len();
+                            } else {
+                                self.search_select -= 1
+                            }
                         }
                     }
                 }

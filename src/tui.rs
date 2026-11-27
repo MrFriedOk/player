@@ -218,8 +218,15 @@ impl App {
     }
 
     fn render_query_list(&mut self, frame: &mut Frame, area: Rect, state: &mut ListState) {
-        
-        let Some(items) = self.search_result.iter().map(|track| );
+        let Some(ref search_result) = self.search_result else {
+            return;
+        };
+        let items: Vec<String> = search_result
+            .iter()
+            .map(|track| track.label.clone())
+            .collect(); //ohhhh
+        //so NOW it works
+        //i LOVE collect
         let list = List::new(items)
             .block(Block::bordered())
             .highlight_style(Modifier::REVERSED);

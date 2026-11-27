@@ -68,12 +68,13 @@ impl App {
 
     fn render_home(&mut self, frame: &mut Frame, area: Rect) {
         let v_layout = Layout::vertical([
-            Constraint::Percentage(10),
-            Constraint::Percentage(80),
+            Constraint::Percentage(7),
+            Constraint::Percentage(13),
+            Constraint::Percentage(70),
             Constraint::Percentage(10),
         ]);
 
-        let [search_area, main, playback_area] = area.layout(&v_layout);
+        let [search_area, list, main, playback_area] = area.layout(&v_layout);
 
         let h_layout = Layout::horizontal([Constraint::Percentage(33), Constraint::Percentage(77)]);
 
@@ -93,6 +94,8 @@ impl App {
         let playback = Block::bordered().title("playback");
         frame.render_widget(playback, playback_area);
         frame.render_widget(search, search_area);
+
+        self.render_query_list(frame, list);
 
         if let Some(ref bytes) = self.player.image {
             self.render_image(frame, image_container, bytes).unwrap();
@@ -194,6 +197,8 @@ impl App {
 
         frame.render_stateful_widget(list, area, state);
     }
+
+    fn render_query_list(&mut self, frame: &mut Frame, area: Rect) {}
 
     fn render_image(&self, frame: &mut Frame, area: Rect, bytes: &Vec<u8>) -> Result<()> {
         let read_image = ImageReader::new(Cursor::new(bytes)).with_guessed_format()?;

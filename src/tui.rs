@@ -122,12 +122,15 @@ impl App {
             "search, / to query"
         };
 
-        let text = {if self.searching {return "/"}}
+        let text: String = {
+            if self.searching {
+                String::from("[ESC]: exit")
+            } else {
+                String::from("[/]: query  [ESC]: exit app")
+            }
+        };
 
-        let keybinds_hints = Line::from(
-            text
-        )
-        .dim();
+        let keybinds_hints = Line::from(text).dim();
 
         frame.render_widget(keybinds_hints, keybinds);
 

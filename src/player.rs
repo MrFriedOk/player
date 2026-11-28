@@ -136,4 +136,8 @@ impl Player {
         queue.items.clear();
         self.player.clear();
     }
+
+    pub fn detach(mut self) {
+        self.player.detach();
+    }
 }

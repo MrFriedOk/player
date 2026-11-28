@@ -186,7 +186,9 @@ impl App {
                 }
                 KeyCode::Enter => {
                     if self.active_screen == 1 {
-                        let _ = self.player.append(&mut self.tracks[self.select])?;
+                        self.queue
+                            .items
+                            .push(self.player.append(&mut self.tracks[self.select])?);
                         //self.player.play(&mut self.tracks[self.select])?
                         //self.queue.append_from_track(&self.tracks[self.select]);
                     } else {
@@ -194,8 +196,10 @@ impl App {
                             self.search()?;
                         } else {
                             if self.search_result.is_some() {
-                                if let Some(ref tracks) = self.search_result {
-                                    let _ = self.player.append(&mut tracks[self.search_select])?;
+                                if let Some(ref mut tracks) = self.search_result {
+                                    self.queue
+                                        .items
+                                        .push(self.player.append(&mut tracks[self.search_select])?);
                                     // self.queue.append_from_track(&tracks[self.search_select]);
                                 };
                             }

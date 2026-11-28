@@ -91,12 +91,12 @@ impl Player {
         Ok(())
     }
 
-    pub fn append(&mut self, track: &mut Track) -> Result<(String, PathBuf)> {
-        let (label, path_buf) = (track.label.to_owned(), track.path_buf.to_owned());
+    pub fn append(&mut self, track: &mut Track) -> Result<Track> {
+        let path_buf = track.path_buf.to_owned();
         let file = File::open(&path_buf)?;
         let source = Decoder::try_from(file)?;
         self.player.append(source);
-        Ok((label, path_buf))
+        Ok(track.to_owned()) //output the Track that the queue will load
     }
 
     pub fn play(&mut self, track: &mut Track) -> Result<()> {

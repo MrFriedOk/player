@@ -97,7 +97,7 @@ impl Track {
                 for prefix in prefixes {
                     let path = parent.join(format!("{}{}", prefix, extension));
                     if path.exists() {
-                        println!("thing in this folder");
+                        panic!() //println!("thing in this folder");
                     }
                 }
             }

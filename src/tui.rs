@@ -232,8 +232,8 @@ impl App {
                                 'r' => self.random = !self.random,
                                 'l' => self.loop_one = !self.loop_one,
                                 ' ' => self.player.toggle(),
-                                'd' => self.player.lower_vol(0.01),
-                                'u' => self.player.raise_vol(0.01),
+                                'd' => self.player.lower_vol(0.05),
+                                'u' => self.player.raise_vol(0.05),
                                 _ => (),
                             }
                         }
@@ -253,7 +253,7 @@ impl App {
     fn render_tabs(&self, frame: &mut Frame, area: Rect, label: String) {
         let block: Block = Block::bordered()
             .title(label)
-            .title_bottom(self.player.player.volume().to_string());
+            .title_bottom(format!("{:.2}", self.player.player.volume()));
         frame.render_widget(
             Tabs::new(["Home", "List"])
                 .select(self.active_screen)

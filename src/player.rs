@@ -115,4 +115,14 @@ impl Player {
             self.player.pause()
         }
     }
+
+    //pub fn random_toggle(&mut self) {
+    //
+    //}
+
+    pub fn lower_vol(&mut self, increment: f32) {
+        let vol = self.player.volume();
+        let new_vol = vol -= increment;
+        self.player.set_volume(new_vol);
+    }
 }

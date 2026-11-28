@@ -90,6 +90,18 @@ impl Track {
     }
 
     pub fn get_pic(&mut self) -> Option<Vec<u8>> {
+        let tagged = read_from_path(&self.path_buf).ok()?;
+        let tag = tagged.primary_tag().or_else(|| tagged.first_tag())?;
+        let pic = tag
+            .pictures()
+            .iter()
+            .find(|pic| pic.pic_type() == PictureType::CoverFront);
+        if pic.is_some() {
+            //..so what about to_vec, that just leaves pic's Picture floating around?? no, because pic
+            //is just a reference to the Picture, it's never left floating because it was never an owned
+            //value in the first place. it gets dropped after this function ends
+            return Some(pic?.data().to_vec());
+        }
         if let Some(parent) = &self.path_buf.parent() {
             let [extensions, prefixes] = [[".jpg", ".png"], ["cover", "folder"]];
 
@@ -97,22 +109,18 @@ impl Track {
                 for prefix in prefixes {
                     let path = parent.join(format!("{}{}", prefix, extension));
                     if path.exists() {
-                        panic!() //println!("thing in this folder");
+                        return Some(Vec::new());
+                        //println!("thing in this folder");
+                    } else {
+                        return None;
                     }
                 }
             }
+            return None;
+        } else {
+            return None;
         }
-        let tagged = read_from_path(&self.path_buf).ok()?;
-        let tag = tagged.primary_tag().or_else(|| tagged.first_tag())?;
-        let pic = tag
-            .pictures()
-            .iter()
-            .find(|pic| pic.pic_type() == PictureType::CoverFront);
 
-        //..so what about to_vec, that just leaves pic's Picture floating around?? no, because pic
-        //is just a reference to the Picture, it's never left floating because it was never an owned
-        //value in the first place. it gets dropped after this function ends
-        Some(pic?.data().to_vec())
         // => return self.picture = Some(pic.data().to_vec()),
     }
 }

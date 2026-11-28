@@ -306,7 +306,7 @@ impl App {
         let image = picker.new_protocol(
             decoded,
             size,
-            ratatui_image::Resize::Scale(Some(ratatui_image::FilterType::Lanczos3)),
+            ratatui_image::Resize::Fit(Some(ratatui_image::FilterType::Nearest)),
         )?;
         let image = Image::new(&image);
         frame.render_widget(image, area);

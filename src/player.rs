@@ -14,6 +14,7 @@ use std::io::BufReader;
 use std::io::Cursor;
 use std::path::Path;
 use std::path::PathBuf;
+use std::time::Duration;
 
 use crate::track::Track;
 
@@ -135,6 +136,11 @@ impl Player {
     pub fn clear(&mut self, queue: &mut Queue) {
         queue.items.clear();
         self.player.clear();
+    }
+
+    pub fn seek_left(&mut self, interval: u64) -> Result<()> {
+        let duration = Duration::from_millis(interval);
+        Ok(())
     }
 
     //pub fn detach(mut self) {

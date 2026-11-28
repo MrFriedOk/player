@@ -140,9 +140,12 @@ impl App {
     }
 
     fn handle_events(&mut self) -> Result<()> {
+        //if let Some() self.player.image.
         match event::read()? {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
                 //KeyCode::Char(char) => self.exit(),
+                KeyCode::Left => self.player.seek_left(100)?,
+                KeyCode::Right => self.player.seek_right(),
                 KeyCode::Esc => {
                     if self.searching {
                         self.searching = false

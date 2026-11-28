@@ -104,19 +104,18 @@ impl Track {
         }
         if let Some(parent) = &self.path_buf.parent() {
             let [extensions, prefixes] = [[".jpg", ".png"], ["cover", "folder"]];
-
+            let mut path: Option<PathBuf> = None;
             for extension in extensions {
                 for prefix in prefixes {
-                    let path = parent.join(format!("{}{}", prefix, extension));
-                    if path.exists() {
-                        return Some(Vec::new());
-                        //println!("thing in this folder");
+                    let image = parent.join(format!("{}{}", prefix, extension));
+                    if image.exists() {
+                        path = Some(image);
                     } else {
-                        return None;
+                        path = None;
                     }
                 }
             }
-            return None;
+            return Some(vec![2, 3]);
         } else {
             return None;
         }

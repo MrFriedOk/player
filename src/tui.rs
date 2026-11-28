@@ -5,7 +5,7 @@ use color_eyre::Result;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use image::ImageReader;
 use ratatui::layout::{Constraint, Layout, Size};
-use ratatui::style::{Color, Modifier, Style};
+use ratatui::style::{Color, Modifier, Style, Stylize};
 use ratatui::text::Line;
 use ratatui::widgets::{
     Block, Chart, List, ListItem, ListState, Padding, Tabs, TitlePosition, Widget,
@@ -96,10 +96,11 @@ impl App {
             Constraint::Percentage(7),
             Constraint::Percentage(13),
             Constraint::Percentage(70),
-            Constraint::Percentage(10),
+            Constraint::Percentage(5),
+            Constraint::Percentage(5),
         ]);
 
-        let [search_area, list, main, playback_area] = area.layout(&v_layout);
+        let [search_area, list, main, playback_area, keybinds] = area.layout(&v_layout);
 
         let h_layout = Layout::horizontal([Constraint::Percentage(33), Constraint::Percentage(77)]);
 
@@ -120,6 +121,11 @@ impl App {
         } else {
             "search, / to query"
         };
+
+        let keybinds_hints = Line::from(vec!["/ to query", "j"]).dim();
+
+        frame.render_widget(keybinds_hints, keybinds);
+
         let search = Paragraph::new(&*self.query).block(Block::bordered().title(title)); //Block::bordered().title("search");
         let playback = Block::bordered().title("playback");
         frame.render_widget(playback, playback_area);

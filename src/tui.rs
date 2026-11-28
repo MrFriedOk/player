@@ -186,16 +186,17 @@ impl App {
                 }
                 KeyCode::Enter => {
                     if self.active_screen == 1 {
-                        //let _ = self.player.append(&mut self.tracks[self.select])?;
+                        let _ = self.player.append(&mut self.tracks[self.select])?;
                         //self.player.play(&mut self.tracks[self.select])?
-                        self.queue.append_from_track(&self.tracks[self.select]);
+                        //self.queue.append_from_track(&self.tracks[self.select]);
                     } else {
                         if !self.query.is_empty() && self.search_result.is_none() {
                             self.search()?;
                         } else {
                             if self.search_result.is_some() {
                                 if let Some(ref tracks) = self.search_result {
-                                    self.queue.append_from_track(&tracks[self.search_select]);
+                                    let _ = self.player.append(&mut tracks[self.search_select])?;
+                                    // self.queue.append_from_track(&tracks[self.search_select]);
                                 };
                             }
                         }

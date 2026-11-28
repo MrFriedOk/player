@@ -131,4 +131,9 @@ impl Player {
         let new_vol = vol + incremet;
         self.player.set_volume(new_vol);
     }
+
+    pub fn clear(&mut self, queue: &mut Queue) {
+        queue.items.clear();
+        self.player.clear();
+    }
 }

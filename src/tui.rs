@@ -234,6 +234,7 @@ impl App {
                                 ' ' => self.player.toggle(),
                                 'd' => self.player.lower_vol(0.05),
                                 'u' => self.player.raise_vol(0.05),
+                                'c' => self.player.clear(&mut self.queue),
                                 _ => (),
                             }
                         }

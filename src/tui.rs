@@ -122,8 +122,10 @@ impl App {
             "search, / to query"
         };
 
+        let text = {if self.searching {return "/"}}
+
         let keybinds_hints = Line::from(
-            "/ to query, tab to switch tabs, esc to exit app (exit search if searching)",
+            text
         )
         .dim();
 

@@ -121,8 +121,14 @@ impl Player {
     //}
 
     pub fn lower_vol(&mut self, increment: f32) {
-        let vol = self.player.volume().to_owned();
+        let vol = self.player.volume();
         let new_vol = vol - increment;
+        self.player.set_volume(new_vol);
+    }
+
+    pub fn raise_vol(&mut self, incremet: f32) {
+        let vol = self.player.volume();
+        let new_vol = vol + incremet;
         self.player.set_volume(new_vol);
     }
 }

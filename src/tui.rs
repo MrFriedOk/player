@@ -122,7 +122,10 @@ impl App {
             "search, / to query"
         };
 
-        let keybinds_hints = Line::from(vec!["/ to query", "j"]).dim();
+        let keybinds_hints = Line::from(
+            "/ to query, tab to switch tabs, esc to exit app (exit search if searching)",
+        )
+        .dim();
 
         frame.render_widget(keybinds_hints, keybinds);
 

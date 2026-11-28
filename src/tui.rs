@@ -145,7 +145,7 @@ impl App {
             Event::Key(event) if event.kind == KeyEventKind::Press => match event.code {
                 //KeyCode::Char(char) => self.exit(),
                 KeyCode::Left => self.player.seek_left(100)?,
-                KeyCode::Right => self.player.seek_right(),
+                KeyCode::Right => self.player.seek_right(100)?,
                 KeyCode::Esc => {
                     if self.searching {
                         self.searching = false

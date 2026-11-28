@@ -140,6 +140,17 @@ impl Player {
 
     pub fn seek_left(&mut self, interval: u64) -> Result<()> {
         let duration = Duration::from_millis(interval);
+        let pos = self.player.get_pos();
+        let new_pos = pos - duration;
+        self.player.try_seek(new_pos)?;
+        Ok(())
+    }
+
+    pub fn seek_right(&mut self, interval: u64) -> Result<()> {
+        let duration = Duration::from_millis(interval);
+        let pos = self.player.get_pos();
+        let new_pos = pos + duration;
+        self.player.try_seek(new_pos)?;
         Ok(())
     }
 

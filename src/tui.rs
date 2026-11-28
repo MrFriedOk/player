@@ -63,6 +63,7 @@ impl App {
 
             //println!("{:?}",self.player.handle.)
         }
+        //self.player.detach();
         Ok(())
     }
 
@@ -272,7 +273,7 @@ impl App {
         //let sections = Layout::vertical([Constraint::Percentage(20), Constraint::Min(0)]);
         let list = List::new(items)
             .highlight_style(Modifier::REVERSED)
-            .style(Color::Rgb(255, 255, 255))
+            //.style(Color::Rgb(255, 255, 255))
             .block(Block::bordered().title("songs poorly ordered"));
 
         frame.render_stateful_widget(list, area, state);
@@ -338,12 +339,13 @@ impl App {
     }
 
     fn render_playlists(&mut self, frame: &mut Frame, area: Rect) {
-        let list = List::new(["hi", "no"]).block(Block::bordered().title("playlists"));
+        let list = List::new([""]).block(Block::bordered().title("playlists"));
 
         frame.render_widget(list, area);
     }
 
     fn render_queue(&mut self, frame: &mut Frame, area: Rect) {
+        let mut state = ListState::default();
         let items: Vec<ListItem> = self
             .queue
             .items
@@ -352,6 +354,6 @@ impl App {
             .collect();
         let list = List::new(items).block(Block::bordered().title("queue"));
 
-        frame.render_widget(list, area);
+        frame.render_stateful_widget(list, area, &mut state);
     }
 }

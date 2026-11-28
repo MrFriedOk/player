@@ -137,7 +137,7 @@ impl Player {
         self.player.clear();
     }
 
-    pub fn detach(mut self) {
-        self.player.detach();
-    }
+    //pub fn detach(mut self) {
+    //    self.player.detach();
+    // }
 }

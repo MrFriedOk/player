@@ -90,6 +90,7 @@ impl Track {
     }
 
     pub fn get_pic(&mut self) -> Option<Vec<u8>> {
+        if let Some(parent) = &self.path_buf.parent() {}
         let tagged = read_from_path(&self.path_buf).ok()?;
         let tag = tagged.primary_tag().or_else(|| tagged.first_tag())?;
         let pic = tag
